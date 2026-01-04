@@ -1,0 +1,697 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Animation Packages - SimpleAnimate Docs</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SimpleAnimate Docs</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="animation-packages-guide"><a class="header" href="#animation-packages-guide">Animation Packages Guide</a></h1>
+<p>This guide covers how to work with Roblox animation packages and player-equipped animations in SimpleAnimate.</p>
+<h2 id="what-are-animation-packages"><a class="header" href="#what-are-animation-packages">What are Animation Packages?</a></h2>
+<p>Animation packages are collections of animations that players can equip from the Roblox catalog. They include:</p>
+<ul>
+<li>Movement animations (idle, walk, run, jump)</li>
+<li>Emote animations (wave, dance, laugh, etc.)</li>
+<li>Custom character animations based on player preferences</li>
+</ul>
+<p>SimpleAnimate can automatically load these player-equipped animations.</p>
+<h2 id="loading-player-animations"><a class="header" href="#loading-player-animations">Loading Player Animations</a></h2>
+<h3 id="server-side-loading"><a class="header" href="#server-side-loading">Server-Side Loading</a></h3>
+<pre><code class="language-lua">local Players = game:GetService("Players")
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        -- Wait for animator
+        local animator = character:WaitForChild("Humanoid"):WaitForChild("Animator")
+        
+        -- Load player's animation package
+        local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+        local emoteAnims = SimpleAnimate.getEmotePackageAsync(player)
+        
+        -- Create controller with player's animations
+        local controller = SimpleAnimate.new(
+            character,
+            true,
+            coreAnims,
+            emoteAnims
+        )
+        
+        print(player.Name, "loaded with custom animations")
+    end)
+end)
+</code></pre>
+<h3 id="client-side-loading"><a class="header" href="#client-side-loading">Client-Side Loading</a></h3>
+<pre><code class="language-lua">-- LocalScript in StarterPlayer.StarterCharacterScripts
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+local character = script.Parent
+
+-- Get local player's animations (no player parameter needed on client)
+local coreAnims = SimpleAnimate.getAnimPackageAsync()
+local emoteAnims = SimpleAnimate.getEmotePackageAsync()
+
+-- Create controller
+local controller = SimpleAnimate.new(
+    character,
+    true,
+    coreAnims,
+    emoteAnims
+)
+</code></pre>
+<h2 id="fallback-animations"><a class="header" href="#fallback-animations">Fallback Animations</a></h2>
+<p>When loading animation packages, provide fallbacks for missing animations:</p>
+<h3 id="using-default-fallbacks"><a class="header" href="#using-default-fallbacks">Using Default Fallbacks</a></h3>
+<pre><code class="language-lua">-- If player doesn't have custom animations, R15 defaults are used
+local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+-- Missing animations automatically filled with R15 defaults
+</code></pre>
+<h3 id="custom-fallbacks"><a class="header" href="#custom-fallbacks">Custom Fallbacks</a></h3>
+<pre><code class="language-lua">-- Define your custom fallback animations
+local customDefaults = {
+    Idle = {{id = "rbxassetid://YOUR_IDLE", weight = 10}},
+    Walk = {{id = "rbxassetid://YOUR_WALK", weight = 10}},
+    Run = {{id = "rbxassetid://YOUR_RUN", weight = 10}}
+}
+
+-- Use custom fallbacks
+local coreAnims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
+
+-- Now if player doesn't have custom animations, your defaults are used
+</code></pre>
+<h3 id="selective-fallbacks"><a class="header" href="#selective-fallbacks">Selective Fallbacks</a></h3>
+<pre><code class="language-lua">-- Get player's animations
+local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+
+-- Override specific animations with your own
+coreAnims.Idle = {{id = "rbxassetid://YOUR_SPECIAL_IDLE", weight = 10}}
+
+-- Keep player's other animations, but force your idle
+local controller = SimpleAnimate.new(character, true, coreAnims)
+</code></pre>
+<h2 id="mixing-player-and-custom-animations"><a class="header" href="#mixing-player-and-custom-animations">Mixing Player and Custom Animations</a></h2>
+<h3 id="player-animations-with-custom-emotes"><a class="header" href="#player-animations-with-custom-emotes">Player Animations with Custom Emotes</a></h3>
+<pre><code class="language-lua">-- Use player's movement animations
+local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+
+-- But use your custom emotes
+local customEmotes = {
+    wave = {{id = "rbxassetid://CUSTOM_WAVE", weight = 10}},
+    dance = {{id = "rbxassetid://CUSTOM_DANCE", weight = 10}},
+    cheer = {{id = "rbxassetid://CUSTOM_CHEER", weight = 10}}
+}
+
+local controller = SimpleAnimate.new(
+    character,
+    true,
+    coreAnims,
+    customEmotes
+)
+</code></pre>
+<h3 id="custom-animations-with-player-emotes"><a class="header" href="#custom-animations-with-player-emotes">Custom Animations with Player Emotes</a></h3>
+<pre><code class="language-lua">-- Use your custom movement animations
+local customCore = {
+    Idle = {{id = "rbxassetid://YOUR_IDLE", weight = 10}},
+    Walk = {{id = "rbxassetid://YOUR_WALK", weight = 10}},
+    Run = {{id = "rbxassetid://YOUR_RUN", weight = 10}}
+}
+
+-- But keep player's emotes
+local emoteAnims = SimpleAnimate.getEmotePackageAsync(player)
+
+local controller = SimpleAnimate.new(
+    character,
+    true,
+    customCore,
+    emoteAnims
+)
+</code></pre>
+<h2 id="handling-different-rig-types"><a class="header" href="#handling-different-rig-types">Handling Different Rig Types</a></h2>
+<h3 id="r6-vs-r15-detection"><a class="header" href="#r6-vs-r15-detection">R6 vs R15 Detection</a></h3>
+<pre><code class="language-lua">local function getRigType(character)
+    local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+    if humanoid then
+        return humanoid.RigType == Enum.HumanoidRigType.R6 and "R6" or "R15"
+    end
+    return "R15" -- Default
+end
+
+local function setupCharacter(player, character)
+    local rigType = getRigType(character)
+    
+    -- Get appropriate defaults
+    local defaultCore, defaultEmotes = SimpleAnimate.getCopyOfAnims(rigType)
+    
+    -- Load player's animations with appropriate fallbacks
+    local coreAnims = SimpleAnimate.getAnimPackageAsync(player, defaultCore)
+    local emoteAnims = SimpleAnimate.getEmotePackageAsync(player, defaultEmotes)
+    
+    local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
+end
+</code></pre>
+<h3 id="force-specific-rig-type"><a class="header" href="#force-specific-rig-type">Force Specific Rig Type</a></h3>
+<pre><code class="language-lua">-- Always use R15 animations regardless of player's equipped package
+local r15Core, r15Emotes = SimpleAnimate.getCopyOfAnims("R15")
+
+local controller = SimpleAnimate.new(
+    character,
+    true,
+    r15Core,
+    r15Emotes
+)
+</code></pre>
+<h2 id="caching-animation-packages"><a class="header" href="#caching-animation-packages">Caching Animation Packages</a></h2>
+<p>Cache player animation packages to avoid repeated API calls:</p>
+<pre><code class="language-lua">local Players = game:GetService("Players")
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Cache player animations
+local playerAnimCache = {}
+
+local function getPlayerAnimations(player)
+    -- Check cache first
+    if playerAnimCache[player.UserId] then
+        return playerAnimCache[player.UserId]
+    end
+    
+    -- Load from API
+    local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+    local emoteAnims = SimpleAnimate.getEmotePackageAsync(player)
+    
+    -- Cache for future use
+    playerAnimCache[player.UserId] = {
+        core = coreAnims,
+        emotes = emoteAnims
+    }
+    
+    return playerAnimCache[player.UserId]
+end
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        local anims = getPlayerAnimations(player)
+        
+        local controller = SimpleAnimate.new(
+            character,
+            true,
+            anims.core,
+            anims.emotes
+        )
+    end)
+end)
+
+-- Clear cache when player leaves
+Players.PlayerRemoving:Connect(function(player)
+    playerAnimCache[player.UserId] = nil
+end)
+</code></pre>
+<h2 id="validating-animation-packages"><a class="header" href="#validating-animation-packages">Validating Animation Packages</a></h2>
+<p>Check if animations loaded successfully:</p>
+<pre><code class="language-lua">local function validateAnimationPackage(anims, packageName)
+    local requiredPoses = {"Idle", "Walk", "Run", "Jump"}
+    
+    for _, pose in requiredPoses do
+        if not anims[pose] or #anims[pose] == 0 then
+            warn(packageName, "missing", pose, "animation")
+            return false
+        end
+    end
+    
+    return true
+end
+
+-- Usage
+local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+
+if validateAnimationPackage(coreAnims, "Core Animations") then
+    print("Animation package valid")
+else
+    -- Use defaults instead
+    coreAnims = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
+end
+</code></pre>
+<h2 id="overriding-specific-animations"><a class="header" href="#overriding-specific-animations">Overriding Specific Animations</a></h2>
+<h3 id="keep-player-package-override-one-pose"><a class="header" href="#keep-player-package-override-one-pose">Keep Player Package, Override One Pose</a></h3>
+<pre><code class="language-lua">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+
+-- Player has custom animations, but we want a special idle
+coreAnims.Idle = {
+    {
+        id = "rbxassetid://SPECIAL_IDLE",
+        weight = 10,
+        speed = 0.8,
+        fadeTime = 0.3
+    }
+}
+
+local controller = SimpleAnimate.new(character, true, coreAnims)
+</code></pre>
+<h3 id="blend-custom-with-player-animations"><a class="header" href="#blend-custom-with-player-animations">Blend Custom with Player Animations</a></h3>
+<pre><code class="language-lua">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+
+-- Add variants to player's animations
+table.insert(coreAnims.Idle, {
+    id = "rbxassetid://EXTRA_IDLE_VARIANT",
+    weight = 3, -- Lower weight = less common
+    fadeTime = 0.3
+})
+
+-- Now player has their animations PLUS your variant
+local controller = SimpleAnimate.new(character, true, coreAnims)
+</code></pre>
+<h2 id="animation-package-metadata"><a class="header" href="#animation-package-metadata">Animation Package Metadata</a></h2>
+<p>Store and retrieve animation package information:</p>
+<pre><code class="language-lua">local AnimationPackages = {
+    Stylish = {
+        name = "Stylish",
+        description = "Cool and modern animations",
+        animations = {
+            Idle = {{id = "rbxassetid://001", weight = 10}},
+            Walk = {{id = "rbxassetid://002", weight = 10}},
+            Run = {{id = "rbxassetid://003", weight = 10}}
+        }
+    },
+    Classic = {
+        name = "Classic",
+        description = "Traditional Roblox animations",
+        animations = SimpleAnimate.getCopyOfAnims("R15")
+    }
+}
+
+local function applyPackage(player, packageName)
+    local package = AnimationPackages[packageName]
+    
+    if not package then
+        warn("Package not found:", packageName)
+        return
+    end
+    
+    player.CharacterAdded:Connect(function(character)
+        local controller = SimpleAnimate.new(
+            character,
+            true,
+            package.animations
+        )
+        
+        print("Applied", package.name, "to", player.Name)
+    end)
+end
+
+-- Usage
+applyPackage(player, "Stylish")
+</code></pre>
+<h2 id="dynamic-package-switching"><a class="header" href="#dynamic-package-switching">Dynamic Package Switching</a></h2>
+<p>Allow players to switch animation packages at runtime:</p>
+<pre><code class="language-lua">local currentControllers = {}
+
+local function switchAnimationPackage(player, packageName)
+    local character = player.Character
+    if not character then return end
+    
+    -- Destroy old controller
+    if currentControllers[player] then
+        currentControllers[player]:Destroy()
+    end
+    
+    -- Get new package
+    local package = AnimationPackages[packageName]
+    
+    -- Create new controller
+    local controller = SimpleAnimate.new(
+        character,
+        true,
+        package.animations
+    )
+    
+    currentControllers[player] = controller
+    
+    print(player.Name, "switched to", packageName)
+end
+
+-- Remote event for switching
+local switchPackageRemote = game.ReplicatedStorage.SwitchAnimPackage
+
+switchPackageRemote.OnServerEvent:Connect(function(player, packageName)
+    switchAnimationPackage(player, packageName)
+end)
+</code></pre>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
+<p>Robust error handling for animation package loading:</p>
+<pre><code class="language-lua">local function safeLoadAnimations(player)
+    local success, coreAnims = pcall(function()
+        return SimpleAnimate.getAnimPackageAsync(player)
+    end)
+    
+    if not success then
+        warn("Failed to load player animations:", coreAnims)
+        -- Use defaults
+        coreAnims = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
+    end
+    
+    local success2, emoteAnims = pcall(function()
+        return SimpleAnimate.getEmotePackageAsync(player)
+    end)
+    
+    if not success2 then
+        warn("Failed to load player emotes:", emoteAnims)
+        emoteAnims = SimpleAnimate.getCopyOfAnimsList("R15", "Emotes")
+    end
+    
+    return coreAnims, emoteAnims
+end
+
+-- Usage
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        local coreAnims, emoteAnims = safeLoadAnimations(player)
+        
+        local controller = SimpleAnimate.new(
+            character,
+            true,
+            coreAnims,
+            emoteAnims
+        )
+    end)
+end)
+</code></pre>
+<h2 id="package-selection-ui"><a class="header" href="#package-selection-ui">Package Selection UI</a></h2>
+<p>Create a UI for players to choose animation packages:</p>
+<pre><code class="language-lua">-- Client Script
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Create UI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = playerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 400)
+frame.Position = UDim2.new(0.5, -150, 0.5, -200)
+frame.Parent = screenGui
+
+-- List of packages
+local packages = {"Default", "Stylish", "Athletic", "Ninja", "Robot"}
+
+for i, packageName in packages do
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, -20, 0, 50)
+    button.Position = UDim2.new(0, 10, 0, (i - 1) * 60 + 10)
+    button.Text = packageName
+    button.Parent = frame
+    
+    button.MouseButton1Click:Connect(function()
+        -- Request package change
+        ReplicatedStorage.SwitchAnimPackage:FireServer(packageName)
+    end)
+end
+</code></pre>
+<h2 id="pre-loading-animation-packages"><a class="header" href="#pre-loading-animation-packages">Pre-Loading Animation Packages</a></h2>
+<p>Pre-load animation packages before character spawns:</p>
+<pre><code class="language-lua">local loadedPackages = {}
+
+-- Pre-load all packages on server start
+local function preLoadPackages()
+    for name, package in AnimationPackages do
+        print("Pre-loading package:", name)
+        loadedPackages[name] = package.animations
+    end
+end
+
+preLoadPackages()
+
+-- Instant assignment when player spawns
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        local packageName = player:GetAttribute("AnimPackage") or "Default"
+        local anims = loadedPackages[packageName]
+        
+        local controller = SimpleAnimate.new(character, true, anims)
+    end)
+end)
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Always provide fallbacks</strong>: Handle cases where player animations fail to load</li>
+<li><strong>Cache when possible</strong>: Avoid repeated API calls for the same player</li>
+<li><strong>Validate packages</strong>: Check that required animations exist</li>
+<li><strong>Handle errors gracefully</strong>: Use pcall for API calls</li>
+<li><strong>Test with different rigs</strong>: Ensure compatibility with R6 and R15</li>
+<li><strong>Consider performance</strong>: Pre-load packages when possible</li>
+<li><strong>Respect player choice</strong>: Let players use their equipped animations when appropriate</li>
+<li><strong>Provide options</strong>: Give players ability to override with custom packages</li>
+</ol>
+<h2 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h2>
+<h3 id="animations-not-loading"><a class="header" href="#animations-not-loading">Animations Not Loading</a></h3>
+<pre><code class="language-lua">-- ❌ Problem: Server call without player parameter
+local anims = SimpleAnimate.getAnimPackageAsync() -- Error on server!
+
+-- ✅ Solution: Always pass player on server
+local anims = SimpleAnimate.getAnimPackageAsync(player)
+</code></pre>
+<h3 id="missing-animations"><a class="header" href="#missing-animations">Missing Animations</a></h3>
+<pre><code class="language-lua">-- ❌ Problem: Not providing fallbacks
+local anims = SimpleAnimate.getAnimPackageAsync(player)
+-- Some poses might be missing
+
+-- ✅ Solution: Provide fallbacks
+local defaults = SimpleAnimate.getCopyOfAnims("R15")
+local anims = SimpleAnimate.getAnimPackageAsync(player, defaults)
+</code></pre>
+<h3 id="repeated-loading"><a class="header" href="#repeated-loading">Repeated Loading</a></h3>
+<pre><code class="language-lua">-- ❌ Problem: Loading on every character spawn
+player.CharacterAdded:Connect(function(character)
+    local anims = SimpleAnimate.getAnimPackageAsync(player) -- Loads every time
+end)
+
+-- ✅ Solution: Cache the results
+local playerAnims = SimpleAnimate.getAnimPackageAsync(player)
+
+player.CharacterAdded:Connect(function(character)
+    local controller = SimpleAnimate.new(character, true, playerAnims)
+end)
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../guides/state-machines.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../examples/basic-setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../guides/state-machines.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../examples/basic-setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

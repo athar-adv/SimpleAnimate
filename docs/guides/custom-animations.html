@@ -1,0 +1,572 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Custom Animations - SimpleAnimate Docs</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SimpleAnimate Docs</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="custom-animations-guide"><a class="header" href="#custom-animations-guide">Custom Animations Guide</a></h1>
+<p>This guide covers how to use custom animations with SimpleAnimate.</p>
+<h2 id="animation-info-structure"><a class="header" href="#animation-info-structure">Animation Info Structure</a></h2>
+<p>All animations in SimpleAnimate are defined using the <code>AnimInfo</code> structure:</p>
+<pre><code class="language-lua">{
+    id = "rbxassetid://123456789", -- Animation asset ID
+    weight = 10,                    -- Selection weight (default: 10)
+    speed = 1,                      -- Playback speed (default: 1)
+    fadeTime = 0.1,                 -- Fade in time (default: 0.1)
+    stopFadeTime = 0.1             -- Fade out time (optional)
+}
+</code></pre>
+<h2 id="creating-custom-core-animations"><a class="header" href="#creating-custom-core-animations">Creating Custom Core Animations</a></h2>
+<h3 id="method-1-modify-default-animations"><a class="header" href="#method-1-modify-default-animations">Method 1: Modify Default Animations</a></h3>
+<p>Start with default animations and modify them:</p>
+<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Get a copy of R15 animations
+local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
+
+-- Replace idle animation
+coreAnims.Idle = {
+    {
+        id = "rbxassetid://YOUR_IDLE_ANIM",
+        weight = 10,
+        fadeTime = 0.2
+    }
+}
+
+-- Replace walk animation
+coreAnims.Walk = {
+    {
+        id = "rbxassetid://YOUR_WALK_ANIM",
+        weight = 10
+    }
+}
+
+-- Create controller with custom animations
+local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
+</code></pre>
+<h3 id="method-2-build-from-scratch"><a class="header" href="#method-2-build-from-scratch">Method 2: Build From Scratch</a></h3>
+<p>Create a complete animation set from scratch:</p>
+<pre><code class="language-lua">local customCoreAnims = {
+    Idle = {
+        {id = "rbxassetid://123", weight = 10, fadeTime = 0.1}
+    },
+    Walk = {
+        {id = "rbxassetid://124", weight = 10}
+    },
+    Run = {
+        {id = "rbxassetid://125", weight = 10}
+    },
+    Jump = {
+        {id = "rbxassetid://126", weight = 10}
+    },
+    Fall = {
+        {id = "rbxassetid://127", weight = 10}
+    },
+    Climb = {
+        {id = "rbxassetid://128", weight = 10}
+    },
+    Sit = {
+        {id = "rbxassetid://129", weight = 10}
+    }
+}
+
+local controller = SimpleAnimate.new(character, true, customCoreAnims)
+</code></pre>
+<h2 id="multiple-animation-variants"><a class="header" href="#multiple-animation-variants">Multiple Animation Variants</a></h2>
+<p>Add multiple variants of the same animation with different weights:</p>
+<pre><code class="language-lua">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
+
+-- Multiple idle animations
+coreAnims.Idle = {
+    {
+        id = "rbxassetid://IDLE_1",
+        weight = 10,  -- Common idle
+        fadeTime = 0.2
+    },
+    {
+        id = "rbxassetid://IDLE_2",
+        weight = 3,   -- Rare idle (stretching)
+        fadeTime = 0.3
+    },
+    {
+        id = "rbxassetid://IDLE_3",
+        weight = 2,   -- Very rare idle (looking around)
+        fadeTime = 0.3
+    }
+}
+
+-- Multiple run animations
+coreAnims.Run = {
+    {
+        id = "rbxassetid://RUN_NORMAL",
+        weight = 10,
+        speed = 1.0
+    },
+    {
+        id = "rbxassetid://RUN_URGENT",
+        weight = 5,
+        speed = 1.2
+    }
+}
+</code></pre>
+<h2 id="animation-speed-control"><a class="header" href="#animation-speed-control">Animation Speed Control</a></h2>
+<p>Control playback speed for different effects:</p>
+<pre><code class="language-lua">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
+
+-- Slow idle for tired character
+coreAnims.Idle[1].speed = 0.7
+
+-- Fast run for energetic character
+coreAnims.Run[1].speed = 1.3
+
+-- Slow climb for heavy character
+coreAnims.Climb[1].speed = 0.8
+</code></pre>
+<h2 id="fade-time-customization"><a class="header" href="#fade-time-customization">Fade Time Customization</a></h2>
+<p>Control how animations blend together:</p>
+<pre><code class="language-lua">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
+
+-- Quick transition for responsive movement
+coreAnims.Walk[1].fadeTime = 0.05
+
+-- Smooth transition for idle
+coreAnims.Idle[1].fadeTime = 0.3
+coreAnims.Idle[1].stopFadeTime = 0.3
+
+-- Instant jump
+coreAnims.Jump[1].fadeTime = 0
+</code></pre>
+<h2 id="runtime-animation-changes"><a class="header" href="#runtime-animation-changes">Runtime Animation Changes</a></h2>
+<p>Change animations while the game is running:</p>
+<pre><code class="language-lua">-- Change a single animation
+controller.Core.PoseController:ChangeCoreAnim(
+    "Idle",
+    1,
+    "rbxassetid://NEW_IDLE_ANIM"
+)
+
+-- The new animation will play immediately if character is idle
+</code></pre>
+<p>Change with AnimInfo for more control:</p>
+<pre><code class="language-luau">controller.Core.PoseController:ChangeCoreAnim(
+    "Run",
+    1,
+    {
+        id = "rbxassetid://NEW_RUN",
+        weight = 10,
+        speed = 1.2,
+        fadeTime = 0.1
+    }
+)
+</code></pre>
+<h2 id="character-specific-animations"><a class="header" href="#character-specific-animations">Character-Specific Animations</a></h2>
+<p>Different animations for different character types:</p>
+<pre><code class="language-lua">local function getAnimationsForCharacter(characterType)
+    if characterType == "Warrior" then
+        return {
+            Idle = {{id = "rbxassetid://WARRIOR_IDLE", weight = 10}},
+            Walk = {{id = "rbxassetid://WARRIOR_WALK", weight = 10}},
+            Run = {{id = "rbxassetid://WARRIOR_RUN", weight = 10}}
+        }
+    elseif characterType == "Mage" then
+        return {
+            Idle = {{id = "rbxassetid://MAGE_IDLE", weight = 10}},
+            Walk = {{id = "rbxassetid://MAGE_WALK", weight = 10}},
+            Run = {{id = "rbxassetid://MAGE_RUN", weight = 10}}
+        }
+    else
+        return SimpleAnimate.getCopyOfAnims("R15")
+    end
+end
+
+-- Usage
+local characterType = player:GetAttribute("CharacterType")
+local anims = getAnimationsForCharacter(characterType)
+local controller = SimpleAnimate.new(character, true, anims)
+</code></pre>
+<h2 id="conditional-animation-system"><a class="header" href="#conditional-animation-system">Conditional Animation System</a></h2>
+<p>Change animations based on game state:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+-- Normal animations
+local normalAnims = {
+    Idle = {{id = "rbxassetid://NORMAL_IDLE", weight = 10}},
+    Walk = {{id = "rbxassetid://NORMAL_WALK", weight = 10}}
+}
+
+-- Combat animations
+local combatAnims = {
+    Idle = {{id = "rbxassetid://COMBAT_IDLE", weight = 10}},
+    Walk = {{id = "rbxassetid://COMBAT_WALK", weight = 10}}
+}
+
+-- Switch to combat mode
+local function enterCombat()
+    for pose, anims in combatAnims do
+        controller.Core.PoseController:ChangeCoreAnim(pose, 1, anims[1])
+    end
+end
+
+-- Switch to normal mode
+local function exitCombat()
+    for pose, anims in normalAnims do
+        controller.Core.PoseController:ChangeCoreAnim(pose, 1, anims[1])
+    end
+end
+
+-- Use in game
+player:GetAttributeChangedSignal("InCombat"):Connect(function()
+    if player:GetAttribute("InCombat") then
+        enterCombat()
+    else
+        exitCombat()
+    end
+end)
+</code></pre>
+<h2 id="animation-sets-system"><a class="header" href="#animation-sets-system">Animation Sets System</a></h2>
+<p>Create a reusable animation sets system:</p>
+<pre><code class="language-luau">local AnimationSets = {}
+
+AnimationSets.Default = SimpleAnimate.getCopyOfAnims("R15")
+
+AnimationSets.Zombie = {
+    Idle = {{id = "rbxassetid://ZOMBIE_IDLE", weight = 10, speed = 0.7}},
+    Walk = {{id = "rbxassetid://ZOMBIE_WALK", weight = 10, speed = 0.6}},
+    Run = {{id = "rbxassetid://ZOMBIE_RUN", weight = 10, speed = 0.8}}
+}
+
+AnimationSets.Robot = {
+    Idle = {{id = "rbxassetid://ROBOT_IDLE", weight = 10}},
+    Walk = {{id = "rbxassetid://ROBOT_WALK", weight = 10, speed = 1.1}},
+    Run = {{id = "rbxassetid://ROBOT_RUN", weight = 10, speed = 1.2}}
+}
+
+-- Apply animation set
+local function applyAnimationSet(controller, setName)
+    local animSet = AnimationSets[setName]
+    
+    for pose, anims in animSet do
+        controller.Core.PoseController:ChangeCoreAnim(pose, 1, anims[1])
+    end
+end
+
+-- Usage
+local controller = SimpleAnimate.new(character)
+applyAnimationSet(controller, "Zombie")
+</code></pre>
+<h2 id="mixing-player-and-custom-animations"><a class="header" href="#mixing-player-and-custom-animations">Mixing Player and Custom Animations</a></h2>
+<p>Use player's animations but override specific poses:</p>
+<pre><code class="language-luau">-- Get player's animations
+local playerAnims = SimpleAnimate.getAnimPackageAsync(player)
+
+-- Override specific animations with custom ones
+playerAnims.Idle = {
+    {id = "rbxassetid://CUSTOM_IDLE", weight = 10}
+}
+
+playerAnims.Run = {
+    {id = "rbxassetid://CUSTOM_RUN", weight = 10}
+}
+
+-- Create controller with mixed animations
+local controller = SimpleAnimate.new(character, true, playerAnims)
+</code></pre>
+<h2 id="animation-preloading"><a class="header" href="#animation-preloading">Animation Preloading</a></h2>
+<p>Control when animations are loaded:</p>
+<pre><code class="language-luau">-- Preload immediately (default)
+local controller1 = SimpleAnimate.new(character, true, customAnims)
+
+-- Don't preload (load on-demand)
+local controller2 = SimpleAnimate.new(character, false, customAnims)
+
+-- Manual preloading
+local animator = character:FindFirstChildWhichIsA("Animator", true)
+local preloadedAnims = SimpleAnimate.Preload.preloadAnimList(
+    animator,
+    customAnims,
+    "core",
+    Enum.AnimationPriority.Core,
+    true
+)
+
+local controller3 = SimpleAnimate.new(character, false, preloadedAnims)
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Always provide fallbacks</strong>: Include all required poses even if using defaults</li>
+<li><strong>Test weight distributions</strong>: Higher weights = more frequent selection</li>
+<li><strong>Consider fade times</strong>: Smooth transitions improve animation quality</li>
+<li><strong>Use appropriate speeds</strong>: Match animation speed to character movement</li>
+<li><strong>Organize animation IDs</strong>: Keep animation IDs in a centralized configuration</li>
+<li><strong>Test variants</strong>: Multiple animation variants add life to characters</li>
+<li><strong>Profile performance</strong>: Too many variants can impact performance</li>
+</ol>
+<h2 id="example-complete-custom-system"><a class="header" href="#example-complete-custom-system">Example: Complete Custom System</a></h2>
+<pre><code class="language-luau">local AnimationConfig = {
+    HeavyWarrior = {
+        Idle = {
+            {id = "rbxassetid://001", weight = 10, speed = 0.8, fadeTime = 0.3}
+        },
+        Walk = {
+            {id = "rbxassetid://002", weight = 10, speed = 0.9}
+        },
+        Run = {
+            {id = "rbxassetid://003", weight = 10, speed = 0.85}
+        },
+        Jump = {
+            {id = "rbxassetid://004", weight = 10, speed = 0.7}
+        }
+    },
+    LightRogue = {
+        Idle = {
+            {id = "rbxassetid://101", weight = 8, speed = 1.1},
+            {id = "rbxassetid://102", weight = 2, speed = 1.0} -- Rare variant
+        },
+        Walk = {
+            {id = "rbxassetid://103", weight = 10, speed = 1.2}
+        },
+        Run = {
+            {id = "rbxassetid://104", weight = 10, speed = 1.3}
+        },
+        Jump = {
+            {id = "rbxassetid://105", weight = 10, speed = 1.2}
+        }
+    }
+}
+
+-- Create character with appropriate animations
+local function createCharacter(player, class)
+    player.CharacterAdded:Connect(function(character)
+        local anims = AnimationConfig[class]
+        local controller = SimpleAnimate.new(character, true, anims)
+        
+        print(player.Name, "loaded as", class)
+    end)
+end
+
+createCharacter(player, "HeavyWarrior")
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../api/action.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../guides/emotes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../api/action.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../guides/emotes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Action - SimpleAnimate Docs</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SimpleAnimate Docs</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="action-api"><a class="header" href="#action-api">Action API</a></h1>
+<p>The Action module manages emotes and custom action animations. It handles one-off animations that interrupt core animations temporarily.</p>
+<p><strong>Access:</strong> <code>controller.Action</code></p>
+<h2 id="methods"><a class="header" href="#methods">Methods</a></h2>
+<h3 id="createaction"><a class="header" href="#createaction"><code>:CreateAction()</code></a></h3>
+<p>Creates a new action animation and adds it to the actions collection.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-lua">function CreateAction(
+    key: any,
+    template: {AnimInfo},
+    doPreload: boolean?,
+    priority: Enum.AnimationPriority?,
+    looped: boolean?
+): {AnimInfo}
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>key: any</code> - The key identifier for the action (can be string, number, etc.)</li>
+<li><code>template: {AnimInfo}</code> - Array of animation info structures</li>
+<li><code>doPreload: boolean?</code> - Whether to preload animations (default: <code>true</code>)</li>
+<li><code>priority: Enum.AnimationPriority?</code> - Animation priority (default: <code>Enum.AnimationPriority.Action</code>)</li>
+<li><code>looped: boolean?</code> - Whether animations loop (default: <code>false</code>)</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>{AnimInfo}</code> - The preloaded/created animation info array</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>Create a simple action:</p>
+<pre><code class="language-lua">local waveAction = {
+    {
+        id = "rbxassetid://123456789",
+        weight = 10,
+        speed = 1,
+        fadeTime = 0.2
+    }
+}
+
+controller.Action:CreateAction("customWave", waveAction)
+</code></pre>
+<p>Create action with multiple variants:</p>
+<pre><code class="language-lua">local danceAction = {
+    {
+        id = "rbxassetid://111111111",
+        weight = 10,
+        speed = 1
+    },
+    {
+        id = "rbxassetid://222222222",
+        weight = 5, -- Less likely to be selected
+        speed = 1.2
+    },
+    {
+        id = "rbxassetid://333333333",
+        weight = 15, -- Most likely to be selected
+        speed = 0.9
+    }
+}
+
+controller.Action:CreateAction("dance", danceAction)
+</code></pre>
+<p>Create with custom priority:</p>
+<pre><code class="language-lua">controller.Action:CreateAction(
+    "importantAction",
+    actionTemplate,
+    true,
+    Enum.AnimationPriority.Action4 -- Higher priority
+)
+</code></pre>
+<p>Create looped action:</p>
+<pre><code class="language-lua">local sitAction = {
+    {
+        id = "rbxassetid://987654321",
+        weight = 10
+    }
+}
+
+controller.Action:CreateAction("sit", sitAction, true, nil, true) -- Looped
+</code></pre>
+<hr />
+<h3 id="bulkcreateaction"><a class="header" href="#bulkcreateaction"><code>:BulkCreateAction()</code></a></h3>
+<p>Creates multiple actions at once from an animations list.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-lua">function BulkCreateAction(
+    animsList: AnimationsList,
+    doPreload: boolean?,
+    priority: Enum.AnimationPriority?
+): AnimationsList
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>animsList: AnimationsList</code> - Dictionary of action names to animation arrays</li>
+<li><code>doPreload: boolean?</code> - Whether to preload animations (default: <code>true</code>)</li>
+<li><code>priority: Enum.AnimationPriority?</code> - Animation priority (default: <code>Enum.AnimationPriority.Action</code>)</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>AnimationsList</code> - The created animations list</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>Create multiple actions at once:</p>
+<pre><code class="language-lua">local customActions = {
+    wave = {
+        {id = "rbxassetid://111", weight = 10}
+    },
+    dance = {
+        {id = "rbxassetid://222", weight = 10},
+        {id = "rbxassetid://333", weight = 5}
+    },
+    point = {
+        {id = "rbxassetid://444", weight = 10}
+    }
+}
+
+controller.Action:BulkCreateAction(customActions)
+
+-- Now you can play any of them
+controller.Action:PlayAction("wave")
+controller.Action:PlayAction("dance")
+controller.Action:PlayAction("point")
+</code></pre>
+<hr />
+<h3 id="removeaction"><a class="header" href="#removeaction"><code>:RemoveAction()</code></a></h3>
+<p>Removes and destroys an action by key.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-lua">function RemoveAction(key: any): ()
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>key: any</code> - The key of the action to remove</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-lua">-- Remove an action
+controller.Action:RemoveAction("customWave")
+
+-- Action is now destroyed and can't be played
+</code></pre>
+<p>Remove multiple actions:</p>
+<pre><code class="language-lua">local actionsToRemove = {"action1", "action2", "action3"}
+
+for _, actionKey in actionsToRemove do
+    controller.Action:RemoveAction(actionKey)
+end
+</code></pre>
+<hr />
+<h3 id="stopallactions"><a class="header" href="#stopallactions"><code>:StopAllActions()</code></a></h3>
+<p>Stops all currently playing animations for a specific action.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-lua">function StopAllActions(key: any): ()
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>key: any</code> - The key of the action to stop</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-lua">-- Stop all dance animations
+controller.Action:StopAllActions("dance")
+</code></pre>
+<p>Stop action after delay:</p>
+<pre><code class="language-lua">controller.Action:PlayAction("dance")
+
+task.delay(3, function()
+    controller.Action:StopAllActions("dance")
+end)
+</code></pre>
+<hr />
+<h3 id="getaction"><a class="header" href="#getaction"><code>:GetAction()</code></a></h3>
+<p>Gets an action's animation info array by key.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-lua">function GetAction(key: any): {AnimInfo}?
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>key: any</code> - The key of the action to get</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>{AnimInfo}?</code> - The animation info array or <code>nil</code> if not found</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-lua">local waveInfo = controller.Action:GetAction("wave")
+
+if waveInfo then
+    print("Wave action has", #waveInfo, "animations")
+    
+    for i, info in waveInfo do
+        print(string.format("Animation %d: %s (weight: %d)", i, info.id, info.weight))
+    end
+end
+</code></pre>
+<p>Check if action exists:</p>
+<pre><code class="language-lua">if controller.Action:GetAction("customAction") then
+    print("Custom action exists!")
+else
+    print("Custom action not found")
+end
+</code></pre>
+<hr />
+<h3 id="getrandomactionanim"><a class="header" href="#getrandomactionanim"><code>:GetRandomActionAnim()</code></a></h3>
+<p>Gets a random animation track from an action's animations using weighted selection.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-lua">function GetRandomActionAnim(key: any): AnimationTrack
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>key: any</code> - The key of the action</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>AnimationTrack</code> - A randomly selected animation track</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-lua">local danceTrack = controller.Action:GetRandomActionAnim("dance")
+print("Selected animation:", danceTrack.Animation.AnimationId)
+
+-- Play it manually
+danceTrack:Play()
+</code></pre>
+<hr />
+<h3 id="playrandomactionanim"><a class="header" href="#playrandomactionanim"><code>:PlayRandomActionAnim()</code></a></h3>
+<p>Plays a random animation from an action and returns the track.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-lua">function PlayRandomActionAnim(key: any): AnimationTrack
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>key: any</code> - The key of the action to play</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>AnimationTrack</code> - The animation track that was played</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>Basic usage:</p>
+<pre><code class="language-lua">local track = controller.Action:PlayRandomActionAnim("wave")
+</code></pre>
+<p>Wait for animation to finish:</p>
+<pre><code class="language-lua">local track = controller.Action:PlayRandomActionAnim("dance")
+
+track.Stopped:Wait()
+print("Dance finished!")
+</code></pre>
+<p>Play with custom adjustments:</p>
+<pre><code class="language-lua">local track = controller.Action:PlayRandomActionAnim("emote")
+track:AdjustSpeed(1.5) -- Speed up
+track:AdjustWeight(2)  -- Increase weight
+</code></pre>
+<p>Chain animations:</p>
+<pre><code class="language-lua">local function playEmoteSequence()
+    local wave = controller.Action:PlayRandomActionAnim("wave")
+    wave.Stopped:Wait()
+    
+    task.wait(0.5)
+    
+    local dance = controller.Action:PlayRandomActionAnim("dance")
+    dance.Stopped:Wait()
+    
+    task.wait(0.5)
+    
+    local point = controller.Action:PlayRandomActionAnim("point")
+end
+
+playEmoteSequence()
+</code></pre>
+<hr />
+<h3 id="playaction"><a class="header" href="#playaction"><code>:PlayAction()</code></a></h3>
+<p>Shorter alias for <code>:PlayRandomActionAnim()</code>.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-lua">function PlayAction(key: any): AnimationTrack
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>key: any</code> - The key of the action to play</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>AnimationTrack</code> - The animation track that was played</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-lua">-- These are equivalent
+local track1 = controller.Action:PlayAction("wave")
+local track2 = controller.Action:PlayRandomActionAnim("wave")
+</code></pre>
+<p>Quick emote playing:</p>
+<pre><code class="language-lua">-- Play various emotes
+controller.Action:PlayAction("wave")
+task.wait(2)
+controller.Action:PlayAction("dance")
+task.wait(2)
+controller.Action:PlayAction("point")
+</code></pre>
+<hr />
+<h3 id="setemotebindable"><a class="header" href="#setemotebindable"><code>:SetEmoteBindable()</code></a></h3>
+<p>Sets up the emote bindable function for handling emote requests. This is used internally to connect with Roblox's emote system.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-lua">function SetEmoteBindable(e: BindableFunction): ()
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>e: BindableFunction</code> - The bindable function to set up</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-lua">local emoteBindable = Instance.new("BindableFunction")
+controller.Action:SetEmoteBindable(emoteBindable)
+
+-- Now the emote system is connected
+-- Players can use the emote menu to trigger animations
+</code></pre>
+<p>Custom emote handler:</p>
+<pre><code class="language-lua">local emoteBindable = Instance.new("BindableFunction")
+controller.Action:SetEmoteBindable(emoteBindable)
+
+-- Monitor emote usage
+local originalInvoke = emoteBindable.OnInvoke
+
+function emoteBindable.OnInvoke(emoteName)
+    print(player.Name, "played emote:", emoteName)
+    return originalInvoke(emoteName)
+end
+</code></pre>
+<h2 id="complete-examples"><a class="header" href="#complete-examples">Complete Examples</a></h2>
+<h3 id="custom-emote-system"><a class="header" href="#custom-emote-system">Custom Emote System</a></h3>
+<pre><code class="language-lua">-- Define custom emotes
+local customEmotes = {
+    wave = {
+        {id = "rbxassetid://111", weight = 10, fadeTime = 0.2}
+    },
+    dance1 = {
+        {id = "rbxassetid://222", weight = 10, fadeTime = 0.3}
+    },
+    dance2 = {
+        {id = "rbxassetid://333", weight = 10, fadeTime = 0.3}
+    },
+    sit = {
+        {id = "rbxassetid://444", weight = 10, fadeTime = 0.5}
+    }
+}
+
+-- Create all emotes
+controller.Action:BulkCreateAction(customEmotes)
+
+-- Create UI buttons to trigger emotes
+local function createEmoteButton(emoteName)
+    local button = Instance.new("TextButton")
+    button.Text = emoteName
+    button.MouseButton1Click:Connect(function()
+        controller.Action:PlayAction(emoteName)
+    end)
+    return button
+end
+
+for emoteName in customEmotes do
+    local button = createEmoteButton(emoteName)
+    button.Parent = emoteGui
+end
+</code></pre>
+<h3 id="timed-actions"><a class="header" href="#timed-actions">Timed Actions</a></h3>
+<pre><code class="language-luau">-- Create a timed buff action
+local buffAction = {
+    {id = "rbxassetid://555", weight = 10}
+}
+
+controller.Action:CreateAction("buff", buffAction, true, nil, true) -- Looped
+
+-- Play buff animation for 10 seconds
+controller.Action:PlayAction("buff")
+
+task.delay(10, function()
+    controller.Action:StopAction("buff")
+end)
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../api/connections.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../guides/custom-animations.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../api/connections.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../guides/custom-animations.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

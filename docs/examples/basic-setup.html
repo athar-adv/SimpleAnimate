@@ -1,0 +1,492 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Basic Character Setup - SimpleAnimate Docs</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SimpleAnimate Docs</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="basic-character-setup"><a class="header" href="#basic-character-setup">Basic Character Setup</a></h1>
+<h2 id="simple-setup-server"><a class="header" href="#simple-setup-server">Simple Setup (Server)</a></h2>
+<p>The most basic setup for handling all players:</p>
+<pre><code class="language-lua">local Players = game:GetService("Players")
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        -- Wait for animator to load
+        local animator = character:WaitForChild("Humanoid"):WaitForChild("Animator")
+        
+        -- Create controller
+        local controller = SimpleAnimate.new(character)
+        
+        print(player.Name, "animation controller ready!")
+    end)
+end)
+</code></pre>
+<h2 id="with-player-animation-packages"><a class="header" href="#with-player-animation-packages">With Player Animation Packages</a></h2>
+<p>Load each player's equipped animations:</p>
+<pre><code class="language-lua">local Players = game:GetService("Players")
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        local animator = character:WaitForChild("Humanoid"):WaitForChild("Animator")
+        
+        -- Get player's animation package
+        local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+        local emoteAnims = SimpleAnimate.getEmotePackageAsync(player)
+        
+        -- Create controller with player's animations
+        local controller = SimpleAnimate.new(
+            character,
+            true,
+            coreAnims,
+            emoteAnims
+        )
+    end)
+end)
+</code></pre>
+<h2 id="client-side-setup"><a class="header" href="#client-side-setup">Client-Side Setup</a></h2>
+<p>Setup on the client for the local player:</p>
+<pre><code class="language-lua">-- LocalScript in StarterPlayer.StarterCharacterScripts
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+local character = script.Parent
+
+-- Create controller
+local controller = SimpleAnimate.new(character)
+
+-- Listen for pose changes
+controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose)
+    print("Pose changed:", oldPose, "-&gt;", newPose)
+end)
+</code></pre>
+<h2 id="with-custom-default-animations"><a class="header" href="#with-custom-default-animations">With Custom Default Animations</a></h2>
+<p>Replace default animations with your own:</p>
+<pre><code class="language-lua">local Players = game:GetService("Players")
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Define custom animations
+local customAnims = {
+    Idle = {
+        {id = "rbxassetid://123456789", weight = 10, fadeTime = 0.1}
+    },
+    Walk = {
+        {id = "rbxassetid://111111111", weight = 10}
+    },
+    Run = {
+        {id = "rbxassetid://222222222", weight = 10}
+    },
+    Jump = {
+        {id = "rbxassetid://333333333", weight = 10}
+    },
+    -- Add more poses...
+}
+
+local customEmotes = {
+    wave = {
+        {id = "rbxassetid://444444444", weight = 10}
+    },
+    dance = {
+        {id = "rbxassetid://555555555", weight = 10}
+    }
+}
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        local animator = character:WaitForChild("Humanoid"):WaitForChild("Animator")
+        
+        local controller = SimpleAnimate.new(
+            character,
+            true,
+            customAnims,
+            customEmotes
+        )
+    end)
+end)
+</code></pre>
+<h2 id="with-emote-menu-integration"><a class="header" href="#with-emote-menu-integration">With Emote Menu Integration</a></h2>
+<p>Set up the emote menu to work with SimpleAnimate:</p>
+<pre><code class="language-lua">local Players = game:GetService("Players")
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        local animator = character:WaitForChild("Humanoid"):WaitForChild("Animator")
+        local humanoid = character:WaitForChild("Humanoid")
+        
+        local controller = SimpleAnimate.new(character)
+        
+        -- Hook up emote bindable
+        local emoteBindable = Instance.new("BindableFunction")
+        emoteBindable.Parent = character
+        
+        controller.Action:SetEmoteBindable(emoteBindable)
+        
+        -- Set the humanoid's emote bindable
+        humanoid:SetEmoteBindableFunction(emoteBindable)
+    end)
+end)
+</code></pre>
+<h2 id="character-respawn-handling"><a class="header" href="#character-respawn-handling">Character Respawn Handling</a></h2>
+<p>Properly handle character respawns:</p>
+<pre><code class="language-lua">local Players = game:GetService("Players")
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+local playerControllers = {}
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        -- Clean up old controller if it exists
+        if playerControllers[player] then
+            playerControllers[player]:Destroy()
+        end
+        
+        local animator = character:WaitForChild("Humanoid"):WaitForChild("Animator")
+        
+        -- Create new controller
+        local controller = SimpleAnimate.new(character)
+        playerControllers[player] = controller
+    end)
+    
+    player.CharacterRemoving:Connect(function()
+        if playerControllers[player] then
+            playerControllers[player]:Destroy()
+            playerControllers[player] = nil
+        end
+    end)
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    playerControllers[player] = nil
+end)
+</code></pre>
+<h2 id="with-animation-preloading-disabled"><a class="header" href="#with-animation-preloading-disabled">With Animation Preloading Disabled</a></h2>
+<p>Disable preloading if you want animations to load on-demand:</p>
+<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Preloading disabled (3rd parameter = false)
+local controller = SimpleAnimate.new(
+    character,
+    false -- Don't preload
+)
+
+-- Animations will load when first played
+</code></pre>
+<h2 id="multiple-characters-npcs"><a class="header" href="#multiple-characters-npcs">Multiple Characters (NPCs)</a></h2>
+<p>Set up animation controllers for NPC characters:</p>
+<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+local function setupNPC(npc)
+    local animator = npc:WaitForChild("Humanoid"):WaitForChild("Animator")
+    
+    -- Create controller for NPC
+    local controller = SimpleAnimate.new(npc)
+    
+    -- Store reference if needed
+    npc:SetAttribute("HasAnimController", true)
+    
+    return controller
+end
+
+-- Setup all NPCs in workspace
+for _, npc in workspace.NPCs:GetChildren() do
+    if npc:IsA("Model") and npc:FindFirstChild("Humanoid") then
+        setupNPC(npc)
+    end
+end
+
+-- Setup new NPCs as they're added
+workspace.NPCs.ChildAdded:Connect(function(npc)
+    if npc:IsA("Model") then
+        npc:WaitForChild("Humanoid")
+        setupNPC(npc)
+    end
+end)
+</code></pre>
+<h2 id="with-pose-change-monitoring"><a class="header" href="#with-pose-change-monitoring">With Pose Change Monitoring</a></h2>
+<p>Monitor and log all pose changes:</p>
+<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+local character = player.Character or player.CharacterAdded:Wait()
+local controller = SimpleAnimate.new(character)
+
+-- Track pose changes
+local poseHistory = {}
+
+controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+    table.insert(poseHistory, {
+        from = oldPose,
+        to = newPose,
+        time = tick(),
+        animationId = track.Animation.AnimationId
+    })
+    
+    print(string.format("[%.2f] %s -&gt; %s", tick(), oldPose, newPose))
+end)
+
+-- Function to get pose statistics
+local function getPoseStats()
+    local stats = {}
+    
+    for _, entry in poseHistory do
+        stats[entry.to] = (stats[entry.to] or 0) + 1
+    end
+    
+    return stats
+end
+</code></pre>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
+<p>Robust error handling for animation setup:</p>
+<pre><code class="language-lua">local Players = game:GetService("Players")
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        local success, controller = pcall(function()
+            local animator = character:WaitForChild("Humanoid", 5):WaitForChild("Animator", 5)
+            return SimpleAnimate.new(character)
+        end)
+        
+        if success then
+            print(player.Name, "animation controller created successfully")
+        else
+            warn(player.Name, "failed to create animation controller:", controller)
+        end
+    end)
+end)
+</code></pre>
+<h2 id="waiting-for-existing-controllers"><a class="header" href="#waiting-for-existing-controllers">Waiting for Existing Controllers</a></h2>
+<p>Use <code>awaitController</code> in other scripts:</p>
+<pre><code class="language-lua">-- Script A: Creates controller
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+local controller = SimpleAnimate.new(character)
+
+-- Script B: Waits for controller
+local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+local controller = SimpleAnimate.awaitController(character, 10)
+
+if controller then
+    print("Got controller!")
+    controller.Action:PlayAction("wave")
+else
+    warn("Controller not found within timeout")
+end
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../guides/animation-packages.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../guides/animation-packages.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

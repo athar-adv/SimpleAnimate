@@ -1,0 +1,451 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Connections - SimpleAnimate Docs</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SimpleAnimate Docs</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="connections-api"><a class="header" href="#connections-api">Connections API</a></h1>
+<p>The Connections module handles humanoid event connections and automatic pose changes based on character state. It responds to movement, jumping, climbing, swimming, and other state changes.</p>
+<p><strong>Access:</strong> <code>controller.Core.Connections</code></p>
+<h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
+<h3 id="configuration-properties"><a class="header" href="#configuration-properties">Configuration Properties</a></h3>
+<p>These properties control animation behavior and speed multipliers:</p>
+<ul>
+<li><code>JumpDuration: number</code> - Duration before falling animation plays (default: <code>0.2</code>)</li>
+<li><code>SwimIdleAnimationSpeed: number</code> - Speed for swim idle animation (default: <code>1</code>)</li>
+<li><code>IdleAnimationSpeed: number</code> - Speed for idle animation (default: <code>1</code>)</li>
+<li><code>RunThreshold: number</code> - Speed threshold between walk and run (default: <code>15.5</code>)</li>
+<li><code>SwimIdleThreshold: number</code> - Speed threshold for swim idle vs swimming (default: <code>2</code>)</li>
+<li><code>MoveAnimationSpeedMultiplier: number</code> - Multiplier for walk/run animations (default: <code>1</code>)</li>
+<li><code>ClimbAnimationSpeedMultiplier: number</code> - Multiplier for climb animations (default: <code>1</code>)</li>
+<li><code>SwimAnimationSpeedMultiplier: number</code> - Multiplier for swim animations (default: <code>1</code>)</li>
+<li><code>WalkSpeed: number</code> - Reference walk speed (default: humanoid's WalkSpeed)</li>
+<li><code>AutoAdjustSpeedMultipliers: boolean</code> - Automatically adjust multipliers based on WalkSpeed (default: <code>true</code>)</li>
+<li><code>UseWalkSpeedForAnimSpeed: boolean</code> - Use WalkSpeed for animation speed calculations (default: <code>true</code>)</li>
+</ul>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h3 id="adjusting-run-threshold"><a class="header" href="#adjusting-run-threshold">Adjusting Run Threshold</a></h3>
+<p>Control when the character switches from walking to running:</p>
+<pre><code class="language-lua">-- Default is 15.5, lower value = switches to run earlier
+controller.Core.Connections.RunThreshold = 10
+
+-- Now character will run at speeds above 10
+</code></pre>
+<h3 id="custom-animation-speeds"><a class="header" href="#custom-animation-speeds">Custom Animation Speeds</a></h3>
+<pre><code class="language-lua">-- Make idle animation slower for dramatic effect
+controller.Core.Connections.IdleAnimationSpeed = 0.7
+
+-- Make running animation faster
+controller.Core.Connections.MoveAnimationSpeedMultiplier = 1.5
+</code></pre>
+<h3 id="adjusting-jump-timing"><a class="header" href="#adjusting-jump-timing">Adjusting Jump Timing</a></h3>
+<pre><code class="language-lua">-- Make character fall faster (shorter jump animation)
+controller.Core.Connections.JumpDuration = 0.1
+
+-- Make character stay in jump animation longer
+controller.Core.Connections.JumpDuration = 0.5
+</code></pre>
+<h3 id="manual-speed-multipliers"><a class="header" href="#manual-speed-multipliers">Manual Speed Multipliers</a></h3>
+<p>Disable auto-adjustment and set custom multipliers:</p>
+<pre><code class="language-lua">local connections = controller.Core.Connections
+
+-- Disable automatic adjustment
+connections.AutoAdjustSpeedMultipliers = false
+
+-- Set custom multipliers
+connections.MoveAnimationSpeedMultiplier = 2.0   -- Walk/run at 2x speed
+connections.ClimbAnimationSpeedMultiplier = 1.5  -- Climb at 1.5x speed
+connections.SwimAnimationSpeedMultiplier = 0.8   -- Swim at 0.8x speed
+</code></pre>
+<h3 id="swimming-configuration"><a class="header" href="#swimming-configuration">Swimming Configuration</a></h3>
+<pre><code class="language-lua">local connections = controller.Core.Connections
+
+-- Adjust swim idle threshold
+connections.SwimIdleThreshold = 3 -- Idle when speed &lt; 3
+
+-- Adjust swim idle animation speed
+connections.SwimIdleAnimationSpeed = 0.5 -- Slower treading water
+
+-- Adjust swimming animation speed
+connections.SwimAnimationSpeedMultiplier = 1.2
+</code></pre>
+<h3 id="speed-based-animation-system"><a class="header" href="#speed-based-animation-system">Speed-Based Animation System</a></h3>
+<p>Create a system where animation speed matches character speed:</p>
+<pre><code class="language-lua">local connections = controller.Core.Connections
+
+-- Enable speed-based animation
+connections.UseWalkSpeedForAnimSpeed = true
+connections.AutoAdjustSpeedMultipliers = true
+
+-- Update walk speed reference
+local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+
+humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+    connections.WalkSpeed = humanoid.WalkSpeed
+end)
+</code></pre>
+<h3 id="custom-speed-zones"><a class="header" href="#custom-speed-zones">Custom Speed Zones</a></h3>
+<p>Create areas with different animation behaviors:</p>
+<pre><code class="language-lua">local connections = controller.Core.Connections
+
+local slowZone = workspace.SlowZone
+local fastZone = workspace.FastZone
+
+slowZone.Touched:Connect(function(hit)
+    if hit.Parent == character then
+        -- Slow down animations in this zone
+        connections.MoveAnimationSpeedMultiplier = 0.5
+        connections.ClimbAnimationSpeedMultiplier = 0.5
+    end
+end)
+
+fastZone.Touched:Connect(function(hit)
+    if hit.Parent == character then
+        -- Speed up animations in this zone
+        connections.MoveAnimationSpeedMultiplier = 2.0
+        connections.ClimbAnimationSpeedMultiplier = 2.0
+    end
+end)
+</code></pre>
+<h3 id="dynamic-animation-speed"><a class="header" href="#dynamic-animation-speed">Dynamic Animation Speed</a></h3>
+<p>Adjust animation speed based on game state:</p>
+<pre><code class="language-lua">local connections = controller.Core.Connections
+
+-- Normal mode
+local function setNormalSpeed()
+    connections.MoveAnimationSpeedMultiplier = 1.0
+    connections.IdleAnimationSpeed = 1.0
+end
+
+-- Combat mode - faster, more alert animations
+local function setCombatSpeed()
+    connections.MoveAnimationSpeedMultiplier = 1.3
+    connections.IdleAnimationSpeed = 1.2
+end
+
+-- Exhausted mode - slower animations
+local function setExhaustedSpeed()
+    connections.MoveAnimationSpeedMultiplier = 0.7
+    connections.IdleAnimationSpeed = 0.8
+end
+
+-- Switch modes based on stamina
+local stamina = 100
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    if stamina &gt; 50 then
+        setNormalSpeed()
+    elseif stamina &gt; 20 then
+        setCombatSpeed()
+    else
+        setExhaustedSpeed()
+    end
+end)
+</code></pre>
+<h3 id="disable-auto-speed-adjustment"><a class="header" href="#disable-auto-speed-adjustment">Disable Auto-Speed Adjustment</a></h3>
+<p>For more control, disable automatic speed calculations:</p>
+<pre><code class="language-lua">local connections = controller.Core.Connections
+
+-- Disable auto-adjustment
+connections.AutoAdjustSpeedMultipliers = false
+connections.UseWalkSpeedForAnimSpeed = false
+
+-- Now multipliers won't change automatically
+-- Set them manually as needed
+connections.MoveAnimationSpeedMultiplier = 1.5
+</code></pre>
+<h3 id="custom-thresholds-for-different-characters"><a class="header" href="#custom-thresholds-for-different-characters">Custom Thresholds for Different Characters</a></h3>
+<pre><code class="language-lua">-- Heavy character - slower threshold
+local heavyConnections = heavyController.Core.Connections
+heavyConnections.RunThreshold = 12
+heavyConnections.MoveAnimationSpeedMultiplier = 0.8
+
+-- Light character - faster threshold  
+local lightConnections = lightController.Core.Connections
+lightConnections.RunThreshold = 18
+lightConnections.MoveAnimationSpeedMultiplier = 1.2
+</code></pre>
+<h3 id="monitoring-animation-state"><a class="header" href="#monitoring-animation-state">Monitoring Animation State</a></h3>
+<pre><code class="language-lua">local connections = controller.Core.Connections
+
+-- Check current settings
+print("Run Threshold:", connections.RunThreshold)
+print("Move Speed Multiplier:", connections.MoveAnimationSpeedMultiplier)
+print("Auto Adjust:", connections.AutoAdjustSpeedMultipliers)
+
+-- Monitor changes
+task.spawn(function()
+    while true do
+        task.wait(1)
+        print("Current speed multiplier:", connections.MoveAnimationSpeedMultiplier)
+    end
+end)
+</code></pre>
+<h3 id="complete-movement-system"><a class="header" href="#complete-movement-system">Complete Movement System</a></h3>
+<p>A comprehensive example combining multiple settings:</p>
+<pre><code class="language-lua">local connections = controller.Core.Connections
+
+-- Configure all movement settings
+connections.RunThreshold = 14
+connections.SwimIdleThreshold = 2.5
+connections.JumpDuration = 0.25
+
+-- Configure animation speeds
+connections.IdleAnimationSpeed = 1.0
+connections.SwimIdleAnimationSpeed = 0.8
+
+-- Configure multipliers
+connections.AutoAdjustSpeedMultipliers = true
+connections.UseWalkSpeedForAnimSpeed = true
+
+-- Set base walk speed
+connections.WalkSpeed = character.Humanoid.WalkSpeed
+
+-- Create speed boost power-up
+local function applySpeedBoost(duration)
+    local originalMultiplier = connections.MoveAnimationSpeedMultiplier
+    
+    connections.MoveAnimationSpeedMultiplier = 2.0
+    connections.AutoAdjustSpeedMultipliers = false
+    
+    task.delay(duration, function()
+        connections.MoveAnimationSpeedMultiplier = originalMultiplier
+        connections.AutoAdjustSpeedMultipliers = true
+    end)
+end
+
+-- Use it
+applySpeedBoost(5) -- 5 second speed boost
+</code></pre>
+<h2 id="notes"><a class="header" href="#notes">Notes</a></h2>
+<ul>
+<li>The Connections module automatically updates itself based on humanoid events</li>
+<li>Most users won't need to modify these properties unless they want custom animation behavior</li>
+<li>Changes to these properties take effect immediately</li>
+<li><code>AutoAdjustSpeedMultipliers</code> recalculates multipliers every frame based on WalkSpeed</li>
+<li>Setting <code>AutoAdjustSpeedMultipliers</code> to <code>false</code> gives you full manual control</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../api/pose-controller.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../api/action.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../api/pose-controller.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../api/action.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
