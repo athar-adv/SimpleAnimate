@@ -1,3 +1,6 @@
+--!optimize 2
+--PoseController.luau
+
 local utility = script.Parent.Parent.Utility
 local parent = script.Parent.Parent
 
@@ -18,25 +21,33 @@ end
 local PoseController = {}
 PoseController.__index = PoseController
 
+--[[
+    Sets whether the internal core state can play animations.
+    @param value boolean - Whether core animations should be active
+]]
 function PoseController:SetCoreCanPlayAnims(value: boolean)
 	self._playAnims = value
 end
 
+--[[
+    Gets whether the internal core state can play animations.
+    @return boolean - Whether core animations should be active
+]]
 function PoseController:GetCoreCanPlayAnims(): boolean
 	return self._playAnims
 end
 
 --[[
-    Sets whether the core animations are active.
-    @param value boolean - Whether core animations should be active
+    Sets whether the internal core state is automatically changed.
+    @param value boolean - Whether core state should be active
 ]]
 function PoseController:SetCoreActive(value: boolean): ()
 	self._active = value
 end
 
 --[[
-    Gets whether the core animations are active.
-    @return boolean - Whether core animations are active
+    Gets whether the internal core state is automatically changed.
+    @return boolean - Whether core state is active
 ]]
 function PoseController:GetCoreActive(): boolean
 	return self._active
@@ -118,7 +129,7 @@ function PoseController:ChangeCoreAnim(pose: PoseType, index: number, new: Anima
 
 	if self._lastPose == pose then
 		self._track:Stop()
-		self:PlayAnimation(pose)
+		self:PlayCoreAnimation(pose)
 	end
 
 	return track
@@ -140,7 +151,7 @@ end
     
     @param fadeTime number? - Optional fade time for stopping animations
 ]]
-function PoseController:StopCore(fadeTime: number?)
+function PoseController:StopCoreAnimations(fadeTime: number?)
 	if not self._animator then return end
 	for i, v: AnimationTrack in self._animator:GetPlayingAnimationTracks() do
 		if isAction(v) and v.Name ~= "emote" then
@@ -157,14 +168,14 @@ end
     @param speed number? - Optional playback speed (defaults to 1)
     @param fadeTime number? - Optional fade time for animation transitions
 ]]
-function PoseController:PlayAnimation(pose: PoseType, looped: boolean?, speed: number?, fadeTime: number?): ()
+function PoseController:PlayCoreAnimation(pose: PoseType, looped: boolean?, speed: number?, fadeTime: number?): ()
 	if not self._animator then return end
 
 	speed = speed or 1
 	looped = if looped == nil then true else looped
 
 	local newTrack, numInfo, info = self:GetRandomCoreAnim(pose)
-	self:StopCore(self._lastInfo.stopFadeTime or 0.1)
+	self:StopCoreAnimations(self._lastInfo.stopFadeTime or 0.1)
 
 	newTrack:Play(info.fadeTime or 0.1, 1, info.speed or speed)
 
@@ -174,7 +185,7 @@ function PoseController:PlayAnimation(pose: PoseType, looped: boolean?, speed: n
 	if numInfo > 1 and looped then
 		newTrack.DidLoop:Once(function()
 			if self._active and self._lastPose == pose then
-				self:PlayAnimation(pose, speed)
+				self:PlayCoreAnimation(pose, speed)
 			end
 		end)
 	end
@@ -185,7 +196,7 @@ end
     Cleans up and destroys the <code>PoseController</code> instance.
 ]]
 function PoseController:Destroy(): ()
-	self:StopCore()
+	self:StopCoreAnimations()
 	self.PoseChanged:Destroy()
 	self._active = false
 
@@ -247,7 +258,7 @@ local function new(rig: Model, coreAnimations: Types.AnimationsList) : PoseContr
 		local lastPose = controller._lastPose
 		local info
 		if controller._playAnims then
-			info = controller:PlayAnimation(pose, speed)
+			info = controller:PlayCoreAnimation(pose, speed)
 		end
 		
 		controller.PoseChanged:Fire(lastPose, pose, controller._track)

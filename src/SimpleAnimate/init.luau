@@ -1,4 +1,5 @@
 --!optimize 2
+--SimpleAnimate.luau
 
 local RunService = game:GetService('RunService')
 
@@ -70,20 +71,44 @@ export type AnimationController = typeof(AnimationController) & {
     @return A new AnimationController instance
 ]]
 local function new(rig: Model, doPreload: boolean?, coreAnimations: AnimationsList?, emoteAnimations: AnimationsList?, stateMachine: Types.StateMachine?): AnimationController
-	doPreload = doPreload == nil and true or doPreload
+	doPreload = if doPreload == nil then true else doPreload
+	
 	local animator = rig:FindFirstChildWhichIsA("Animator", true)
 	if not animator then
 		error(`Animator not found for rig {rig}`)
 	end
 	
-	coreAnimations = coreAnimations ~= nil and deepCopy(coreAnimations) or deepCopy(DefaultAnims.R15.Animations)
-	emoteAnimations = emoteAnimations ~= nil and deepCopy(emoteAnimations) or deepCopy(DefaultAnims.R15.Emotes)
+	local humanoid = rig:FindFirstChildWhichIsA("Humanoid")
 	
-	coreAnimations = doPreload and Preload.preloadAnimList(animator, coreAnimations, "core", Enum.AnimationPriority.Core, true) or coreAnimations
-	emoteAnimations = doPreload and Preload.preloadAnimList(animator, emoteAnimations, "emote", Enum.AnimationPriority.Action, false) or emoteAnimations
+	local humanoidAnims, humanoidEmotes
+	if coreAnimations then
+		humanoidAnims = coreAnimations
+	elseif humanoid then
+		if humanoid.RigType == Enum.HumanoidRigType.R15 then
+			humanoidAnims = deepCopy(DefaultAnims.R15.Animations)
+		elseif humanoid.RigType == Enum.HumanoidRigType.R6 then
+			humanoidAnims = deepCopy(DefaultAnims.R6.Animations)
+		end
+	else
+		humanoidAnims = deepCopy(DefaultAnims.R15.Animations)
+	end
+	if emoteAnimations then
+		humanoidEmotes = emoteAnimations
+	elseif humanoid then
+		if humanoid.RigType == Enum.HumanoidRigType.R15 then
+			humanoidEmotes = deepCopy(DefaultAnims.R15.Emotes)
+		elseif humanoid.RigType == Enum.HumanoidRigType.R6 then
+			humanoidEmotes = deepCopy(DefaultAnims.R6.Emotes)
+		end
+	else
+		humanoidEmotes = deepCopy(DefaultAnims.R15.Emotes)
+	end
 	
-	local core = Core.new(rig, coreAnimations, stateMachine)
-	local action = Action.new(core.PoseController, rig, emoteAnimations, stateMachine)
+	humanoidAnims = doPreload and Preload.preloadAnimList(animator, humanoidAnims, "core", Enum.AnimationPriority.Core, true) or humanoidAnims
+	humanoidEmotes = doPreload and Preload.preloadAnimList(animator, humanoidEmotes, "emote", Enum.AnimationPriority.Action, false) or humanoidEmotes
+	
+	local core = Core.new(rig, humanoidAnims, stateMachine)
+	local action = Action.new(core.PoseController, rig, humanoidEmotes, stateMachine)
 	
 	local controller = setmetatable({
 		Core = core,
@@ -127,7 +152,7 @@ end
     @param timeOut Optional timeout in seconds (default: 5)
     @return The AnimationController when available or nil if timeout occurs
 ]]
-local function waitForController(rig: Model, timeOut: number?): AnimationController?
+local function awaitController(rig: Model, timeOut: number?): AnimationController?
 	if animationControllers[rig] then
 		return animationControllers[rig]
 	end
@@ -219,7 +244,7 @@ end
 return {
 	new = new,
 	fromExisting = fromExisting,
-	waitForController = waitForController,
+	awaitController = awaitController,
 	getCopyOfAnimsList = getCopyOfAnimsList,
 	getCopyOfAnims = getCopyOfAnims,
 	

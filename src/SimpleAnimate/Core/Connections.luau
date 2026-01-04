@@ -1,3 +1,6 @@
+--!optimize 2
+--Connections.luau
+
 local RunService = game:GetService('RunService')
 local parent = script.Parent.Parent
 
@@ -113,11 +116,19 @@ export type Connections = typeof(Connections) & {
 }
 
 local function new(PoseController, rig: Model, stateMachine: Types.StateMachine?) : Connections
-	local humanoid: Humanoid = stateMachine or rig:FindFirstChildWhichIsA("Humanoid")
+	local humanoid: Types.StateMachine = stateMachine or rig:FindFirstChildWhichIsA("Humanoid")
 	if not humanoid then
 		error(`Humanoid not found for rig {rig}`)
 	end
-	
+	assert(
+		humanoid.Running
+		and humanoid.Jumping
+		and humanoid.WalkSpeed
+		and humanoid.Climbing
+		and humanoid.StateChanged
+		and humanoid.Swimming,
+		"StateMachine fields incomplete"
+	)
 	local trash = ItemGroup.create(ItemGroup.cleanup.disconnect)
 
 	local connections = setmetatable({
@@ -140,7 +151,7 @@ local function new(PoseController, rig: Model, stateMachine: Types.StateMachine?
 		ClimbAnimationSpeedMultiplier = 1,
 		SwimAnimationSpeedMultiplier = 1,
 		
-		WalkSpeed = typeof(humanoid) == "Instance" and humanoid.WalkSpeed or 16,
+		WalkSpeed = humanoid.WalkSpeed,
 		
 		AutoAdjustSpeedMultipliers = true,
 		UseWalkSpeedForAnimSpeed = true

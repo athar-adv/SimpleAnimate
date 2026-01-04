@@ -1,3 +1,6 @@
+--!optimize 2
+--Core.luau
+
 local Types = require(script.Parent.Types)
 
 local PoseController = require(script.PoseController)

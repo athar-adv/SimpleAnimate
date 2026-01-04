@@ -1,3 +1,6 @@
+--!optimize 2
+--Action.luau
+
 local utility = script.Parent.Utility
 local Types = require(script.Parent.Types)
 
@@ -13,10 +16,9 @@ local function resume(self, endTriggers, track: AnimationTrack)
 	
 	local PoseController = self._controller
 	
-	if PoseController:GetCoreActive() then return end
+	if PoseController:GetCoreCanPlayAnims() then return end
 
-	PoseController:SetCoreActive(true)
-	PoseController:PlayAnimation("Idle")
+	PoseController:SetCoreCanPlayAnims(true)
 end
 
 local function setupAnimEndTrigger(self, track: AnimationTrack)
@@ -33,20 +35,6 @@ local function setupAnimEndTrigger(self, track: AnimationTrack)
 	end))
 end
 
-local function deepCopy(tbl)
-	local r = {}
-	
-	for i, v in tbl do
-		if type(v) == "table" then
-			r[i] = deepCopy(v)
-			continue
-		end
-		r[i] = v
-	end
-	
-	return r
-end
-
 local Action = {}
 Action.__index = Action
 
@@ -60,7 +48,7 @@ Action.__index = Action
     @param priority Animation priority level (default: Enum.AnimationPriority.Action)
     @return The preloaded animation information table
 ]]
-function Action:Create(key: any, template: {Types.AnimInfo}, doPreload: boolean?, priority: Enum.AnimationPriority?, looped: boolean?): {Types.AnimInfo}
+function Action:CreateAction(key: any, template: {Types.AnimInfo}, doPreload: boolean?, priority: Enum.AnimationPriority?, looped: boolean?): {Types.AnimInfo}
 	doPreload = if doPreload == nil then true else doPreload
 	priority = priority or Enum.AnimationPriority.Action
 	
@@ -80,7 +68,7 @@ end
     @param priority Animation priority level (default: Enum.AnimationPriority.Action)
     @return Array of preloaded animation information tables
 ]]
-function Action:BulkCreate(animsList: Types.AnimationsList, doPreload: boolean?, priority: Enum.AnimationPriority?): Types.AnimationsList
+function Action:BulkCreateAction(animsList: Types.AnimationsList, doPreload: boolean?, priority: Enum.AnimationPriority?): Types.AnimationsList
 	local anims = {}
 	for key, list in animsList do
 		anims[key] = self:Create(key, list, doPreload, priority)
@@ -94,11 +82,11 @@ end
     @param self The Action instance
     @param key The key of the action to remove
 ]]
-function Action:Remove(key: any): ()
+function Action:RemoveAction(key: any): ()
 	local list: {Types.AnimInfo} = self._actions[key]
 	
 	if not list then 
-		warn(`Action {key} has not been created yet. (:Remove)`)
+		error(`Action {key} has not been created yet. (:RemoveAction)`)
 		return
 	end
 	
@@ -116,18 +104,16 @@ end
     @param self The Action instance
     @param key The key of the action to stop
 ]]
-function Action:StopAll(key: any): ()
+function Action:StopAction(key: any, fadeTime: number?): ()
 	local list: {Types.AnimInfo} = self._actions[key]
 
 	if not list then 
-		warn(`Action {key} has not been created yet. (:StopAll)`)
+		error(`Action {key} has not been created yet. (:StopAllActions)`)
 		return
 	end
 	
-	for i = 1, #list do
-		local info = list[i]
-		
-		info.anim:Stop()
+	for _, info in list do
+		info.anim:Stop(fadeTime)
 	end
 end
 
@@ -153,7 +139,7 @@ function Action:GetRandomActionAnim(key: any): AnimationTrack
 	local list: Types.AnimationsList = self._actions[key]
 
 	if not list then 
-		warn(`Action {key} has not been created yet. (:GetRandomActionAnim)`)
+		error(`Action {key} has not been created yet. (:GetRandomActionAnim)`)
 		return
 	end
 	
@@ -169,15 +155,15 @@ end
 	@param key The key of the action to play a random animation from
 	@return A random animation track from the action
 ]]
-function Action:PlayRandom(key: any): AnimationTrack
+function Action:PlayRandomActionAnim(key: any): AnimationTrack
 	local track = self:GetRandomActionAnim(key)
 	track:Play()
 	return track
 end
 
-Action.Play = Action.PlayRandom :: typeof(
+Action.PlayAction = Action.PlayRandomActionAnim :: typeof(
 	--[[
-		A shorter alias for <code>Action:PlayRandom()</code>.
+		A shorter alias for <code>Action:PlayRandomActionAnim()</code>.
 	]]
 	function(self: Actions, key: any): AnimationTrack end
 )
@@ -201,19 +187,19 @@ function Action:SetEmoteBindable(e: BindableFunction)
 			return false
 		end
 		
-		PoseController:SetCoreActive(false)
+		PoseController:SetCoreCanPlayAnims(false)
 		local name = typeof(emote) == "Instance" and emote.Name or emote
 		
 		if self._emotes[name] ~= nil then
 			local emoteAnim: AnimationTrack, _, info = randomWeighted(self._emotes[name])
-			PoseController:StopCore(info.fadeTime or 0.1)
+			PoseController:StopCoreAnimations(info.fadeTime or 0.1)
 			
 			emoteAnim:Play(0.1, 1, info.speed or 1)
 			setupAnimEndTrigger(self, emoteAnim)
 
 			return true, emoteAnim
 		elseif typeof(emote) == "Instance" and emote:IsA("Animation") then
-			PoseController:StopCore()
+			PoseController:StopCoreAnimations()
 			
 			local track = self._animator:LoadAnimation(emote)
 			track.Looped = false
@@ -250,7 +236,7 @@ function Action:Destroy()
 	self = nil
 end
 
-export type Actions = typeof(Action)
+export type Action = typeof(Action)
 
 --[[
     Creates a new Action instance.
@@ -261,7 +247,7 @@ export type Actions = typeof(Action)
     @param stateMachine Optional state machine (defaults to Humanoid)
     @return A new Action instance
 ]]
-local function new(PoseController, rig: Model, emoteAnimations: Types.AnimationsList, stateMachine: any?) : Actions
+local function new(PoseController, rig: Model, emoteAnimations: Types.AnimationsList, stateMachine: Types.StateMachine?) : Action
 	local animator = rig:FindFirstChildWhichIsA("Animator", true)
 	if not animator then
 		error(`Animator not found for rig {rig}`)
