@@ -4,7 +4,7 @@
 
 The most basic setup for handling all players:
 
-```lua
+```luau
 local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
@@ -25,7 +25,7 @@ end)
 
 Load each player's equipped animations:
 
-```lua
+```luau
 local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
@@ -52,7 +52,7 @@ end)
 
 Setup on the client for the local player:
 
-```lua
+```luau
 -- LocalScript in StarterPlayer.StarterCharacterScripts
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local character = script.Parent
@@ -70,7 +70,7 @@ end)
 
 Replace default animations with your own:
 
-```lua
+```luau
 local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
@@ -118,7 +118,7 @@ end)
 
 Set up the emote menu to work with SimpleAnimate:
 
-```lua
+```luau
 local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
@@ -145,7 +145,7 @@ end)
 
 Properly handle character respawns:
 
-```lua
+```luau
 local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
@@ -182,7 +182,7 @@ end)
 
 Disable preloading if you want animations to load on-demand:
 
-```lua
+```luau
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Preloading disabled (3rd parameter = false)
@@ -198,7 +198,7 @@ local controller = SimpleAnimate.new(
 
 Set up animation controllers for NPC characters:
 
-```lua
+```luau
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 local function setupNPC(npc)
@@ -233,7 +233,7 @@ end)
 
 Monitor and log all pose changes:
 
-```lua
+```luau
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 local character = player.Character or player.CharacterAdded:Wait()
@@ -269,7 +269,7 @@ end
 
 Robust error handling for animation setup:
 
-```lua
+```luau
 local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
@@ -293,7 +293,7 @@ end)
 
 Use `awaitController` in other scripts:
 
-```lua
+```luau
 -- Script A: Creates controller
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local controller = SimpleAnimate.new(character)

@@ -182,7 +182,7 @@
 <h3 id="new"><a class="header" href="#new"><code>new()</code></a></h3>
 <p>Creates a new AnimationController instance.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function new(
+<pre><code class="language-luau">function new(
     rig: Model,
     doPreload: boolean?,
     coreAnimations: AnimationsList?,
@@ -204,10 +204,10 @@
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Basic usage with defaults:</p>
-<pre><code class="language-lua">local controller = SimpleAnimate.new(character)
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
 </code></pre>
 <p>With custom animations:</p>
-<pre><code class="language-lua">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
 coreAnims.Idle[1].id = "rbxassetid://123456789"
 
 local controller = SimpleAnimate.new(
@@ -218,10 +218,10 @@ local controller = SimpleAnimate.new(
 )
 </code></pre>
 <p>Without preloading (load animations on-demand):</p>
-<pre><code class="language-lua">local controller = SimpleAnimate.new(character, false)
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character, false)
 </code></pre>
 <p>With custom state machine:</p>
-<pre><code class="language-lua">local customStateMachine = character:FindFirstChild("CustomHumanoid")
+<pre><code class="language-luau">local customStateMachine = character:FindFirstChild("CustomHumanoid")
 local controller = SimpleAnimate.new(
     character,
     true,
@@ -234,7 +234,7 @@ local controller = SimpleAnimate.new(
 <h3 id="fromexisting"><a class="header" href="#fromexisting"><code>fromExisting()</code></a></h3>
 <p>Gets an existing AnimationController for the specified rig.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function fromExisting(rig: Model): AnimationController?
+<pre><code class="language-luau">function fromExisting(rig: Model): AnimationController?
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -245,7 +245,7 @@ local controller = SimpleAnimate.new(
 <li><code>AnimationController?</code> - The existing controller or <code>nil</code> if none exists</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local controller = SimpleAnimate.fromExisting(character)
+<pre><code class="language-luau">local controller = SimpleAnimate.fromExisting(character)
 
 if controller then
     print("Controller already exists!")
@@ -256,7 +256,7 @@ else
 end
 </code></pre>
 <p>Checking multiple characters:</p>
-<pre><code class="language-lua">for _, player in Players:GetPlayers() do
+<pre><code class="language-luau">for _, player in Players:GetPlayers() do
     local char = player.Character
     if char then
         local controller = SimpleAnimate.fromExisting(char)
@@ -270,7 +270,7 @@ end
 <h3 id="awaitcontroller"><a class="header" href="#awaitcontroller"><code>awaitController()</code></a></h3>
 <p>Waits for an AnimationController to be created for the specified rig. Yields until available or timeout occurs.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function awaitController(rig: Model, timeOut: number?): AnimationController?
+<pre><code class="language-luau">function awaitController(rig: Model, timeOut: number?): AnimationController?
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -283,7 +283,7 @@ end
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Basic usage:</p>
-<pre><code class="language-lua">-- Wait up to 5 seconds for controller
+<pre><code class="language-luau">-- Wait up to 5 seconds for controller
 local controller = SimpleAnimate.awaitController(character)
 
 if controller then
@@ -293,11 +293,11 @@ else
 end
 </code></pre>
 <p>Custom timeout:</p>
-<pre><code class="language-lua">-- Wait up to 10 seconds
+<pre><code class="language-luau">-- Wait up to 10 seconds
 local controller = SimpleAnimate.awaitController(character, 10)
 </code></pre>
 <p>Useful in separate scripts:</p>
-<pre><code class="language-lua">-- Script A creates the controller
+<pre><code class="language-luau">-- Script A creates the controller
 SimpleAnimate.new(character)
 
 -- Script B (elsewhere) waits for it
@@ -308,7 +308,7 @@ controller.Action:PlayAction("wave")
 <h3 id="getcopyofanimslist"><a class="header" href="#getcopyofanimslist"><code>getCopyOfAnimsList()</code></a></h3>
 <p>Gets a deep copy of a default animation list by name and type.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function getCopyOfAnimsList(
+<pre><code class="language-luau">function getCopyOfAnimsList(
     name: "R6" | "R15",
     specifier: "Animations" | "Emotes"
 ): AnimationsList
@@ -324,14 +324,14 @@ controller.Action:PlayAction("wave")
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Get R15 core animations:</p>
-<pre><code class="language-lua">local r15Anims = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
+<pre><code class="language-luau">local r15Anims = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
 
 -- Modify as needed
 r15Anims.Idle[1].speed = 0.8
 r15Anims.Run[1].id = "rbxassetid://123456789"
 </code></pre>
 <p>Get R6 emotes:</p>
-<pre><code class="language-lua">local r6Emotes = SimpleAnimate.getCopyOfAnimsList("R6", "Emotes")
+<pre><code class="language-luau">local r6Emotes = SimpleAnimate.getCopyOfAnimsList("R6", "Emotes")
 
 -- Add custom emote
 r6Emotes.customWave = {
@@ -345,7 +345,7 @@ r6Emotes.customWave = {
 <h3 id="getcopyofanims"><a class="header" href="#getcopyofanims"><code>getCopyOfAnims()</code></a></h3>
 <p>Gets deep copies of both default animation lists (Animations and Emotes).</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function getCopyOfAnims(name: "R6" | "R15"): (AnimationsList, AnimationsList)
+<pre><code class="language-luau">function getCopyOfAnims(name: "R6" | "R15"): (AnimationsList, AnimationsList)
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -358,7 +358,7 @@ r6Emotes.customWave = {
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Get both R15 lists:</p>
-<pre><code class="language-lua">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Customize both
 coreAnims.Walk[1].speed = 1.2
@@ -367,13 +367,13 @@ emoteAnims.wave[1].fadeTime = 0.3
 local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
 </code></pre>
 <p>Get R6 lists:</p>
-<pre><code class="language-lua">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R6")
+<pre><code class="language-luau">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R6")
 </code></pre>
 <hr />
 <h3 id="getanimpackageasync"><a class="header" href="#getanimpackageasync"><code>getAnimPackageAsync()</code></a></h3>
 <p>Gets a player's equipped animation package asynchronously. Fills in missing animations with defaults.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function getAnimPackageAsync(
+<pre><code class="language-luau">function getAnimPackageAsync(
     player: Player?,
     defaultPoseSourceIfUnavailable: AnimationsList?
 ): AnimationsList?
@@ -389,7 +389,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Server-side:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 
 Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(character)
@@ -401,7 +401,7 @@ Players.PlayerAdded:Connect(function(player)
 end)
 </code></pre>
 <p>Client-side:</p>
-<pre><code class="language-lua">local player = game.Players.LocalPlayer
+<pre><code class="language-luau">local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
 -- Get local player's animations (no player parameter needed)
@@ -410,7 +410,7 @@ local anims = SimpleAnimate.getAnimPackageAsync()
 local controller = SimpleAnimate.new(character, true, anims)
 </code></pre>
 <p>With custom fallbacks:</p>
-<pre><code class="language-lua">local customDefaults = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
+<pre><code class="language-luau">local customDefaults = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
 customDefaults.Idle[1].id = "rbxassetid://123456789"
 
 local anims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
@@ -419,7 +419,7 @@ local anims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 <h3 id="getemotepackageasync"><a class="header" href="#getemotepackageasync"><code>getEmotePackageAsync()</code></a></h3>
 <p>Gets a player's equipped emote package asynchronously.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function getEmotePackageAsync(
+<pre><code class="language-luau">function getEmotePackageAsync(
     player: Player?,
     defaultEmoteSourceIfUnavailable: AnimationsList?
 ): AnimationsList?
@@ -435,7 +435,7 @@ local anims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Server-side:</p>
-<pre><code class="language-lua">Players.PlayerAdded:Connect(function(player)
+<pre><code class="language-luau">Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(character)
         local anims = SimpleAnimate.getAnimPackageAsync(player)
         local emotes = SimpleAnimate.getEmotePackageAsync(player)
@@ -450,13 +450,13 @@ local anims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 end)
 </code></pre>
 <p>Client-side:</p>
-<pre><code class="language-lua">local emotes = SimpleAnimate.getEmotePackageAsync()
+<pre><code class="language-luau">local emotes = SimpleAnimate.getEmotePackageAsync()
 </code></pre>
 <h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
 <h3 id="preload"><a class="header" href="#preload"><code>Preload</code></a></h3>
 <p>Reference to the Preload utility module.</p>
 <p><strong>Example:</strong></p>
-<pre><code class="language-lua">local animator = character:FindFirstChildWhichIsA("Animator", true)
+<pre><code class="language-luau">local animator = character:FindFirstChildWhichIsA("Animator", true)
 local animList = {
     Idle = {{id = "rbxassetid://123", weight = 10}}
 }
@@ -473,7 +473,7 @@ local preloaded = SimpleAnimate.Preload.preloadAnimList(
 <h3 id="default"><a class="header" href="#default"><code>default</code></a></h3>
 <p>Reference to default animation lists (DefaultAnims module).</p>
 <p><strong>Example:</strong></p>
-<pre><code class="language-lua">-- Access default R15 animations directly
+<pre><code class="language-luau">-- Access default R15 animations directly
 local defaultR15 = SimpleAnimate.default.R15
 
 print(defaultR15.Animations.Idle[1].id)
@@ -482,7 +482,7 @@ print(defaultR15.Emotes.wave[1].id)
 <div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
 <h2 id="basic-setup"><a class="header" href="#basic-setup">Basic Setup</a></h2>
 <p>The simplest way to get started with SimpleAnimate:</p>
-<pre><code class="language-lua">local SimpleAnimate = require(path.to.SimpleAnimate)
+<pre><code class="language-luau">local SimpleAnimate = require(path.to.SimpleAnimate)
 
 -- Wait for character
 local character = player.Character or player.CharacterAdded:Wait()
@@ -492,7 +492,7 @@ local controller = SimpleAnimate.new(character)
 </code></pre>
 <p>That's it! The controller will automatically handle all character animations based on humanoid state changes.</p>
 <h2 id="playing-an-emote"><a class="header" href="#playing-an-emote">Playing an Emote</a></h2>
-<pre><code class="language-lua">-- Play a random animation from the "wave" emote
+<pre><code class="language-luau">-- Play a random animation from the "wave" emote
 local track = controller.Action:PlayAction("wave")
 
 -- Wait for it to finish
@@ -500,7 +500,7 @@ track.Stopped:Wait()
 print("Wave animation completed!")
 </code></pre>
 <h2 id="changing-a-core-animation"><a class="header" href="#changing-a-core-animation">Changing a Core Animation</a></h2>
-<pre><code class="language-lua">-- Change the idle animation
+<pre><code class="language-luau">-- Change the idle animation
 controller.Core.PoseController:ChangeCoreAnim(
     "Idle",
     1,
@@ -508,12 +508,12 @@ controller.Core.PoseController:ChangeCoreAnim(
 )
 </code></pre>
 <h2 id="listening-to-pose-changes"><a class="header" href="#listening-to-pose-changes">Listening to Pose Changes</a></h2>
-<pre><code class="language-lua">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+<pre><code class="language-luau">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     print(string.format("Pose changed: %s -&gt; %s", oldPose, newPose))
 end)
 </code></pre>
 <h2 id="getting-current-state"><a class="header" href="#getting-current-state">Getting Current State</a></h2>
-<pre><code class="language-lua">-- Get current pose
+<pre><code class="language-luau">-- Get current pose
 local currentPose = controller.Core.PoseController:GetPose()
 print("Current pose:", currentPose) -- "Idle", "Walk", "Run", etc.
 
@@ -522,7 +522,7 @@ local currentTrack = controller.Core.PoseController:GetCurrentTrack()
 print("Current speed:", currentTrack.Speed)
 </code></pre>
 <h2 id="creating-custom-actions"><a class="header" href="#creating-custom-actions">Creating Custom Actions</a></h2>
-<pre><code class="language-lua">-- Define a custom action
+<pre><code class="language-luau">-- Define a custom action
 local customAction = {
     {
         id = "rbxassetid://123456789",
@@ -540,7 +540,7 @@ controller.Action:PlayAction("myCustomAction")
 </code></pre>
 <h2 id="cleanup"><a class="header" href="#cleanup">Cleanup</a></h2>
 <p>Always destroy the controller when done:</p>
-<pre><code class="language-lua">-- Cleanup (automatically called when character is destroyed)
+<pre><code class="language-luau">-- Cleanup (automatically called when character is destroyed)
 controller:Destroy()
 </code></pre>
 <h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
@@ -555,7 +555,7 @@ controller:Destroy()
 <h3 id="new-1"><a class="header" href="#new-1"><code>new()</code></a></h3>
 <p>Creates a new AnimationController instance.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function new(
+<pre><code class="language-luau">function new(
     rig: Model,
     doPreload: boolean?,
     coreAnimations: AnimationsList?,
@@ -577,10 +577,10 @@ controller:Destroy()
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Basic usage with defaults:</p>
-<pre><code class="language-lua">local controller = SimpleAnimate.new(character)
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
 </code></pre>
 <p>With custom animations:</p>
-<pre><code class="language-lua">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
 coreAnims.Idle[1].id = "rbxassetid://123456789"
 
 local controller = SimpleAnimate.new(
@@ -591,10 +591,10 @@ local controller = SimpleAnimate.new(
 )
 </code></pre>
 <p>Without preloading (load animations on-demand):</p>
-<pre><code class="language-lua">local controller = SimpleAnimate.new(character, false)
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character, false)
 </code></pre>
 <p>With custom state machine:</p>
-<pre><code class="language-lua">local customStateMachine = character:FindFirstChild("CustomHumanoid")
+<pre><code class="language-luau">local customStateMachine = character:FindFirstChild("CustomHumanoid")
 local controller = SimpleAnimate.new(
     character,
     true,
@@ -607,7 +607,7 @@ local controller = SimpleAnimate.new(
 <h3 id="fromexisting-1"><a class="header" href="#fromexisting-1"><code>fromExisting()</code></a></h3>
 <p>Gets an existing AnimationController for the specified rig.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function fromExisting(rig: Model): AnimationController?
+<pre><code class="language-luau">function fromExisting(rig: Model): AnimationController?
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -618,7 +618,7 @@ local controller = SimpleAnimate.new(
 <li><code>AnimationController?</code> - The existing controller or <code>nil</code> if none exists</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local controller = SimpleAnimate.fromExisting(character)
+<pre><code class="language-luau">local controller = SimpleAnimate.fromExisting(character)
 
 if controller then
     print("Controller already exists!")
@@ -629,7 +629,7 @@ else
 end
 </code></pre>
 <p>Checking multiple characters:</p>
-<pre><code class="language-lua">for _, player in Players:GetPlayers() do
+<pre><code class="language-luau">for _, player in Players:GetPlayers() do
     local char = player.Character
     if char then
         local controller = SimpleAnimate.fromExisting(char)
@@ -643,7 +643,7 @@ end
 <h3 id="awaitcontroller-1"><a class="header" href="#awaitcontroller-1"><code>awaitController()</code></a></h3>
 <p>Waits for an AnimationController to be created for the specified rig. Yields until available or timeout occurs.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function awaitController(rig: Model, timeOut: number?): AnimationController?
+<pre><code class="language-luau">function awaitController(rig: Model, timeOut: number?): AnimationController?
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -656,7 +656,7 @@ end
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Basic usage:</p>
-<pre><code class="language-lua">-- Wait up to 5 seconds for controller
+<pre><code class="language-luau">-- Wait up to 5 seconds for controller
 local controller = SimpleAnimate.awaitController(character)
 
 if controller then
@@ -666,11 +666,11 @@ else
 end
 </code></pre>
 <p>Custom timeout:</p>
-<pre><code class="language-lua">-- Wait up to 10 seconds
+<pre><code class="language-luau">-- Wait up to 10 seconds
 local controller = SimpleAnimate.awaitController(character, 10)
 </code></pre>
 <p>Useful in separate scripts:</p>
-<pre><code class="language-lua">-- Script A creates the controller
+<pre><code class="language-luau">-- Script A creates the controller
 SimpleAnimate.new(character)
 
 -- Script B (elsewhere) waits for it
@@ -681,7 +681,7 @@ controller.Action:PlayAction("wave")
 <h3 id="getcopyofanimslist-1"><a class="header" href="#getcopyofanimslist-1"><code>getCopyOfAnimsList()</code></a></h3>
 <p>Gets a deep copy of a default animation list by name and type.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function getCopyOfAnimsList(
+<pre><code class="language-luau">function getCopyOfAnimsList(
     name: "R6" | "R15",
     specifier: "Animations" | "Emotes"
 ): AnimationsList
@@ -697,14 +697,14 @@ controller.Action:PlayAction("wave")
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Get R15 core animations:</p>
-<pre><code class="language-lua">local r15Anims = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
+<pre><code class="language-luau">local r15Anims = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
 
 -- Modify as needed
 r15Anims.Idle[1].speed = 0.8
 r15Anims.Run[1].id = "rbxassetid://123456789"
 </code></pre>
 <p>Get R6 emotes:</p>
-<pre><code class="language-lua">local r6Emotes = SimpleAnimate.getCopyOfAnimsList("R6", "Emotes")
+<pre><code class="language-luau">local r6Emotes = SimpleAnimate.getCopyOfAnimsList("R6", "Emotes")
 
 -- Add custom emote
 r6Emotes.customWave = {
@@ -718,7 +718,7 @@ r6Emotes.customWave = {
 <h3 id="getcopyofanims-1"><a class="header" href="#getcopyofanims-1"><code>getCopyOfAnims()</code></a></h3>
 <p>Gets deep copies of both default animation lists (Animations and Emotes).</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function getCopyOfAnims(name: "R6" | "R15"): (AnimationsList, AnimationsList)
+<pre><code class="language-luau">function getCopyOfAnims(name: "R6" | "R15"): (AnimationsList, AnimationsList)
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -731,7 +731,7 @@ r6Emotes.customWave = {
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Get both R15 lists:</p>
-<pre><code class="language-lua">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Customize both
 coreAnims.Walk[1].speed = 1.2
@@ -740,13 +740,13 @@ emoteAnims.wave[1].fadeTime = 0.3
 local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
 </code></pre>
 <p>Get R6 lists:</p>
-<pre><code class="language-lua">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R6")
+<pre><code class="language-luau">local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R6")
 </code></pre>
 <hr />
 <h3 id="getanimpackageasync-1"><a class="header" href="#getanimpackageasync-1"><code>getAnimPackageAsync()</code></a></h3>
 <p>Gets a player's equipped animation package asynchronously. Fills in missing animations with defaults.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function getAnimPackageAsync(
+<pre><code class="language-luau">function getAnimPackageAsync(
     player: Player?,
     defaultPoseSourceIfUnavailable: AnimationsList?
 ): AnimationsList?
@@ -762,7 +762,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Server-side:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 
 Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(character)
@@ -774,7 +774,7 @@ Players.PlayerAdded:Connect(function(player)
 end)
 </code></pre>
 <p>Client-side:</p>
-<pre><code class="language-lua">local player = game.Players.LocalPlayer
+<pre><code class="language-luau">local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
 -- Get local player's animations (no player parameter needed)
@@ -783,7 +783,7 @@ local anims = SimpleAnimate.getAnimPackageAsync()
 local controller = SimpleAnimate.new(character, true, anims)
 </code></pre>
 <p>With custom fallbacks:</p>
-<pre><code class="language-lua">local customDefaults = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
+<pre><code class="language-luau">local customDefaults = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
 customDefaults.Idle[1].id = "rbxassetid://123456789"
 
 local anims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
@@ -792,7 +792,7 @@ local anims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 <h3 id="getemotepackageasync-1"><a class="header" href="#getemotepackageasync-1"><code>getEmotePackageAsync()</code></a></h3>
 <p>Gets a player's equipped emote package asynchronously.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function getEmotePackageAsync(
+<pre><code class="language-luau">function getEmotePackageAsync(
     player: Player?,
     defaultEmoteSourceIfUnavailable: AnimationsList?
 ): AnimationsList?
@@ -808,7 +808,7 @@ local anims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Server-side:</p>
-<pre><code class="language-lua">Players.PlayerAdded:Connect(function(player)
+<pre><code class="language-luau">Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(character)
         local anims = SimpleAnimate.getAnimPackageAsync(player)
         local emotes = SimpleAnimate.getEmotePackageAsync(player)
@@ -823,13 +823,13 @@ local anims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 end)
 </code></pre>
 <p>Client-side:</p>
-<pre><code class="language-lua">local emotes = SimpleAnimate.getEmotePackageAsync()
+<pre><code class="language-luau">local emotes = SimpleAnimate.getEmotePackageAsync()
 </code></pre>
 <h2 id="properties-1"><a class="header" href="#properties-1">Properties</a></h2>
 <h3 id="preload-1"><a class="header" href="#preload-1"><code>Preload</code></a></h3>
 <p>Reference to the Preload utility module.</p>
 <p><strong>Example:</strong></p>
-<pre><code class="language-lua">local animator = character:FindFirstChildWhichIsA("Animator", true)
+<pre><code class="language-luau">local animator = character:FindFirstChildWhichIsA("Animator", true)
 local animList = {
     Idle = {{id = "rbxassetid://123", weight = 10}}
 }
@@ -846,7 +846,7 @@ local preloaded = SimpleAnimate.Preload.preloadAnimList(
 <h3 id="default-1"><a class="header" href="#default-1"><code>default</code></a></h3>
 <p>Reference to default animation lists (DefaultAnims module).</p>
 <p><strong>Example:</strong></p>
-<pre><code class="language-lua">-- Access default R15 animations directly
+<pre><code class="language-luau">-- Access default R15 animations directly
 local defaultR15 = SimpleAnimate.default.R15
 
 print(defaultR15.Animations.Idle[1].id)
@@ -861,7 +861,7 @@ print(defaultR15.Emotes.wave[1].id)
 <h3 id="posechanged"><a class="header" href="#posechanged"><code>PoseChanged</code></a></h3>
 <p>Fires when the character's pose changes.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">PoseChanged: RBXScriptSignal&lt;PoseType, PoseType, AnimationTrack&gt;
+<pre><code class="language-luau">PoseChanged: RBXScriptSignal&lt;PoseType, PoseType, AnimationTrack&gt;
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -871,12 +871,12 @@ print(defaultR15.Emotes.wave[1].id)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Basic usage:</p>
-<pre><code class="language-lua">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+<pre><code class="language-luau">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     print(string.format("Changed from %s to %s", oldPose, newPose))
 end)
 </code></pre>
 <p>Track specific transitions:</p>
-<pre><code class="language-lua">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+<pre><code class="language-luau">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     if newPose == "Jumping" then
         print("Character jumped!")
         track:AdjustSpeed(1.5) -- Make jump animation faster
@@ -886,7 +886,7 @@ end)
 end)
 </code></pre>
 <p>Create visual effects on pose changes:</p>
-<pre><code class="language-lua">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+<pre><code class="language-luau">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     if newPose == "Landed" then
         -- Create dust particle effect
         local dust = dustEffect:Clone()
@@ -903,7 +903,7 @@ end)
 <h3 id="setcoreactive"><a class="header" href="#setcoreactive"><code>:SetCoreActive()</code></a></h3>
 <p>Sets whether core animations are active.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function SetCoreActive(value: boolean): ()
+<pre><code class="language-luau">function SetCoreActive(value: boolean): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -911,14 +911,14 @@ end)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Disable all core animations:</p>
-<pre><code class="language-lua">controller.Core.PoseController:SetCoreActive(false)
+<pre><code class="language-luau">controller.Core.PoseController:SetCoreActive(false)
 -- Character will stop animating automatically
 </code></pre>
 <p>Re-enable core animations:</p>
-<pre><code class="language-lua">controller.Core.PoseController:SetCoreActive(true)
+<pre><code class="language-luau">controller.Core.PoseController:SetCoreActive(true)
 </code></pre>
 <p>Temporarily pause during cutscene:</p>
-<pre><code class="language-lua">-- Start cutscene
+<pre><code class="language-luau">-- Start cutscene
 controller.Core.PoseController:SetCoreActive(false)
 
 -- Play cutscene...
@@ -931,32 +931,32 @@ controller.Core.PoseController:SetCoreActive(true)
 <h3 id="getcoreactive"><a class="header" href="#getcoreactive"><code>:GetCoreActive()</code></a></h3>
 <p>Gets whether core animations are currently active.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetCoreActive(): boolean
+<pre><code class="language-luau">function GetCoreActive(): boolean
 </code></pre>
 <p><strong>Returns:</strong></p>
 <ul>
 <li><code>boolean</code> - Whether core animations are active</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local isActive = controller.Core.PoseController:GetCoreActive()
+<pre><code class="language-luau">local isActive = controller.Core.PoseController:GetCoreActive()
 print("Core animations active:", isActive)
 </code></pre>
 <p>Toggle core animations:</p>
-<pre><code class="language-lua">local currentState = controller.Core.PoseController:GetCoreActive()
+<pre><code class="language-luau">local currentState = controller.Core.PoseController:GetCoreActive()
 controller.Core.PoseController:SetCoreActive(not currentState)
 </code></pre>
 <hr />
 <h3 id="setcorecanplayanims"><a class="header" href="#setcorecanplayanims"><code>:SetCoreCanPlayAnims()</code></a></h3>
 <p>Controls whether core animations can play. Used internally during emotes.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function SetCoreCanPlayAnims(value: boolean): ()
+<pre><code class="language-luau">function SetCoreCanPlayAnims(value: boolean): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>value: boolean</code> - Whether core animations can play</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">-- Prevent core animations temporarily
+<pre><code class="language-luau">-- Prevent core animations temporarily
 controller.Core.PoseController:SetCoreCanPlayAnims(false)
 
 -- Allow core animations
@@ -966,7 +966,7 @@ controller.Core.PoseController:SetCoreCanPlayAnims(true)
 <h3 id="getcorecanplayanims"><a class="header" href="#getcorecanplayanims"><code>:GetCoreCanPlayAnims()</code></a></h3>
 <p>Gets whether core animations can play.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetCoreCanPlayAnims(): boolean
+<pre><code class="language-luau">function GetCoreCanPlayAnims(): boolean
 </code></pre>
 <p><strong>Returns:</strong></p>
 <ul>
@@ -976,38 +976,38 @@ controller.Core.PoseController:SetCoreCanPlayAnims(true)
 <h3 id="getcurrenttrack"><a class="header" href="#getcurrenttrack"><code>:GetCurrentTrack()</code></a></h3>
 <p>Gets the currently playing animation track.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetCurrentTrack(): AnimationTrack
+<pre><code class="language-luau">function GetCurrentTrack(): AnimationTrack
 </code></pre>
 <p><strong>Returns:</strong></p>
 <ul>
 <li><code>AnimationTrack</code> - The current animation track</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local track = controller.Core.PoseController:GetCurrentTrack()
+<pre><code class="language-luau">local track = controller.Core.PoseController:GetCurrentTrack()
 print("Current animation:", track.Animation.AnimationId)
 print("Current speed:", track.Speed)
 print("Is playing:", track.IsPlaying)
 </code></pre>
 <p>Adjust current animation speed:</p>
-<pre><code class="language-lua">local track = controller.Core.PoseController:GetCurrentTrack()
+<pre><code class="language-luau">local track = controller.Core.PoseController:GetCurrentTrack()
 track:AdjustSpeed(2) -- Play at 2x speed
 </code></pre>
 <hr />
 <h3 id="getpose"><a class="header" href="#getpose"><code>:GetPose()</code></a></h3>
 <p>Gets the current pose type.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetPose(): PoseType?
+<pre><code class="language-luau">function GetPose(): PoseType?
 </code></pre>
 <p><strong>Returns:</strong></p>
 <ul>
 <li><code>PoseType?</code> - The current pose (e.g., "Idle", "Walk", "Run", "Jumping")</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local currentPose = controller.Core.PoseController:GetPose()
+<pre><code class="language-luau">local currentPose = controller.Core.PoseController:GetPose()
 print("Character is:", currentPose)
 </code></pre>
 <p>Conditional logic based on pose:</p>
-<pre><code class="language-lua">local pose = controller.Core.PoseController:GetPose()
+<pre><code class="language-luau">local pose = controller.Core.PoseController:GetPose()
 
 if pose == "Idle" then
     print("Character is standing still")
@@ -1021,7 +1021,7 @@ end
 <h3 id="setposeenabled"><a class="header" href="#setposeenabled"><code>:SetPoseEnabled()</code></a></h3>
 <p>Enables or disables a specific pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function SetPoseEnabled(pose: PoseType, enabled: boolean): ()
+<pre><code class="language-luau">function SetPoseEnabled(pose: PoseType, enabled: boolean): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1030,23 +1030,23 @@ end
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Disable jumping animation:</p>
-<pre><code class="language-lua">controller.Core.PoseController:SetPoseEnabled("Jumping", false)
+<pre><code class="language-luau">controller.Core.PoseController:SetPoseEnabled("Jumping", false)
 -- Character can still jump but won't play jump animation
 </code></pre>
 <p>Disable multiple poses:</p>
-<pre><code class="language-lua">-- Create a "statue" mode
+<pre><code class="language-luau">-- Create a "statue" mode
 controller.Core.PoseController:SetPoseEnabled("Walk", false)
 controller.Core.PoseController:SetPoseEnabled("Run", false)
 controller.Core.PoseController:SetPoseEnabled("Jumping", false)
 </code></pre>
 <p>Re-enable poses:</p>
-<pre><code class="language-lua">controller.Core.PoseController:SetPoseEnabled("Jumping", true)
+<pre><code class="language-luau">controller.Core.PoseController:SetPoseEnabled("Jumping", true)
 </code></pre>
 <hr />
 <h3 id="getcoreaniminfos"><a class="header" href="#getcoreaniminfos"><code>:GetCoreAnimInfos()</code></a></h3>
 <p>Gets the animation information array for a specific pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetCoreAnimInfos(pose: PoseType): {AnimInfo}
+<pre><code class="language-luau">function GetCoreAnimInfos(pose: PoseType): {AnimInfo}
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1057,21 +1057,21 @@ controller.Core.PoseController:SetPoseEnabled("Jumping", false)
 <li><code>{AnimInfo}</code> - Array of animation info structures</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local idleAnims = controller.Core.PoseController:GetCoreAnimInfos("Idle")
+<pre><code class="language-luau">local idleAnims = controller.Core.PoseController:GetCoreAnimInfos("Idle")
 
 for i, info in idleAnims do
     print(string.format("Idle anim %d: %s (weight: %d)", i, info.id, info.weight))
 end
 </code></pre>
 <p>Check how many walk animations exist:</p>
-<pre><code class="language-lua">local walkAnims = controller.Core.PoseController:GetCoreAnimInfos("Walk")
+<pre><code class="language-luau">local walkAnims = controller.Core.PoseController:GetCoreAnimInfos("Walk")
 print("Number of walk animations:", #walkAnims)
 </code></pre>
 <hr />
 <h3 id="changecoreanim"><a class="header" href="#changecoreanim"><code>:ChangeCoreAnim()</code></a></h3>
 <p>Changes a core animation for a specific pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function ChangeCoreAnim(
+<pre><code class="language-luau">function ChangeCoreAnim(
     pose: PoseType,
     index: number,
     new: Animation | string | AnimationTrack | AnimInfo
@@ -1089,20 +1089,20 @@ print("Number of walk animations:", #walkAnims)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Change using animation ID:</p>
-<pre><code class="language-lua">controller.Core.PoseController:ChangeCoreAnim(
+<pre><code class="language-luau">controller.Core.PoseController:ChangeCoreAnim(
     "Idle",
     1,
     "rbxassetid://123456789"
 )
 </code></pre>
 <p>Change using Animation instance:</p>
-<pre><code class="language-lua">local anim = Instance.new("Animation")
+<pre><code class="language-luau">local anim = Instance.new("Animation")
 anim.AnimationId = "rbxassetid://123456789"
 
 controller.Core.PoseController:ChangeCoreAnim("Run", 1, anim)
 </code></pre>
 <p>Change using AnimInfo table:</p>
-<pre><code class="language-lua">local newAnimInfo = {
+<pre><code class="language-luau">local newAnimInfo = {
     id = "rbxassetid://123456789",
     weight = 15,
     speed = 1.2,
@@ -1112,7 +1112,7 @@ controller.Core.PoseController:ChangeCoreAnim("Run", 1, anim)
 controller.Core.PoseController:ChangeCoreAnim("Walk", 1, newAnimInfo)
 </code></pre>
 <p>Change multiple animations:</p>
-<pre><code class="language-lua">-- Replace all idle animations
+<pre><code class="language-luau">-- Replace all idle animations
 local idleAnims = {
     "rbxassetid://111111",
     "rbxassetid://222222",
@@ -1127,7 +1127,7 @@ end
 <h3 id="getrandomcoreanim"><a class="header" href="#getrandomcoreanim"><code>:GetRandomCoreAnim()</code></a></h3>
 <p>Gets a random animation track for the specified pose, weighted by animation weights.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetRandomCoreAnim(pose: PoseType): AnimationTrack
+<pre><code class="language-luau">function GetRandomCoreAnim(pose: PoseType): AnimationTrack
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1138,14 +1138,14 @@ end
 <li><code>AnimationTrack</code> - A randomly selected animation track</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local randomIdle = controller.Core.PoseController:GetRandomCoreAnim("Idle")
+<pre><code class="language-luau">local randomIdle = controller.Core.PoseController:GetRandomCoreAnim("Idle")
 print("Selected idle animation:", randomIdle.Animation.AnimationId)
 </code></pre>
 <hr />
 <h3 id="stopcoreanimations"><a class="header" href="#stopcoreanimations"><code>:StopCoreAnimations()</code></a></h3>
 <p>Stops all currently playing core animations.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function StopCoreAnimations(fadeTime: number?): ()
+<pre><code class="language-luau">function StopCoreAnimations(fadeTime: number?): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1153,13 +1153,13 @@ print("Selected idle animation:", randomIdle.Animation.AnimationId)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Stop immediately:</p>
-<pre><code class="language-lua">controller.Core.PoseController:StopCoreAnimations()
+<pre><code class="language-luau">controller.Core.PoseController:StopCoreAnimations()
 </code></pre>
 <p>Stop with fade:</p>
-<pre><code class="language-lua">controller.Core.PoseController:StopCoreAnimations(0.5) -- Fade out over 0.5 seconds
+<pre><code class="language-luau">controller.Core.PoseController:StopCoreAnimations(0.5) -- Fade out over 0.5 seconds
 </code></pre>
 <p>Use before playing custom animation:</p>
-<pre><code class="language-lua">-- Stop all core animations before custom sequence
+<pre><code class="language-luau">-- Stop all core animations before custom sequence
 controller.Core.PoseController:StopCoreAnimations(0.2)
 
 local customTrack = animator:LoadAnimation(customAnimation)
@@ -1169,7 +1169,7 @@ customTrack:Play()
 <h3 id="playcoreanimation"><a class="header" href="#playcoreanimation"><code>:PlayCoreAnimation()</code></a></h3>
 <p>Plays an animation for the specified pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function PlayCoreAnimation(
+<pre><code class="language-luau">function PlayCoreAnimation(
     pose: PoseType,
     looped: boolean?,
     speed: number?,
@@ -1189,19 +1189,19 @@ customTrack:Play()
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Play idle animation:</p>
-<pre><code class="language-lua">controller.Core.PoseController:PlayCoreAnimation("Idle")
+<pre><code class="language-luau">controller.Core.PoseController:PlayCoreAnimation("Idle")
 </code></pre>
 <p>Play with custom speed:</p>
-<pre><code class="language-lua">controller.Core.PoseController:PlayCoreAnimation("Run", true, 1.5)
+<pre><code class="language-luau">controller.Core.PoseController:PlayCoreAnimation("Run", true, 1.5)
 </code></pre>
 <p>Play non-looping:</p>
-<pre><code class="language-lua">controller.Core.PoseController:PlayCoreAnimation("Jumping", false, 1, 0.1)
+<pre><code class="language-luau">controller.Core.PoseController:PlayCoreAnimation("Jumping", false, 1, 0.1)
 </code></pre>
 <hr />
 <h3 id="changepose"><a class="header" href="#changepose"><code>:ChangePose()</code></a></h3>
 <p>Changes the character's pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function ChangePose(pose: PoseType, speed: number?, isCore: boolean?): ()
+<pre><code class="language-luau">function ChangePose(pose: PoseType, speed: number?, isCore: boolean?): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1211,10 +1211,10 @@ customTrack:Play()
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Force character to idle:</p>
-<pre><code class="language-lua">controller.Core.PoseController:ChangePose("Idle")
+<pre><code class="language-luau">controller.Core.PoseController:ChangePose("Idle")
 </code></pre>
 <p>Change pose with custom speed:</p>
-<pre><code class="language-lua">controller.Core.PoseController:ChangePose("Walk", 1.5)
+<pre><code class="language-luau">controller.Core.PoseController:ChangePose("Walk", 1.5)
 </code></pre>
 <p><strong>Note:</strong> Usually you don't need to call this manually as the Connections module handles pose changes automatically based on humanoid state.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="connections-api"><a class="header" href="#connections-api">Connections API</a></h1>
@@ -1239,20 +1239,20 @@ customTrack:Play()
 <h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
 <h3 id="adjusting-run-threshold"><a class="header" href="#adjusting-run-threshold">Adjusting Run Threshold</a></h3>
 <p>Control when the character switches from walking to running:</p>
-<pre><code class="language-lua">-- Default is 15.5, lower value = switches to run earlier
+<pre><code class="language-luau">-- Default is 15.5, lower value = switches to run earlier
 controller.Core.Connections.RunThreshold = 10
 
 -- Now character will run at speeds above 10
 </code></pre>
 <h3 id="custom-animation-speeds"><a class="header" href="#custom-animation-speeds">Custom Animation Speeds</a></h3>
-<pre><code class="language-lua">-- Make idle animation slower for dramatic effect
+<pre><code class="language-luau">-- Make idle animation slower for dramatic effect
 controller.Core.Connections.IdleAnimationSpeed = 0.7
 
 -- Make running animation faster
 controller.Core.Connections.MoveAnimationSpeedMultiplier = 1.5
 </code></pre>
 <h3 id="adjusting-jump-timing"><a class="header" href="#adjusting-jump-timing">Adjusting Jump Timing</a></h3>
-<pre><code class="language-lua">-- Make character fall faster (shorter jump animation)
+<pre><code class="language-luau">-- Make character fall faster (shorter jump animation)
 controller.Core.Connections.JumpDuration = 0.1
 
 -- Make character stay in jump animation longer
@@ -1260,7 +1260,7 @@ controller.Core.Connections.JumpDuration = 0.5
 </code></pre>
 <h3 id="manual-speed-multipliers"><a class="header" href="#manual-speed-multipliers">Manual Speed Multipliers</a></h3>
 <p>Disable auto-adjustment and set custom multipliers:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Disable automatic adjustment
 connections.AutoAdjustSpeedMultipliers = false
@@ -1271,7 +1271,7 @@ connections.ClimbAnimationSpeedMultiplier = 1.5  -- Climb at 1.5x speed
 connections.SwimAnimationSpeedMultiplier = 0.8   -- Swim at 0.8x speed
 </code></pre>
 <h3 id="swimming-configuration"><a class="header" href="#swimming-configuration">Swimming Configuration</a></h3>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Adjust swim idle threshold
 connections.SwimIdleThreshold = 3 -- Idle when speed &lt; 3
@@ -1284,7 +1284,7 @@ connections.SwimAnimationSpeedMultiplier = 1.2
 </code></pre>
 <h3 id="speed-based-animation-system"><a class="header" href="#speed-based-animation-system">Speed-Based Animation System</a></h3>
 <p>Create a system where animation speed matches character speed:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Enable speed-based animation
 connections.UseWalkSpeedForAnimSpeed = true
@@ -1299,7 +1299,7 @@ end)
 </code></pre>
 <h3 id="custom-speed-zones"><a class="header" href="#custom-speed-zones">Custom Speed Zones</a></h3>
 <p>Create areas with different animation behaviors:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 local slowZone = workspace.SlowZone
 local fastZone = workspace.FastZone
@@ -1322,7 +1322,7 @@ end)
 </code></pre>
 <h3 id="dynamic-animation-speed"><a class="header" href="#dynamic-animation-speed">Dynamic Animation Speed</a></h3>
 <p>Adjust animation speed based on game state:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Normal mode
 local function setNormalSpeed()
@@ -1357,7 +1357,7 @@ end)
 </code></pre>
 <h3 id="disable-auto-speed-adjustment"><a class="header" href="#disable-auto-speed-adjustment">Disable Auto-Speed Adjustment</a></h3>
 <p>For more control, disable automatic speed calculations:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Disable auto-adjustment
 connections.AutoAdjustSpeedMultipliers = false
@@ -1368,7 +1368,7 @@ connections.UseWalkSpeedForAnimSpeed = false
 connections.MoveAnimationSpeedMultiplier = 1.5
 </code></pre>
 <h3 id="custom-thresholds-for-different-characters"><a class="header" href="#custom-thresholds-for-different-characters">Custom Thresholds for Different Characters</a></h3>
-<pre><code class="language-lua">-- Heavy character - slower threshold
+<pre><code class="language-luau">-- Heavy character - slower threshold
 local heavyConnections = heavyController.Core.Connections
 heavyConnections.RunThreshold = 12
 heavyConnections.MoveAnimationSpeedMultiplier = 0.8
@@ -1379,7 +1379,7 @@ lightConnections.RunThreshold = 18
 lightConnections.MoveAnimationSpeedMultiplier = 1.2
 </code></pre>
 <h3 id="monitoring-animation-state"><a class="header" href="#monitoring-animation-state">Monitoring Animation State</a></h3>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Check current settings
 print("Run Threshold:", connections.RunThreshold)
@@ -1396,7 +1396,7 @@ end)
 </code></pre>
 <h3 id="complete-movement-system"><a class="header" href="#complete-movement-system">Complete Movement System</a></h3>
 <p>A comprehensive example combining multiple settings:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Configure all movement settings
 connections.RunThreshold = 14
@@ -1445,7 +1445,7 @@ applySpeedBoost(5) -- 5 second speed boost
 <h3 id="createaction"><a class="header" href="#createaction"><code>:CreateAction()</code></a></h3>
 <p>Creates a new action animation and adds it to the actions collection.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function CreateAction(
+<pre><code class="language-luau">function CreateAction(
     key: any,
     template: {AnimInfo},
     doPreload: boolean?,
@@ -1467,7 +1467,7 @@ applySpeedBoost(5) -- 5 second speed boost
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Create a simple action:</p>
-<pre><code class="language-lua">local waveAction = {
+<pre><code class="language-luau">local waveAction = {
     {
         id = "rbxassetid://123456789",
         weight = 10,
@@ -1479,7 +1479,7 @@ applySpeedBoost(5) -- 5 second speed boost
 controller.Action:CreateAction("customWave", waveAction)
 </code></pre>
 <p>Create action with multiple variants:</p>
-<pre><code class="language-lua">local danceAction = {
+<pre><code class="language-luau">local danceAction = {
     {
         id = "rbxassetid://111111111",
         weight = 10,
@@ -1500,7 +1500,7 @@ controller.Action:CreateAction("customWave", waveAction)
 controller.Action:CreateAction("dance", danceAction)
 </code></pre>
 <p>Create with custom priority:</p>
-<pre><code class="language-lua">controller.Action:CreateAction(
+<pre><code class="language-luau">controller.Action:CreateAction(
     "importantAction",
     actionTemplate,
     true,
@@ -1508,7 +1508,7 @@ controller.Action:CreateAction("dance", danceAction)
 )
 </code></pre>
 <p>Create looped action:</p>
-<pre><code class="language-lua">local sitAction = {
+<pre><code class="language-luau">local sitAction = {
     {
         id = "rbxassetid://987654321",
         weight = 10
@@ -1521,7 +1521,7 @@ controller.Action:CreateAction("sit", sitAction, true, nil, true) -- Looped
 <h3 id="bulkcreateaction"><a class="header" href="#bulkcreateaction"><code>:BulkCreateAction()</code></a></h3>
 <p>Creates multiple actions at once from an animations list.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function BulkCreateAction(
+<pre><code class="language-luau">function BulkCreateAction(
     animsList: AnimationsList,
     doPreload: boolean?,
     priority: Enum.AnimationPriority?
@@ -1539,7 +1539,7 @@ controller.Action:CreateAction("sit", sitAction, true, nil, true) -- Looped
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Create multiple actions at once:</p>
-<pre><code class="language-lua">local customActions = {
+<pre><code class="language-luau">local customActions = {
     wave = {
         {id = "rbxassetid://111", weight = 10}
     },
@@ -1563,20 +1563,20 @@ controller.Action:PlayAction("point")
 <h3 id="removeaction"><a class="header" href="#removeaction"><code>:RemoveAction()</code></a></h3>
 <p>Removes and destroys an action by key.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function RemoveAction(key: any): ()
+<pre><code class="language-luau">function RemoveAction(key: any): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>key: any</code> - The key of the action to remove</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">-- Remove an action
+<pre><code class="language-luau">-- Remove an action
 controller.Action:RemoveAction("customWave")
 
 -- Action is now destroyed and can't be played
 </code></pre>
 <p>Remove multiple actions:</p>
-<pre><code class="language-lua">local actionsToRemove = {"action1", "action2", "action3"}
+<pre><code class="language-luau">local actionsToRemove = {"action1", "action2", "action3"}
 
 for _, actionKey in actionsToRemove do
     controller.Action:RemoveAction(actionKey)
@@ -1586,18 +1586,18 @@ end
 <h3 id="stopallactions"><a class="header" href="#stopallactions"><code>:StopAllActions()</code></a></h3>
 <p>Stops all currently playing animations for a specific action.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function StopAllActions(key: any): ()
+<pre><code class="language-luau">function StopAllActions(key: any): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>key: any</code> - The key of the action to stop</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">-- Stop all dance animations
+<pre><code class="language-luau">-- Stop all dance animations
 controller.Action:StopAllActions("dance")
 </code></pre>
 <p>Stop action after delay:</p>
-<pre><code class="language-lua">controller.Action:PlayAction("dance")
+<pre><code class="language-luau">controller.Action:PlayAction("dance")
 
 task.delay(3, function()
     controller.Action:StopAllActions("dance")
@@ -1607,7 +1607,7 @@ end)
 <h3 id="getaction"><a class="header" href="#getaction"><code>:GetAction()</code></a></h3>
 <p>Gets an action's animation info array by key.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetAction(key: any): {AnimInfo}?
+<pre><code class="language-luau">function GetAction(key: any): {AnimInfo}?
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1618,7 +1618,7 @@ end)
 <li><code>{AnimInfo}?</code> - The animation info array or <code>nil</code> if not found</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local waveInfo = controller.Action:GetAction("wave")
+<pre><code class="language-luau">local waveInfo = controller.Action:GetAction("wave")
 
 if waveInfo then
     print("Wave action has", #waveInfo, "animations")
@@ -1629,7 +1629,7 @@ if waveInfo then
 end
 </code></pre>
 <p>Check if action exists:</p>
-<pre><code class="language-lua">if controller.Action:GetAction("customAction") then
+<pre><code class="language-luau">if controller.Action:GetAction("customAction") then
     print("Custom action exists!")
 else
     print("Custom action not found")
@@ -1639,7 +1639,7 @@ end
 <h3 id="getrandomactionanim"><a class="header" href="#getrandomactionanim"><code>:GetRandomActionAnim()</code></a></h3>
 <p>Gets a random animation track from an action's animations using weighted selection.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetRandomActionAnim(key: any): AnimationTrack
+<pre><code class="language-luau">function GetRandomActionAnim(key: any): AnimationTrack
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1650,7 +1650,7 @@ end
 <li><code>AnimationTrack</code> - A randomly selected animation track</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local danceTrack = controller.Action:GetRandomActionAnim("dance")
+<pre><code class="language-luau">local danceTrack = controller.Action:GetRandomActionAnim("dance")
 print("Selected animation:", danceTrack.Animation.AnimationId)
 
 -- Play it manually
@@ -1660,7 +1660,7 @@ danceTrack:Play()
 <h3 id="playrandomactionanim"><a class="header" href="#playrandomactionanim"><code>:PlayRandomActionAnim()</code></a></h3>
 <p>Plays a random animation from an action and returns the track.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function PlayRandomActionAnim(key: any): AnimationTrack
+<pre><code class="language-luau">function PlayRandomActionAnim(key: any): AnimationTrack
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1672,21 +1672,21 @@ danceTrack:Play()
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Basic usage:</p>
-<pre><code class="language-lua">local track = controller.Action:PlayRandomActionAnim("wave")
+<pre><code class="language-luau">local track = controller.Action:PlayRandomActionAnim("wave")
 </code></pre>
 <p>Wait for animation to finish:</p>
-<pre><code class="language-lua">local track = controller.Action:PlayRandomActionAnim("dance")
+<pre><code class="language-luau">local track = controller.Action:PlayRandomActionAnim("dance")
 
 track.Stopped:Wait()
 print("Dance finished!")
 </code></pre>
 <p>Play with custom adjustments:</p>
-<pre><code class="language-lua">local track = controller.Action:PlayRandomActionAnim("emote")
+<pre><code class="language-luau">local track = controller.Action:PlayRandomActionAnim("emote")
 track:AdjustSpeed(1.5) -- Speed up
 track:AdjustWeight(2)  -- Increase weight
 </code></pre>
 <p>Chain animations:</p>
-<pre><code class="language-lua">local function playEmoteSequence()
+<pre><code class="language-luau">local function playEmoteSequence()
     local wave = controller.Action:PlayRandomActionAnim("wave")
     wave.Stopped:Wait()
     
@@ -1706,7 +1706,7 @@ playEmoteSequence()
 <h3 id="playaction"><a class="header" href="#playaction"><code>:PlayAction()</code></a></h3>
 <p>Shorter alias for <code>:PlayRandomActionAnim()</code>.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function PlayAction(key: any): AnimationTrack
+<pre><code class="language-luau">function PlayAction(key: any): AnimationTrack
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -1717,12 +1717,12 @@ playEmoteSequence()
 <li><code>AnimationTrack</code> - The animation track that was played</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">-- These are equivalent
+<pre><code class="language-luau">-- These are equivalent
 local track1 = controller.Action:PlayAction("wave")
 local track2 = controller.Action:PlayRandomActionAnim("wave")
 </code></pre>
 <p>Quick emote playing:</p>
-<pre><code class="language-lua">-- Play various emotes
+<pre><code class="language-luau">-- Play various emotes
 controller.Action:PlayAction("wave")
 task.wait(2)
 controller.Action:PlayAction("dance")
@@ -1733,21 +1733,21 @@ controller.Action:PlayAction("point")
 <h3 id="setemotebindable"><a class="header" href="#setemotebindable"><code>:SetEmoteBindable()</code></a></h3>
 <p>Sets up the emote bindable function for handling emote requests. This is used internally to connect with Roblox's emote system.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function SetEmoteBindable(e: BindableFunction): ()
+<pre><code class="language-luau">function SetEmoteBindable(e: BindableFunction): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>e: BindableFunction</code> - The bindable function to set up</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local emoteBindable = Instance.new("BindableFunction")
+<pre><code class="language-luau">local emoteBindable = Instance.new("BindableFunction")
 controller.Action:SetEmoteBindable(emoteBindable)
 
 -- Now the emote system is connected
 -- Players can use the emote menu to trigger animations
 </code></pre>
 <p>Custom emote handler:</p>
-<pre><code class="language-lua">local emoteBindable = Instance.new("BindableFunction")
+<pre><code class="language-luau">local emoteBindable = Instance.new("BindableFunction")
 controller.Action:SetEmoteBindable(emoteBindable)
 
 -- Monitor emote usage
@@ -1760,7 +1760,7 @@ end
 </code></pre>
 <h2 id="complete-examples"><a class="header" href="#complete-examples">Complete Examples</a></h2>
 <h3 id="custom-emote-system"><a class="header" href="#custom-emote-system">Custom Emote System</a></h3>
-<pre><code class="language-lua">-- Define custom emotes
+<pre><code class="language-luau">-- Define custom emotes
 local customEmotes = {
     wave = {
         {id = "rbxassetid://111", weight = 10, fadeTime = 0.2}
@@ -1813,7 +1813,7 @@ end)
 <p>This guide covers how to use custom animations with SimpleAnimate.</p>
 <h2 id="animation-info-structure"><a class="header" href="#animation-info-structure">Animation Info Structure</a></h2>
 <p>All animations in SimpleAnimate are defined using the <code>AnimInfo</code> structure:</p>
-<pre><code class="language-lua">{
+<pre><code class="language-luau">{
     id = "rbxassetid://123456789", -- Animation asset ID
     weight = 10,                    -- Selection weight (default: 10)
     speed = 1,                      -- Playback speed (default: 1)
@@ -1824,7 +1824,7 @@ end)
 <h2 id="creating-custom-core-animations"><a class="header" href="#creating-custom-core-animations">Creating Custom Core Animations</a></h2>
 <h3 id="method-1-modify-default-animations"><a class="header" href="#method-1-modify-default-animations">Method 1: Modify Default Animations</a></h3>
 <p>Start with default animations and modify them:</p>
-<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Get a copy of R15 animations
 local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
@@ -1851,7 +1851,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
 </code></pre>
 <h3 id="method-2-build-from-scratch"><a class="header" href="#method-2-build-from-scratch">Method 2: Build From Scratch</a></h3>
 <p>Create a complete animation set from scratch:</p>
-<pre><code class="language-lua">local customCoreAnims = {
+<pre><code class="language-luau">local customCoreAnims = {
     Idle = {
         {id = "rbxassetid://123", weight = 10, fadeTime = 0.1}
     },
@@ -1879,7 +1879,7 @@ local controller = SimpleAnimate.new(character, true, customCoreAnims)
 </code></pre>
 <h2 id="multiple-animation-variants"><a class="header" href="#multiple-animation-variants">Multiple Animation Variants</a></h2>
 <p>Add multiple variants of the same animation with different weights:</p>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Multiple idle animations
 coreAnims.Idle = {
@@ -1916,7 +1916,7 @@ coreAnims.Run = {
 </code></pre>
 <h2 id="animation-speed-control"><a class="header" href="#animation-speed-control">Animation Speed Control</a></h2>
 <p>Control playback speed for different effects:</p>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Slow idle for tired character
 coreAnims.Idle[1].speed = 0.7
@@ -1929,7 +1929,7 @@ coreAnims.Climb[1].speed = 0.8
 </code></pre>
 <h2 id="fade-time-customization"><a class="header" href="#fade-time-customization">Fade Time Customization</a></h2>
 <p>Control how animations blend together:</p>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Quick transition for responsive movement
 coreAnims.Walk[1].fadeTime = 0.05
@@ -1943,7 +1943,7 @@ coreAnims.Jump[1].fadeTime = 0
 </code></pre>
 <h2 id="runtime-animation-changes"><a class="header" href="#runtime-animation-changes">Runtime Animation Changes</a></h2>
 <p>Change animations while the game is running:</p>
-<pre><code class="language-lua">-- Change a single animation
+<pre><code class="language-luau">-- Change a single animation
 controller.Core.PoseController:ChangeCoreAnim(
     "Idle",
     1,
@@ -1966,7 +1966,7 @@ controller.Core.PoseController:ChangeCoreAnim(
 </code></pre>
 <h2 id="character-specific-animations"><a class="header" href="#character-specific-animations">Character-Specific Animations</a></h2>
 <p>Different animations for different character types:</p>
-<pre><code class="language-lua">local function getAnimationsForCharacter(characterType)
+<pre><code class="language-luau">local function getAnimationsForCharacter(characterType)
     if characterType == "Warrior" then
         return {
             Idle = {{id = "rbxassetid://WARRIOR_IDLE", weight = 10}},
@@ -2173,7 +2173,7 @@ createCharacter(player, "HeavyWarrior")
 </ul>
 <h2 id="required-interface"><a class="header" href="#required-interface">Required Interface</a></h2>
 <p>Your custom state machine must implement:</p>
-<pre><code class="language-lua">type StateMachine = {
+<pre><code class="language-luau">type StateMachine = {
     Running: RBXScriptSignal&lt;number&gt;,      -- Fires with speed
     Jumping: RBXScriptSignal&lt;()&gt;,          -- Fires on jump
     Climbing: RBXScriptSignal&lt;number&gt;,     -- Fires with climb speed
@@ -2184,7 +2184,7 @@ createCharacter(player, "HeavyWarrior")
 </code></pre>
 <h2 id="basic-custom-state-machine"><a class="header" href="#basic-custom-state-machine">Basic Custom State Machine</a></h2>
 <h3 id="simple-implementation"><a class="header" href="#simple-implementation">Simple Implementation</a></h3>
-<pre><code class="language-lua">local Signal = require(game.ReplicatedStorage.Signal) -- Use any signal library
+<pre><code class="language-luau">local Signal = require(game.ReplicatedStorage.Signal) -- Use any signal library
 
 local CustomStateMachine = {}
 CustomStateMachine.__index = CustomStateMachine
@@ -2223,7 +2223,7 @@ end
 return CustomStateMachine
 </code></pre>
 <h3 id="using-with-simpleanimate"><a class="header" href="#using-with-simpleanimate">Using with SimpleAnimate</a></h3>
-<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local CustomStateMachine = require(game.ReplicatedStorage.CustomStateMachine)
 
 -- Create custom state machine
@@ -2245,7 +2245,7 @@ stateMachine:FireJumping()   -- Triggers jump animation
 </code></pre>
 <h2 id="vehicle-state-machine"><a class="header" href="#vehicle-state-machine">Vehicle State Machine</a></h2>
 <p>Control character animations while in a vehicle:</p>
-<pre><code class="language-lua">local VehicleStateMachine = {}
+<pre><code class="language-luau">local VehicleStateMachine = {}
 VehicleStateMachine.__index = VehicleStateMachine
 
 function VehicleStateMachine.new(vehicle)
@@ -2280,7 +2280,7 @@ end
 return VehicleStateMachine
 </code></pre>
 <p>Usage:</p>
-<pre><code class="language-lua">-- When player enters vehicle
+<pre><code class="language-luau">-- When player enters vehicle
 local vehicleStateMachine = VehicleStateMachine.new(vehicle)
 
 -- Create controller with vehicle state machine
@@ -2296,7 +2296,7 @@ local controller = SimpleAnimate.new(
 </code></pre>
 <h2 id="network-replicated-state-machine"><a class="header" href="#network-replicated-state-machine">Network-Replicated State Machine</a></h2>
 <p>Synchronize animation states across server and clients:</p>
-<pre><code class="language-lua">local ReplicatedStateMachine = {}
+<pre><code class="language-luau">local ReplicatedStateMachine = {}
 ReplicatedStateMachine.__index = ReplicatedStateMachine
 
 function ReplicatedStateMachine.new(character)
@@ -2352,7 +2352,7 @@ return ReplicatedStateMachine
 </code></pre>
 <h2 id="custom-movement-controller"><a class="header" href="#custom-movement-controller">Custom Movement Controller</a></h2>
 <p>Integrate with a custom character controller:</p>
-<pre><code class="language-lua">local CustomController = {}
+<pre><code class="language-luau">local CustomController = {}
 CustomController.__index = CustomController
 
 function CustomController.new(character)
@@ -2407,7 +2407,7 @@ end
 return CustomController
 </code></pre>
 <p>Usage:</p>
-<pre><code class="language-lua">local CustomController = require(game.ReplicatedStorage.CustomController)
+<pre><code class="language-luau">local CustomController = require(game.ReplicatedStorage.CustomController)
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Create custom controller
@@ -2429,7 +2429,7 @@ end)
 </code></pre>
 <h2 id="swimming-state-machine"><a class="header" href="#swimming-state-machine">Swimming State Machine</a></h2>
 <p>Custom swimming mechanics with state machine:</p>
-<pre><code class="language-lua">local SwimStateMachine = {}
+<pre><code class="language-luau">local SwimStateMachine = {}
 SwimStateMachine.__index = SwimStateMachine
 
 function SwimStateMachine.new(character)
@@ -2483,7 +2483,7 @@ return SwimStateMachine
 </code></pre>
 <h2 id="flying-state-machine"><a class="header" href="#flying-state-machine">Flying State Machine</a></h2>
 <p>For characters that can fly:</p>
-<pre><code class="language-lua">local FlyStateMachine = {}
+<pre><code class="language-luau">local FlyStateMachine = {}
 FlyStateMachine.__index = FlyStateMachine
 
 function FlyStateMachine.new()
@@ -2531,7 +2531,7 @@ return FlyStateMachine
 </code></pre>
 <h2 id="ai-state-machine"><a class="header" href="#ai-state-machine">AI State Machine</a></h2>
 <p>For NPC characters with AI:</p>
-<pre><code class="language-lua">local AIStateMachine = {}
+<pre><code class="language-luau">local AIStateMachine = {}
 AIStateMachine.__index = AIStateMachine
 
 function AIStateMachine.new(npc)
@@ -2583,7 +2583,7 @@ end
 return AIStateMachine
 </code></pre>
 <p>Usage with AI:</p>
-<pre><code class="language-lua">local aiStateMachine = AIStateMachine.new(npc)
+<pre><code class="language-luau">local aiStateMachine = AIStateMachine.new(npc)
 local controller = SimpleAnimate.new(npc, true, nil, nil, aiStateMachine)
 
 -- AI behavior
@@ -2601,7 +2601,7 @@ end
 </code></pre>
 <h2 id="state-machine-debugging"><a class="header" href="#state-machine-debugging">State Machine Debugging</a></h2>
 <p>Helper to debug state machine events:</p>
-<pre><code class="language-lua">local function debugStateMachine(stateMachine, name)
+<pre><code class="language-luau">local function debugStateMachine(stateMachine, name)
     print("=== Debugging State Machine:", name, "===")
     
     stateMachine.Running:Connect(function(speed)
@@ -2640,7 +2640,7 @@ debugStateMachine(customStateMachine, "CustomController")
 </ol>
 <h2 id="common-pitfalls"><a class="header" href="#common-pitfalls">Common Pitfalls</a></h2>
 <h3 id="missing-events"><a class="header" href="#missing-events">Missing Events</a></h3>
-<pre><code class="language-lua">-- ❌ BAD: Missing events
+<pre><code class="language-luau">-- ❌ BAD: Missing events
 local stateMachine = {
     Running = Signal.new(),
     WalkSpeed = 16
@@ -2658,14 +2658,14 @@ local stateMachine = {
 }
 </code></pre>
 <h3 id="wrong-signal-signatures"><a class="header" href="#wrong-signal-signatures">Wrong Signal Signatures</a></h3>
-<pre><code class="language-lua">-- ❌ BAD: Wrong signature
+<pre><code class="language-luau">-- ❌ BAD: Wrong signature
 self.Running:Fire() -- Missing speed parameter
 
 -- ✅ GOOD: Correct signature
 self.Running:Fire(16) -- Includes speed
 </code></pre>
 <h3 id="not-updating-walkspeed"><a class="header" href="#not-updating-walkspeed">Not Updating WalkSpeed</a></h3>
-<pre><code class="language-lua">-- ❌ BAD: Static WalkSpeed
+<pre><code class="language-luau">-- ❌ BAD: Static WalkSpeed
 self.WalkSpeed = 16 -- Never changes
 
 -- ✅ GOOD: Dynamic WalkSpeed
@@ -2676,7 +2676,7 @@ end
 </code></pre>
 <h2 id="complete-example"><a class="header" href="#complete-example">Complete Example</a></h2>
 <p>Full custom state machine implementation:</p>
-<pre><code class="language-lua">local Signal = require(game.ReplicatedStorage.Signal)
+<pre><code class="language-luau">local Signal = require(game.ReplicatedStorage.Signal)
 
 local CustomStateMachine = {}
 CustomStateMachine.__index = CustomStateMachine
@@ -2737,7 +2737,7 @@ return CustomStateMachine
 <p>SimpleAnimate can automatically load these player-equipped animations.</p>
 <h2 id="loading-player-animations"><a class="header" href="#loading-player-animations">Loading Player Animations</a></h2>
 <h3 id="server-side-loading"><a class="header" href="#server-side-loading">Server-Side Loading</a></h3>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 Players.PlayerAdded:Connect(function(player)
@@ -2762,7 +2762,7 @@ Players.PlayerAdded:Connect(function(player)
 end)
 </code></pre>
 <h3 id="client-side-loading"><a class="header" href="#client-side-loading">Client-Side Loading</a></h3>
-<pre><code class="language-lua">-- LocalScript in StarterPlayer.StarterCharacterScripts
+<pre><code class="language-luau">-- LocalScript in StarterPlayer.StarterCharacterScripts
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local character = script.Parent
 
@@ -2781,12 +2781,12 @@ local controller = SimpleAnimate.new(
 <h2 id="fallback-animations"><a class="header" href="#fallback-animations">Fallback Animations</a></h2>
 <p>When loading animation packages, provide fallbacks for missing animations:</p>
 <h3 id="using-default-fallbacks"><a class="header" href="#using-default-fallbacks">Using Default Fallbacks</a></h3>
-<pre><code class="language-lua">-- If player doesn't have custom animations, R15 defaults are used
+<pre><code class="language-luau">-- If player doesn't have custom animations, R15 defaults are used
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 -- Missing animations automatically filled with R15 defaults
 </code></pre>
 <h3 id="custom-fallbacks"><a class="header" href="#custom-fallbacks">Custom Fallbacks</a></h3>
-<pre><code class="language-lua">-- Define your custom fallback animations
+<pre><code class="language-luau">-- Define your custom fallback animations
 local customDefaults = {
     Idle = {{id = "rbxassetid://YOUR_IDLE", weight = 10}},
     Walk = {{id = "rbxassetid://YOUR_WALK", weight = 10}},
@@ -2799,7 +2799,7 @@ local coreAnims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 -- Now if player doesn't have custom animations, your defaults are used
 </code></pre>
 <h3 id="selective-fallbacks"><a class="header" href="#selective-fallbacks">Selective Fallbacks</a></h3>
-<pre><code class="language-lua">-- Get player's animations
+<pre><code class="language-luau">-- Get player's animations
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- Override specific animations with your own
@@ -2810,7 +2810,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims)
 </code></pre>
 <h2 id="mixing-player-and-custom-animations-1"><a class="header" href="#mixing-player-and-custom-animations-1">Mixing Player and Custom Animations</a></h2>
 <h3 id="player-animations-with-custom-emotes"><a class="header" href="#player-animations-with-custom-emotes">Player Animations with Custom Emotes</a></h3>
-<pre><code class="language-lua">-- Use player's movement animations
+<pre><code class="language-luau">-- Use player's movement animations
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- But use your custom emotes
@@ -2828,7 +2828,7 @@ local controller = SimpleAnimate.new(
 )
 </code></pre>
 <h3 id="custom-animations-with-player-emotes"><a class="header" href="#custom-animations-with-player-emotes">Custom Animations with Player Emotes</a></h3>
-<pre><code class="language-lua">-- Use your custom movement animations
+<pre><code class="language-luau">-- Use your custom movement animations
 local customCore = {
     Idle = {{id = "rbxassetid://YOUR_IDLE", weight = 10}},
     Walk = {{id = "rbxassetid://YOUR_WALK", weight = 10}},
@@ -2847,7 +2847,7 @@ local controller = SimpleAnimate.new(
 </code></pre>
 <h2 id="handling-different-rig-types"><a class="header" href="#handling-different-rig-types">Handling Different Rig Types</a></h2>
 <h3 id="r6-vs-r15-detection"><a class="header" href="#r6-vs-r15-detection">R6 vs R15 Detection</a></h3>
-<pre><code class="language-lua">local function getRigType(character)
+<pre><code class="language-luau">local function getRigType(character)
     local humanoid = character:FindFirstChildWhichIsA("Humanoid")
     if humanoid then
         return humanoid.RigType == Enum.HumanoidRigType.R6 and "R6" or "R15"
@@ -2869,7 +2869,7 @@ local function setupCharacter(player, character)
 end
 </code></pre>
 <h3 id="force-specific-rig-type"><a class="header" href="#force-specific-rig-type">Force Specific Rig Type</a></h3>
-<pre><code class="language-lua">-- Always use R15 animations regardless of player's equipped package
+<pre><code class="language-luau">-- Always use R15 animations regardless of player's equipped package
 local r15Core, r15Emotes = SimpleAnimate.getCopyOfAnims("R15")
 
 local controller = SimpleAnimate.new(
@@ -2881,7 +2881,7 @@ local controller = SimpleAnimate.new(
 </code></pre>
 <h2 id="caching-animation-packages"><a class="header" href="#caching-animation-packages">Caching Animation Packages</a></h2>
 <p>Cache player animation packages to avoid repeated API calls:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Cache player animations
@@ -2926,7 +2926,7 @@ end)
 </code></pre>
 <h2 id="validating-animation-packages"><a class="header" href="#validating-animation-packages">Validating Animation Packages</a></h2>
 <p>Check if animations loaded successfully:</p>
-<pre><code class="language-lua">local function validateAnimationPackage(anims, packageName)
+<pre><code class="language-luau">local function validateAnimationPackage(anims, packageName)
     local requiredPoses = {"Idle", "Walk", "Run", "Jump"}
     
     for _, pose in requiredPoses do
@@ -2951,7 +2951,7 @@ end
 </code></pre>
 <h2 id="overriding-specific-animations"><a class="header" href="#overriding-specific-animations">Overriding Specific Animations</a></h2>
 <h3 id="keep-player-package-override-one-pose"><a class="header" href="#keep-player-package-override-one-pose">Keep Player Package, Override One Pose</a></h3>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- Player has custom animations, but we want a special idle
 coreAnims.Idle = {
@@ -2966,7 +2966,7 @@ coreAnims.Idle = {
 local controller = SimpleAnimate.new(character, true, coreAnims)
 </code></pre>
 <h3 id="blend-custom-with-player-animations"><a class="header" href="#blend-custom-with-player-animations">Blend Custom with Player Animations</a></h3>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- Add variants to player's animations
 table.insert(coreAnims.Idle, {
@@ -2980,7 +2980,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims)
 </code></pre>
 <h2 id="animation-package-metadata"><a class="header" href="#animation-package-metadata">Animation Package Metadata</a></h2>
 <p>Store and retrieve animation package information:</p>
-<pre><code class="language-lua">local AnimationPackages = {
+<pre><code class="language-luau">local AnimationPackages = {
     Stylish = {
         name = "Stylish",
         description = "Cool and modern animations",
@@ -3021,7 +3021,7 @@ applyPackage(player, "Stylish")
 </code></pre>
 <h2 id="dynamic-package-switching"><a class="header" href="#dynamic-package-switching">Dynamic Package Switching</a></h2>
 <p>Allow players to switch animation packages at runtime:</p>
-<pre><code class="language-lua">local currentControllers = {}
+<pre><code class="language-luau">local currentControllers = {}
 
 local function switchAnimationPackage(player, packageName)
     local character = player.Character
@@ -3056,7 +3056,7 @@ end)
 </code></pre>
 <h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
 <p>Robust error handling for animation package loading:</p>
-<pre><code class="language-lua">local function safeLoadAnimations(player)
+<pre><code class="language-luau">local function safeLoadAnimations(player)
     local success, coreAnims = pcall(function()
         return SimpleAnimate.getAnimPackageAsync(player)
     end)
@@ -3095,7 +3095,7 @@ end)
 </code></pre>
 <h2 id="package-selection-ui"><a class="header" href="#package-selection-ui">Package Selection UI</a></h2>
 <p>Create a UI for players to choose animation packages:</p>
-<pre><code class="language-lua">-- Client Script
+<pre><code class="language-luau">-- Client Script
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
@@ -3129,7 +3129,7 @@ end
 </code></pre>
 <h2 id="pre-loading-animation-packages"><a class="header" href="#pre-loading-animation-packages">Pre-Loading Animation Packages</a></h2>
 <p>Pre-load animation packages before character spawns:</p>
-<pre><code class="language-lua">local loadedPackages = {}
+<pre><code class="language-luau">local loadedPackages = {}
 
 -- Pre-load all packages on server start
 local function preLoadPackages()
@@ -3164,14 +3164,14 @@ end)
 </ol>
 <h2 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h2>
 <h3 id="animations-not-loading"><a class="header" href="#animations-not-loading">Animations Not Loading</a></h3>
-<pre><code class="language-lua">-- ❌ Problem: Server call without player parameter
+<pre><code class="language-luau">-- ❌ Problem: Server call without player parameter
 local anims = SimpleAnimate.getAnimPackageAsync() -- Error on server!
 
 -- ✅ Solution: Always pass player on server
 local anims = SimpleAnimate.getAnimPackageAsync(player)
 </code></pre>
 <h3 id="missing-animations"><a class="header" href="#missing-animations">Missing Animations</a></h3>
-<pre><code class="language-lua">-- ❌ Problem: Not providing fallbacks
+<pre><code class="language-luau">-- ❌ Problem: Not providing fallbacks
 local anims = SimpleAnimate.getAnimPackageAsync(player)
 -- Some poses might be missing
 
@@ -3180,7 +3180,7 @@ local defaults = SimpleAnimate.getCopyOfAnims("R15")
 local anims = SimpleAnimate.getAnimPackageAsync(player, defaults)
 </code></pre>
 <h3 id="repeated-loading"><a class="header" href="#repeated-loading">Repeated Loading</a></h3>
-<pre><code class="language-lua">-- ❌ Problem: Loading on every character spawn
+<pre><code class="language-luau">-- ❌ Problem: Loading on every character spawn
 player.CharacterAdded:Connect(function(character)
     local anims = SimpleAnimate.getAnimPackageAsync(player) -- Loads every time
 end)
@@ -3195,7 +3195,7 @@ end)
 <div style="break-before: page; page-break-before: always;"></div><h1 id="basic-character-setup"><a class="header" href="#basic-character-setup">Basic Character Setup</a></h1>
 <h2 id="simple-setup-server"><a class="header" href="#simple-setup-server">Simple Setup (Server)</a></h2>
 <p>The most basic setup for handling all players:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 Players.PlayerAdded:Connect(function(player)
@@ -3212,7 +3212,7 @@ end)
 </code></pre>
 <h2 id="with-player-animation-packages"><a class="header" href="#with-player-animation-packages">With Player Animation Packages</a></h2>
 <p>Load each player's equipped animations:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 Players.PlayerAdded:Connect(function(player)
@@ -3235,7 +3235,7 @@ end)
 </code></pre>
 <h2 id="client-side-setup"><a class="header" href="#client-side-setup">Client-Side Setup</a></h2>
 <p>Setup on the client for the local player:</p>
-<pre><code class="language-lua">-- LocalScript in StarterPlayer.StarterCharacterScripts
+<pre><code class="language-luau">-- LocalScript in StarterPlayer.StarterCharacterScripts
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local character = script.Parent
 
@@ -3249,7 +3249,7 @@ end)
 </code></pre>
 <h2 id="with-custom-default-animations"><a class="header" href="#with-custom-default-animations">With Custom Default Animations</a></h2>
 <p>Replace default animations with your own:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Define custom animations
@@ -3293,7 +3293,7 @@ end)
 </code></pre>
 <h2 id="with-emote-menu-integration"><a class="header" href="#with-emote-menu-integration">With Emote Menu Integration</a></h2>
 <p>Set up the emote menu to work with SimpleAnimate:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 Players.PlayerAdded:Connect(function(player)
@@ -3316,7 +3316,7 @@ end)
 </code></pre>
 <h2 id="character-respawn-handling"><a class="header" href="#character-respawn-handling">Character Respawn Handling</a></h2>
 <p>Properly handle character respawns:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 local playerControllers = {}
@@ -3349,7 +3349,7 @@ end)
 </code></pre>
 <h2 id="with-animation-preloading-disabled"><a class="header" href="#with-animation-preloading-disabled">With Animation Preloading Disabled</a></h2>
 <p>Disable preloading if you want animations to load on-demand:</p>
-<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Preloading disabled (3rd parameter = false)
 local controller = SimpleAnimate.new(
@@ -3361,7 +3361,7 @@ local controller = SimpleAnimate.new(
 </code></pre>
 <h2 id="multiple-characters-npcs"><a class="header" href="#multiple-characters-npcs">Multiple Characters (NPCs)</a></h2>
 <p>Set up animation controllers for NPC characters:</p>
-<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 local function setupNPC(npc)
     local animator = npc:WaitForChild("Humanoid"):WaitForChild("Animator")
@@ -3392,7 +3392,7 @@ end)
 </code></pre>
 <h2 id="with-pose-change-monitoring"><a class="header" href="#with-pose-change-monitoring">With Pose Change Monitoring</a></h2>
 <p>Monitor and log all pose changes:</p>
-<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 local character = player.Character or player.CharacterAdded:Wait()
 local controller = SimpleAnimate.new(character)
@@ -3424,7 +3424,7 @@ end
 </code></pre>
 <h2 id="error-handling-1"><a class="header" href="#error-handling-1">Error Handling</a></h2>
 <p>Robust error handling for animation setup:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 Players.PlayerAdded:Connect(function(player)
@@ -3444,7 +3444,7 @@ end)
 </code></pre>
 <h2 id="waiting-for-existing-controllers"><a class="header" href="#waiting-for-existing-controllers">Waiting for Existing Controllers</a></h2>
 <p>Use <code>awaitController</code> in other scripts:</p>
-<pre><code class="language-lua">-- Script A: Creates controller
+<pre><code class="language-luau">-- Script A: Creates controller
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local controller = SimpleAnimate.new(character)
 

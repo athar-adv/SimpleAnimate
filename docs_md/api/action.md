@@ -11,7 +11,7 @@ The Action module manages emotes and custom action animations. It handles one-of
 Creates a new action animation and adds it to the actions collection.
 
 **Signature:**
-```lua
+```luau
 function CreateAction(
     key: any,
     template: {AnimInfo},
@@ -34,7 +34,7 @@ function CreateAction(
 **Examples:**
 
 Create a simple action:
-```lua
+```luau
 local waveAction = {
     {
         id = "rbxassetid://123456789",
@@ -48,7 +48,7 @@ controller.Action:CreateAction("customWave", waveAction)
 ```
 
 Create action with multiple variants:
-```lua
+```luau
 local danceAction = {
     {
         id = "rbxassetid://111111111",
@@ -71,7 +71,7 @@ controller.Action:CreateAction("dance", danceAction)
 ```
 
 Create with custom priority:
-```lua
+```luau
 controller.Action:CreateAction(
     "importantAction",
     actionTemplate,
@@ -81,7 +81,7 @@ controller.Action:CreateAction(
 ```
 
 Create looped action:
-```lua
+```luau
 local sitAction = {
     {
         id = "rbxassetid://987654321",
@@ -99,7 +99,7 @@ controller.Action:CreateAction("sit", sitAction, true, nil, true) -- Looped
 Creates multiple actions at once from an animations list.
 
 **Signature:**
-```lua
+```luau
 function BulkCreateAction(
     animsList: AnimationsList,
     doPreload: boolean?,
@@ -118,7 +118,7 @@ function BulkCreateAction(
 **Examples:**
 
 Create multiple actions at once:
-```lua
+```luau
 local customActions = {
     wave = {
         {id = "rbxassetid://111", weight = 10}
@@ -147,7 +147,7 @@ controller.Action:PlayAction("point")
 Removes and destroys an action by key.
 
 **Signature:**
-```lua
+```luau
 function RemoveAction(key: any): ()
 ```
 
@@ -156,7 +156,7 @@ function RemoveAction(key: any): ()
 
 **Examples:**
 
-```lua
+```luau
 -- Remove an action
 controller.Action:RemoveAction("customWave")
 
@@ -164,7 +164,7 @@ controller.Action:RemoveAction("customWave")
 ```
 
 Remove multiple actions:
-```lua
+```luau
 local actionsToRemove = {"action1", "action2", "action3"}
 
 for _, actionKey in actionsToRemove do
@@ -179,7 +179,7 @@ end
 Stops all currently playing animations for a specific action.
 
 **Signature:**
-```lua
+```luau
 function StopAllActions(key: any): ()
 ```
 
@@ -188,13 +188,13 @@ function StopAllActions(key: any): ()
 
 **Examples:**
 
-```lua
+```luau
 -- Stop all dance animations
 controller.Action:StopAllActions("dance")
 ```
 
 Stop action after delay:
-```lua
+```luau
 controller.Action:PlayAction("dance")
 
 task.delay(3, function()
@@ -209,7 +209,7 @@ end)
 Gets an action's animation info array by key.
 
 **Signature:**
-```lua
+```luau
 function GetAction(key: any): {AnimInfo}?
 ```
 
@@ -221,7 +221,7 @@ function GetAction(key: any): {AnimInfo}?
 
 **Examples:**
 
-```lua
+```luau
 local waveInfo = controller.Action:GetAction("wave")
 
 if waveInfo then
@@ -234,7 +234,7 @@ end
 ```
 
 Check if action exists:
-```lua
+```luau
 if controller.Action:GetAction("customAction") then
     print("Custom action exists!")
 else
@@ -249,7 +249,7 @@ end
 Gets a random animation track from an action's animations using weighted selection.
 
 **Signature:**
-```lua
+```luau
 function GetRandomActionAnim(key: any): AnimationTrack
 ```
 
@@ -261,7 +261,7 @@ function GetRandomActionAnim(key: any): AnimationTrack
 
 **Examples:**
 
-```lua
+```luau
 local danceTrack = controller.Action:GetRandomActionAnim("dance")
 print("Selected animation:", danceTrack.Animation.AnimationId)
 
@@ -276,7 +276,7 @@ danceTrack:Play()
 Plays a random animation from an action and returns the track.
 
 **Signature:**
-```lua
+```luau
 function PlayRandomActionAnim(key: any): AnimationTrack
 ```
 
@@ -289,12 +289,12 @@ function PlayRandomActionAnim(key: any): AnimationTrack
 **Examples:**
 
 Basic usage:
-```lua
+```luau
 local track = controller.Action:PlayRandomActionAnim("wave")
 ```
 
 Wait for animation to finish:
-```lua
+```luau
 local track = controller.Action:PlayRandomActionAnim("dance")
 
 track.Stopped:Wait()
@@ -302,14 +302,14 @@ print("Dance finished!")
 ```
 
 Play with custom adjustments:
-```lua
+```luau
 local track = controller.Action:PlayRandomActionAnim("emote")
 track:AdjustSpeed(1.5) -- Speed up
 track:AdjustWeight(2)  -- Increase weight
 ```
 
 Chain animations:
-```lua
+```luau
 local function playEmoteSequence()
     local wave = controller.Action:PlayRandomActionAnim("wave")
     wave.Stopped:Wait()
@@ -334,7 +334,7 @@ playEmoteSequence()
 Shorter alias for `:PlayRandomActionAnim()`.
 
 **Signature:**
-```lua
+```luau
 function PlayAction(key: any): AnimationTrack
 ```
 
@@ -346,14 +346,14 @@ function PlayAction(key: any): AnimationTrack
 
 **Examples:**
 
-```lua
+```luau
 -- These are equivalent
 local track1 = controller.Action:PlayAction("wave")
 local track2 = controller.Action:PlayRandomActionAnim("wave")
 ```
 
 Quick emote playing:
-```lua
+```luau
 -- Play various emotes
 controller.Action:PlayAction("wave")
 task.wait(2)
@@ -369,7 +369,7 @@ controller.Action:PlayAction("point")
 Sets up the emote bindable function for handling emote requests. This is used internally to connect with Roblox's emote system.
 
 **Signature:**
-```lua
+```luau
 function SetEmoteBindable(e: BindableFunction): ()
 ```
 
@@ -378,7 +378,7 @@ function SetEmoteBindable(e: BindableFunction): ()
 
 **Examples:**
 
-```lua
+```luau
 local emoteBindable = Instance.new("BindableFunction")
 controller.Action:SetEmoteBindable(emoteBindable)
 
@@ -387,7 +387,7 @@ controller.Action:SetEmoteBindable(emoteBindable)
 ```
 
 Custom emote handler:
-```lua
+```luau
 local emoteBindable = Instance.new("BindableFunction")
 controller.Action:SetEmoteBindable(emoteBindable)
 
@@ -404,7 +404,7 @@ end
 
 ### Custom Emote System
 
-```lua
+```luau
 -- Define custom emotes
 local customEmotes = {
     wave = {

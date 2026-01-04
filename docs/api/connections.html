@@ -197,20 +197,20 @@
 <h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
 <h3 id="adjusting-run-threshold"><a class="header" href="#adjusting-run-threshold">Adjusting Run Threshold</a></h3>
 <p>Control when the character switches from walking to running:</p>
-<pre><code class="language-lua">-- Default is 15.5, lower value = switches to run earlier
+<pre><code class="language-luau">-- Default is 15.5, lower value = switches to run earlier
 controller.Core.Connections.RunThreshold = 10
 
 -- Now character will run at speeds above 10
 </code></pre>
 <h3 id="custom-animation-speeds"><a class="header" href="#custom-animation-speeds">Custom Animation Speeds</a></h3>
-<pre><code class="language-lua">-- Make idle animation slower for dramatic effect
+<pre><code class="language-luau">-- Make idle animation slower for dramatic effect
 controller.Core.Connections.IdleAnimationSpeed = 0.7
 
 -- Make running animation faster
 controller.Core.Connections.MoveAnimationSpeedMultiplier = 1.5
 </code></pre>
 <h3 id="adjusting-jump-timing"><a class="header" href="#adjusting-jump-timing">Adjusting Jump Timing</a></h3>
-<pre><code class="language-lua">-- Make character fall faster (shorter jump animation)
+<pre><code class="language-luau">-- Make character fall faster (shorter jump animation)
 controller.Core.Connections.JumpDuration = 0.1
 
 -- Make character stay in jump animation longer
@@ -218,7 +218,7 @@ controller.Core.Connections.JumpDuration = 0.5
 </code></pre>
 <h3 id="manual-speed-multipliers"><a class="header" href="#manual-speed-multipliers">Manual Speed Multipliers</a></h3>
 <p>Disable auto-adjustment and set custom multipliers:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Disable automatic adjustment
 connections.AutoAdjustSpeedMultipliers = false
@@ -229,7 +229,7 @@ connections.ClimbAnimationSpeedMultiplier = 1.5  -- Climb at 1.5x speed
 connections.SwimAnimationSpeedMultiplier = 0.8   -- Swim at 0.8x speed
 </code></pre>
 <h3 id="swimming-configuration"><a class="header" href="#swimming-configuration">Swimming Configuration</a></h3>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Adjust swim idle threshold
 connections.SwimIdleThreshold = 3 -- Idle when speed &lt; 3
@@ -242,7 +242,7 @@ connections.SwimAnimationSpeedMultiplier = 1.2
 </code></pre>
 <h3 id="speed-based-animation-system"><a class="header" href="#speed-based-animation-system">Speed-Based Animation System</a></h3>
 <p>Create a system where animation speed matches character speed:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Enable speed-based animation
 connections.UseWalkSpeedForAnimSpeed = true
@@ -257,7 +257,7 @@ end)
 </code></pre>
 <h3 id="custom-speed-zones"><a class="header" href="#custom-speed-zones">Custom Speed Zones</a></h3>
 <p>Create areas with different animation behaviors:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 local slowZone = workspace.SlowZone
 local fastZone = workspace.FastZone
@@ -280,7 +280,7 @@ end)
 </code></pre>
 <h3 id="dynamic-animation-speed"><a class="header" href="#dynamic-animation-speed">Dynamic Animation Speed</a></h3>
 <p>Adjust animation speed based on game state:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Normal mode
 local function setNormalSpeed()
@@ -315,7 +315,7 @@ end)
 </code></pre>
 <h3 id="disable-auto-speed-adjustment"><a class="header" href="#disable-auto-speed-adjustment">Disable Auto-Speed Adjustment</a></h3>
 <p>For more control, disable automatic speed calculations:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Disable auto-adjustment
 connections.AutoAdjustSpeedMultipliers = false
@@ -326,7 +326,7 @@ connections.UseWalkSpeedForAnimSpeed = false
 connections.MoveAnimationSpeedMultiplier = 1.5
 </code></pre>
 <h3 id="custom-thresholds-for-different-characters"><a class="header" href="#custom-thresholds-for-different-characters">Custom Thresholds for Different Characters</a></h3>
-<pre><code class="language-lua">-- Heavy character - slower threshold
+<pre><code class="language-luau">-- Heavy character - slower threshold
 local heavyConnections = heavyController.Core.Connections
 heavyConnections.RunThreshold = 12
 heavyConnections.MoveAnimationSpeedMultiplier = 0.8
@@ -337,7 +337,7 @@ lightConnections.RunThreshold = 18
 lightConnections.MoveAnimationSpeedMultiplier = 1.2
 </code></pre>
 <h3 id="monitoring-animation-state"><a class="header" href="#monitoring-animation-state">Monitoring Animation State</a></h3>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Check current settings
 print("Run Threshold:", connections.RunThreshold)
@@ -354,7 +354,7 @@ end)
 </code></pre>
 <h3 id="complete-movement-system"><a class="header" href="#complete-movement-system">Complete Movement System</a></h3>
 <p>A comprehensive example combining multiple settings:</p>
-<pre><code class="language-lua">local connections = controller.Core.Connections
+<pre><code class="language-luau">local connections = controller.Core.Connections
 
 -- Configure all movement settings
 connections.RunThreshold = 14

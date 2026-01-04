@@ -6,7 +6,7 @@ This guide covers how to use custom animations with SimpleAnimate.
 
 All animations in SimpleAnimate are defined using the `AnimInfo` structure:
 
-```lua
+```luau
 {
     id = "rbxassetid://123456789", -- Animation asset ID
     weight = 10,                    -- Selection weight (default: 10)
@@ -22,7 +22,7 @@ All animations in SimpleAnimate are defined using the `AnimInfo` structure:
 
 Start with default animations and modify them:
 
-```lua
+```luau
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Get a copy of R15 animations
@@ -53,7 +53,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
 
 Create a complete animation set from scratch:
 
-```lua
+```luau
 local customCoreAnims = {
     Idle = {
         {id = "rbxassetid://123", weight = 10, fadeTime = 0.1}
@@ -85,7 +85,7 @@ local controller = SimpleAnimate.new(character, true, customCoreAnims)
 
 Add multiple variants of the same animation with different weights:
 
-```lua
+```luau
 local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Multiple idle animations
@@ -126,7 +126,7 @@ coreAnims.Run = {
 
 Control playback speed for different effects:
 
-```lua
+```luau
 local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Slow idle for tired character
@@ -143,7 +143,7 @@ coreAnims.Climb[1].speed = 0.8
 
 Control how animations blend together:
 
-```lua
+```luau
 local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Quick transition for responsive movement
@@ -161,7 +161,7 @@ coreAnims.Jump[1].fadeTime = 0
 
 Change animations while the game is running:
 
-```lua
+```luau
 -- Change a single animation
 controller.Core.PoseController:ChangeCoreAnim(
     "Idle",
@@ -191,7 +191,7 @@ controller.Core.PoseController:ChangeCoreAnim(
 
 Different animations for different character types:
 
-```lua
+```luau
 local function getAnimationsForCharacter(characterType)
     if characterType == "Warrior" then
         return {

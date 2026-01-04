@@ -9,7 +9,7 @@ The top-level SimpleAnimate module provides factory functions for creating and m
 Creates a new AnimationController instance.
 
 **Signature:**
-```lua
+```luau
 function new(
     rig: Model,
     doPreload: boolean?,
@@ -32,12 +32,12 @@ function new(
 **Examples:**
 
 Basic usage with defaults:
-```lua
+```luau
 local controller = SimpleAnimate.new(character)
 ```
 
 With custom animations:
-```lua
+```luau
 local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
 coreAnims.Idle[1].id = "rbxassetid://123456789"
 
@@ -50,12 +50,12 @@ local controller = SimpleAnimate.new(
 ```
 
 Without preloading (load animations on-demand):
-```lua
+```luau
 local controller = SimpleAnimate.new(character, false)
 ```
 
 With custom state machine:
-```lua
+```luau
 local customStateMachine = character:FindFirstChild("CustomHumanoid")
 local controller = SimpleAnimate.new(
     character,
@@ -73,7 +73,7 @@ local controller = SimpleAnimate.new(
 Gets an existing AnimationController for the specified rig.
 
 **Signature:**
-```lua
+```luau
 function fromExisting(rig: Model): AnimationController?
 ```
 
@@ -85,7 +85,7 @@ function fromExisting(rig: Model): AnimationController?
 
 **Examples:**
 
-```lua
+```luau
 local controller = SimpleAnimate.fromExisting(character)
 
 if controller then
@@ -98,7 +98,7 @@ end
 ```
 
 Checking multiple characters:
-```lua
+```luau
 for _, player in Players:GetPlayers() do
     local char = player.Character
     if char then
@@ -117,7 +117,7 @@ end
 Waits for an AnimationController to be created for the specified rig. Yields until available or timeout occurs.
 
 **Signature:**
-```lua
+```luau
 function awaitController(rig: Model, timeOut: number?): AnimationController?
 ```
 
@@ -131,7 +131,7 @@ function awaitController(rig: Model, timeOut: number?): AnimationController?
 **Examples:**
 
 Basic usage:
-```lua
+```luau
 -- Wait up to 5 seconds for controller
 local controller = SimpleAnimate.awaitController(character)
 
@@ -143,13 +143,13 @@ end
 ```
 
 Custom timeout:
-```lua
+```luau
 -- Wait up to 10 seconds
 local controller = SimpleAnimate.awaitController(character, 10)
 ```
 
 Useful in separate scripts:
-```lua
+```luau
 -- Script A creates the controller
 SimpleAnimate.new(character)
 
@@ -165,7 +165,7 @@ controller.Action:PlayAction("wave")
 Gets a deep copy of a default animation list by name and type.
 
 **Signature:**
-```lua
+```luau
 function getCopyOfAnimsList(
     name: "R6" | "R15",
     specifier: "Animations" | "Emotes"
@@ -182,7 +182,7 @@ function getCopyOfAnimsList(
 **Examples:**
 
 Get R15 core animations:
-```lua
+```luau
 local r15Anims = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
 
 -- Modify as needed
@@ -191,7 +191,7 @@ r15Anims.Run[1].id = "rbxassetid://123456789"
 ```
 
 Get R6 emotes:
-```lua
+```luau
 local r6Emotes = SimpleAnimate.getCopyOfAnimsList("R6", "Emotes")
 
 -- Add custom emote
@@ -210,7 +210,7 @@ r6Emotes.customWave = {
 Gets deep copies of both default animation lists (Animations and Emotes).
 
 **Signature:**
-```lua
+```luau
 function getCopyOfAnims(name: "R6" | "R15"): (AnimationsList, AnimationsList)
 ```
 
@@ -224,7 +224,7 @@ function getCopyOfAnims(name: "R6" | "R15"): (AnimationsList, AnimationsList)
 **Examples:**
 
 Get both R15 lists:
-```lua
+```luau
 local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Customize both
@@ -235,7 +235,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
 ```
 
 Get R6 lists:
-```lua
+```luau
 local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R6")
 ```
 
@@ -246,7 +246,7 @@ local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R6")
 Gets a player's equipped animation package asynchronously. Fills in missing animations with defaults.
 
 **Signature:**
-```lua
+```luau
 function getAnimPackageAsync(
     player: Player?,
     defaultPoseSourceIfUnavailable: AnimationsList?
@@ -263,7 +263,7 @@ function getAnimPackageAsync(
 **Examples:**
 
 Server-side:
-```lua
+```luau
 local Players = game:GetService("Players")
 
 Players.PlayerAdded:Connect(function(player)
@@ -277,7 +277,7 @@ end)
 ```
 
 Client-side:
-```lua
+```luau
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
@@ -288,7 +288,7 @@ local controller = SimpleAnimate.new(character, true, anims)
 ```
 
 With custom fallbacks:
-```lua
+```luau
 local customDefaults = SimpleAnimate.getCopyOfAnimsList("R15", "Animations")
 customDefaults.Idle[1].id = "rbxassetid://123456789"
 
@@ -302,7 +302,7 @@ local anims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 Gets a player's equipped emote package asynchronously.
 
 **Signature:**
-```lua
+```luau
 function getEmotePackageAsync(
     player: Player?,
     defaultEmoteSourceIfUnavailable: AnimationsList?
@@ -319,7 +319,7 @@ function getEmotePackageAsync(
 **Examples:**
 
 Server-side:
-```lua
+```luau
 Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(character)
         local anims = SimpleAnimate.getAnimPackageAsync(player)
@@ -336,7 +336,7 @@ end)
 ```
 
 Client-side:
-```lua
+```luau
 local emotes = SimpleAnimate.getEmotePackageAsync()
 ```
 
@@ -347,7 +347,7 @@ local emotes = SimpleAnimate.getEmotePackageAsync()
 Reference to the Preload utility module.
 
 **Example:**
-```lua
+```luau
 local animator = character:FindFirstChildWhichIsA("Animator", true)
 local animList = {
     Idle = {{id = "rbxassetid://123", weight = 10}}
@@ -369,7 +369,7 @@ local preloaded = SimpleAnimate.Preload.preloadAnimList(
 Reference to default animation lists (DefaultAnims module).
 
 **Example:**
-```lua
+```luau
 -- Access default R15 animations directly
 local defaultR15 = SimpleAnimate.default.R15
 

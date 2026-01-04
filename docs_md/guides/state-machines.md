@@ -23,7 +23,7 @@ By default, SimpleAnimate uses the character's Humanoid, but you can provide a c
 
 Your custom state machine must implement:
 
-```lua
+```luau
 type StateMachine = {
     Running: RBXScriptSignal<number>,      -- Fires with speed
     Jumping: RBXScriptSignal<()>,          -- Fires on jump
@@ -38,7 +38,7 @@ type StateMachine = {
 
 ### Simple Implementation
 
-```lua
+```luau
 local Signal = require(game.ReplicatedStorage.Signal) -- Use any signal library
 
 local CustomStateMachine = {}
@@ -80,7 +80,7 @@ return CustomStateMachine
 
 ### Using with SimpleAnimate
 
-```lua
+```luau
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local CustomStateMachine = require(game.ReplicatedStorage.CustomStateMachine)
 
@@ -106,7 +106,7 @@ stateMachine:FireJumping()   -- Triggers jump animation
 
 Control character animations while in a vehicle:
 
-```lua
+```luau
 local VehicleStateMachine = {}
 VehicleStateMachine.__index = VehicleStateMachine
 
@@ -144,7 +144,7 @@ return VehicleStateMachine
 
 Usage:
 
-```lua
+```luau
 -- When player enters vehicle
 local vehicleStateMachine = VehicleStateMachine.new(vehicle)
 
@@ -164,7 +164,7 @@ local controller = SimpleAnimate.new(
 
 Synchronize animation states across server and clients:
 
-```lua
+```luau
 local ReplicatedStateMachine = {}
 ReplicatedStateMachine.__index = ReplicatedStateMachine
 
@@ -224,7 +224,7 @@ return ReplicatedStateMachine
 
 Integrate with a custom character controller:
 
-```lua
+```luau
 local CustomController = {}
 CustomController.__index = CustomController
 
@@ -282,7 +282,7 @@ return CustomController
 
 Usage:
 
-```lua
+```luau
 local CustomController = require(game.ReplicatedStorage.CustomController)
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
@@ -308,7 +308,7 @@ end)
 
 Custom swimming mechanics with state machine:
 
-```lua
+```luau
 local SwimStateMachine = {}
 SwimStateMachine.__index = SwimStateMachine
 
@@ -366,7 +366,7 @@ return SwimStateMachine
 
 For characters that can fly:
 
-```lua
+```luau
 local FlyStateMachine = {}
 FlyStateMachine.__index = FlyStateMachine
 
@@ -418,7 +418,7 @@ return FlyStateMachine
 
 For NPC characters with AI:
 
-```lua
+```luau
 local AIStateMachine = {}
 AIStateMachine.__index = AIStateMachine
 
@@ -473,7 +473,7 @@ return AIStateMachine
 
 Usage with AI:
 
-```lua
+```luau
 local aiStateMachine = AIStateMachine.new(npc)
 local controller = SimpleAnimate.new(npc, true, nil, nil, aiStateMachine)
 
@@ -495,7 +495,7 @@ end
 
 Helper to debug state machine events:
 
-```lua
+```luau
 local function debugStateMachine(stateMachine, name)
     print("=== Debugging State Machine:", name, "===")
     
@@ -538,7 +538,7 @@ debugStateMachine(customStateMachine, "CustomController")
 
 ### Missing Events
 
-```lua
+```luau
 -- ❌ BAD: Missing events
 local stateMachine = {
     Running = Signal.new(),
@@ -559,7 +559,7 @@ local stateMachine = {
 
 ### Wrong Signal Signatures
 
-```lua
+```luau
 -- ❌ BAD: Wrong signature
 self.Running:Fire() -- Missing speed parameter
 
@@ -569,7 +569,7 @@ self.Running:Fire(16) -- Includes speed
 
 ### Not Updating WalkSpeed
 
-```lua
+```luau
 -- ❌ BAD: Static WalkSpeed
 self.WalkSpeed = 16 -- Never changes
 
@@ -584,7 +584,7 @@ end
 
 Full custom state machine implementation:
 
-```lua
+```luau
 local Signal = require(game.ReplicatedStorage.Signal)
 
 local CustomStateMachine = {}

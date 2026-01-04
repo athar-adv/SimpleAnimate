@@ -187,7 +187,7 @@
 <p>SimpleAnimate can automatically load these player-equipped animations.</p>
 <h2 id="loading-player-animations"><a class="header" href="#loading-player-animations">Loading Player Animations</a></h2>
 <h3 id="server-side-loading"><a class="header" href="#server-side-loading">Server-Side Loading</a></h3>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 Players.PlayerAdded:Connect(function(player)
@@ -212,7 +212,7 @@ Players.PlayerAdded:Connect(function(player)
 end)
 </code></pre>
 <h3 id="client-side-loading"><a class="header" href="#client-side-loading">Client-Side Loading</a></h3>
-<pre><code class="language-lua">-- LocalScript in StarterPlayer.StarterCharacterScripts
+<pre><code class="language-luau">-- LocalScript in StarterPlayer.StarterCharacterScripts
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local character = script.Parent
 
@@ -231,12 +231,12 @@ local controller = SimpleAnimate.new(
 <h2 id="fallback-animations"><a class="header" href="#fallback-animations">Fallback Animations</a></h2>
 <p>When loading animation packages, provide fallbacks for missing animations:</p>
 <h3 id="using-default-fallbacks"><a class="header" href="#using-default-fallbacks">Using Default Fallbacks</a></h3>
-<pre><code class="language-lua">-- If player doesn't have custom animations, R15 defaults are used
+<pre><code class="language-luau">-- If player doesn't have custom animations, R15 defaults are used
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 -- Missing animations automatically filled with R15 defaults
 </code></pre>
 <h3 id="custom-fallbacks"><a class="header" href="#custom-fallbacks">Custom Fallbacks</a></h3>
-<pre><code class="language-lua">-- Define your custom fallback animations
+<pre><code class="language-luau">-- Define your custom fallback animations
 local customDefaults = {
     Idle = {{id = "rbxassetid://YOUR_IDLE", weight = 10}},
     Walk = {{id = "rbxassetid://YOUR_WALK", weight = 10}},
@@ -249,7 +249,7 @@ local coreAnims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 -- Now if player doesn't have custom animations, your defaults are used
 </code></pre>
 <h3 id="selective-fallbacks"><a class="header" href="#selective-fallbacks">Selective Fallbacks</a></h3>
-<pre><code class="language-lua">-- Get player's animations
+<pre><code class="language-luau">-- Get player's animations
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- Override specific animations with your own
@@ -260,7 +260,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims)
 </code></pre>
 <h2 id="mixing-player-and-custom-animations"><a class="header" href="#mixing-player-and-custom-animations">Mixing Player and Custom Animations</a></h2>
 <h3 id="player-animations-with-custom-emotes"><a class="header" href="#player-animations-with-custom-emotes">Player Animations with Custom Emotes</a></h3>
-<pre><code class="language-lua">-- Use player's movement animations
+<pre><code class="language-luau">-- Use player's movement animations
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- But use your custom emotes
@@ -278,7 +278,7 @@ local controller = SimpleAnimate.new(
 )
 </code></pre>
 <h3 id="custom-animations-with-player-emotes"><a class="header" href="#custom-animations-with-player-emotes">Custom Animations with Player Emotes</a></h3>
-<pre><code class="language-lua">-- Use your custom movement animations
+<pre><code class="language-luau">-- Use your custom movement animations
 local customCore = {
     Idle = {{id = "rbxassetid://YOUR_IDLE", weight = 10}},
     Walk = {{id = "rbxassetid://YOUR_WALK", weight = 10}},
@@ -297,7 +297,7 @@ local controller = SimpleAnimate.new(
 </code></pre>
 <h2 id="handling-different-rig-types"><a class="header" href="#handling-different-rig-types">Handling Different Rig Types</a></h2>
 <h3 id="r6-vs-r15-detection"><a class="header" href="#r6-vs-r15-detection">R6 vs R15 Detection</a></h3>
-<pre><code class="language-lua">local function getRigType(character)
+<pre><code class="language-luau">local function getRigType(character)
     local humanoid = character:FindFirstChildWhichIsA("Humanoid")
     if humanoid then
         return humanoid.RigType == Enum.HumanoidRigType.R6 and "R6" or "R15"
@@ -319,7 +319,7 @@ local function setupCharacter(player, character)
 end
 </code></pre>
 <h3 id="force-specific-rig-type"><a class="header" href="#force-specific-rig-type">Force Specific Rig Type</a></h3>
-<pre><code class="language-lua">-- Always use R15 animations regardless of player's equipped package
+<pre><code class="language-luau">-- Always use R15 animations regardless of player's equipped package
 local r15Core, r15Emotes = SimpleAnimate.getCopyOfAnims("R15")
 
 local controller = SimpleAnimate.new(
@@ -331,7 +331,7 @@ local controller = SimpleAnimate.new(
 </code></pre>
 <h2 id="caching-animation-packages"><a class="header" href="#caching-animation-packages">Caching Animation Packages</a></h2>
 <p>Cache player animation packages to avoid repeated API calls:</p>
-<pre><code class="language-lua">local Players = game:GetService("Players")
+<pre><code class="language-luau">local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Cache player animations
@@ -376,7 +376,7 @@ end)
 </code></pre>
 <h2 id="validating-animation-packages"><a class="header" href="#validating-animation-packages">Validating Animation Packages</a></h2>
 <p>Check if animations loaded successfully:</p>
-<pre><code class="language-lua">local function validateAnimationPackage(anims, packageName)
+<pre><code class="language-luau">local function validateAnimationPackage(anims, packageName)
     local requiredPoses = {"Idle", "Walk", "Run", "Jump"}
     
     for _, pose in requiredPoses do
@@ -401,7 +401,7 @@ end
 </code></pre>
 <h2 id="overriding-specific-animations"><a class="header" href="#overriding-specific-animations">Overriding Specific Animations</a></h2>
 <h3 id="keep-player-package-override-one-pose"><a class="header" href="#keep-player-package-override-one-pose">Keep Player Package, Override One Pose</a></h3>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- Player has custom animations, but we want a special idle
 coreAnims.Idle = {
@@ -416,7 +416,7 @@ coreAnims.Idle = {
 local controller = SimpleAnimate.new(character, true, coreAnims)
 </code></pre>
 <h3 id="blend-custom-with-player-animations"><a class="header" href="#blend-custom-with-player-animations">Blend Custom with Player Animations</a></h3>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- Add variants to player's animations
 table.insert(coreAnims.Idle, {
@@ -430,7 +430,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims)
 </code></pre>
 <h2 id="animation-package-metadata"><a class="header" href="#animation-package-metadata">Animation Package Metadata</a></h2>
 <p>Store and retrieve animation package information:</p>
-<pre><code class="language-lua">local AnimationPackages = {
+<pre><code class="language-luau">local AnimationPackages = {
     Stylish = {
         name = "Stylish",
         description = "Cool and modern animations",
@@ -471,7 +471,7 @@ applyPackage(player, "Stylish")
 </code></pre>
 <h2 id="dynamic-package-switching"><a class="header" href="#dynamic-package-switching">Dynamic Package Switching</a></h2>
 <p>Allow players to switch animation packages at runtime:</p>
-<pre><code class="language-lua">local currentControllers = {}
+<pre><code class="language-luau">local currentControllers = {}
 
 local function switchAnimationPackage(player, packageName)
     local character = player.Character
@@ -506,7 +506,7 @@ end)
 </code></pre>
 <h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
 <p>Robust error handling for animation package loading:</p>
-<pre><code class="language-lua">local function safeLoadAnimations(player)
+<pre><code class="language-luau">local function safeLoadAnimations(player)
     local success, coreAnims = pcall(function()
         return SimpleAnimate.getAnimPackageAsync(player)
     end)
@@ -545,7 +545,7 @@ end)
 </code></pre>
 <h2 id="package-selection-ui"><a class="header" href="#package-selection-ui">Package Selection UI</a></h2>
 <p>Create a UI for players to choose animation packages:</p>
-<pre><code class="language-lua">-- Client Script
+<pre><code class="language-luau">-- Client Script
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
@@ -579,7 +579,7 @@ end
 </code></pre>
 <h2 id="pre-loading-animation-packages"><a class="header" href="#pre-loading-animation-packages">Pre-Loading Animation Packages</a></h2>
 <p>Pre-load animation packages before character spawns:</p>
-<pre><code class="language-lua">local loadedPackages = {}
+<pre><code class="language-luau">local loadedPackages = {}
 
 -- Pre-load all packages on server start
 local function preLoadPackages()
@@ -614,14 +614,14 @@ end)
 </ol>
 <h2 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h2>
 <h3 id="animations-not-loading"><a class="header" href="#animations-not-loading">Animations Not Loading</a></h3>
-<pre><code class="language-lua">-- ❌ Problem: Server call without player parameter
+<pre><code class="language-luau">-- ❌ Problem: Server call without player parameter
 local anims = SimpleAnimate.getAnimPackageAsync() -- Error on server!
 
 -- ✅ Solution: Always pass player on server
 local anims = SimpleAnimate.getAnimPackageAsync(player)
 </code></pre>
 <h3 id="missing-animations"><a class="header" href="#missing-animations">Missing Animations</a></h3>
-<pre><code class="language-lua">-- ❌ Problem: Not providing fallbacks
+<pre><code class="language-luau">-- ❌ Problem: Not providing fallbacks
 local anims = SimpleAnimate.getAnimPackageAsync(player)
 -- Some poses might be missing
 
@@ -630,7 +630,7 @@ local defaults = SimpleAnimate.getCopyOfAnims("R15")
 local anims = SimpleAnimate.getAnimPackageAsync(player, defaults)
 </code></pre>
 <h3 id="repeated-loading"><a class="header" href="#repeated-loading">Repeated Loading</a></h3>
-<pre><code class="language-lua">-- ❌ Problem: Loading on every character spawn
+<pre><code class="language-luau">-- ❌ Problem: Loading on every character spawn
 player.CharacterAdded:Connect(function(character)
     local anims = SimpleAnimate.getAnimPackageAsync(player) -- Loads every time
 end)

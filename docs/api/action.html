@@ -182,7 +182,7 @@
 <h3 id="createaction"><a class="header" href="#createaction"><code>:CreateAction()</code></a></h3>
 <p>Creates a new action animation and adds it to the actions collection.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function CreateAction(
+<pre><code class="language-luau">function CreateAction(
     key: any,
     template: {AnimInfo},
     doPreload: boolean?,
@@ -204,7 +204,7 @@
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Create a simple action:</p>
-<pre><code class="language-lua">local waveAction = {
+<pre><code class="language-luau">local waveAction = {
     {
         id = "rbxassetid://123456789",
         weight = 10,
@@ -216,7 +216,7 @@
 controller.Action:CreateAction("customWave", waveAction)
 </code></pre>
 <p>Create action with multiple variants:</p>
-<pre><code class="language-lua">local danceAction = {
+<pre><code class="language-luau">local danceAction = {
     {
         id = "rbxassetid://111111111",
         weight = 10,
@@ -237,7 +237,7 @@ controller.Action:CreateAction("customWave", waveAction)
 controller.Action:CreateAction("dance", danceAction)
 </code></pre>
 <p>Create with custom priority:</p>
-<pre><code class="language-lua">controller.Action:CreateAction(
+<pre><code class="language-luau">controller.Action:CreateAction(
     "importantAction",
     actionTemplate,
     true,
@@ -245,7 +245,7 @@ controller.Action:CreateAction("dance", danceAction)
 )
 </code></pre>
 <p>Create looped action:</p>
-<pre><code class="language-lua">local sitAction = {
+<pre><code class="language-luau">local sitAction = {
     {
         id = "rbxassetid://987654321",
         weight = 10
@@ -258,7 +258,7 @@ controller.Action:CreateAction("sit", sitAction, true, nil, true) -- Looped
 <h3 id="bulkcreateaction"><a class="header" href="#bulkcreateaction"><code>:BulkCreateAction()</code></a></h3>
 <p>Creates multiple actions at once from an animations list.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function BulkCreateAction(
+<pre><code class="language-luau">function BulkCreateAction(
     animsList: AnimationsList,
     doPreload: boolean?,
     priority: Enum.AnimationPriority?
@@ -276,7 +276,7 @@ controller.Action:CreateAction("sit", sitAction, true, nil, true) -- Looped
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Create multiple actions at once:</p>
-<pre><code class="language-lua">local customActions = {
+<pre><code class="language-luau">local customActions = {
     wave = {
         {id = "rbxassetid://111", weight = 10}
     },
@@ -300,20 +300,20 @@ controller.Action:PlayAction("point")
 <h3 id="removeaction"><a class="header" href="#removeaction"><code>:RemoveAction()</code></a></h3>
 <p>Removes and destroys an action by key.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function RemoveAction(key: any): ()
+<pre><code class="language-luau">function RemoveAction(key: any): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>key: any</code> - The key of the action to remove</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">-- Remove an action
+<pre><code class="language-luau">-- Remove an action
 controller.Action:RemoveAction("customWave")
 
 -- Action is now destroyed and can't be played
 </code></pre>
 <p>Remove multiple actions:</p>
-<pre><code class="language-lua">local actionsToRemove = {"action1", "action2", "action3"}
+<pre><code class="language-luau">local actionsToRemove = {"action1", "action2", "action3"}
 
 for _, actionKey in actionsToRemove do
     controller.Action:RemoveAction(actionKey)
@@ -323,18 +323,18 @@ end
 <h3 id="stopallactions"><a class="header" href="#stopallactions"><code>:StopAllActions()</code></a></h3>
 <p>Stops all currently playing animations for a specific action.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function StopAllActions(key: any): ()
+<pre><code class="language-luau">function StopAllActions(key: any): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>key: any</code> - The key of the action to stop</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">-- Stop all dance animations
+<pre><code class="language-luau">-- Stop all dance animations
 controller.Action:StopAllActions("dance")
 </code></pre>
 <p>Stop action after delay:</p>
-<pre><code class="language-lua">controller.Action:PlayAction("dance")
+<pre><code class="language-luau">controller.Action:PlayAction("dance")
 
 task.delay(3, function()
     controller.Action:StopAllActions("dance")
@@ -344,7 +344,7 @@ end)
 <h3 id="getaction"><a class="header" href="#getaction"><code>:GetAction()</code></a></h3>
 <p>Gets an action's animation info array by key.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetAction(key: any): {AnimInfo}?
+<pre><code class="language-luau">function GetAction(key: any): {AnimInfo}?
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -355,7 +355,7 @@ end)
 <li><code>{AnimInfo}?</code> - The animation info array or <code>nil</code> if not found</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local waveInfo = controller.Action:GetAction("wave")
+<pre><code class="language-luau">local waveInfo = controller.Action:GetAction("wave")
 
 if waveInfo then
     print("Wave action has", #waveInfo, "animations")
@@ -366,7 +366,7 @@ if waveInfo then
 end
 </code></pre>
 <p>Check if action exists:</p>
-<pre><code class="language-lua">if controller.Action:GetAction("customAction") then
+<pre><code class="language-luau">if controller.Action:GetAction("customAction") then
     print("Custom action exists!")
 else
     print("Custom action not found")
@@ -376,7 +376,7 @@ end
 <h3 id="getrandomactionanim"><a class="header" href="#getrandomactionanim"><code>:GetRandomActionAnim()</code></a></h3>
 <p>Gets a random animation track from an action's animations using weighted selection.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetRandomActionAnim(key: any): AnimationTrack
+<pre><code class="language-luau">function GetRandomActionAnim(key: any): AnimationTrack
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -387,7 +387,7 @@ end
 <li><code>AnimationTrack</code> - A randomly selected animation track</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local danceTrack = controller.Action:GetRandomActionAnim("dance")
+<pre><code class="language-luau">local danceTrack = controller.Action:GetRandomActionAnim("dance")
 print("Selected animation:", danceTrack.Animation.AnimationId)
 
 -- Play it manually
@@ -397,7 +397,7 @@ danceTrack:Play()
 <h3 id="playrandomactionanim"><a class="header" href="#playrandomactionanim"><code>:PlayRandomActionAnim()</code></a></h3>
 <p>Plays a random animation from an action and returns the track.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function PlayRandomActionAnim(key: any): AnimationTrack
+<pre><code class="language-luau">function PlayRandomActionAnim(key: any): AnimationTrack
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -409,21 +409,21 @@ danceTrack:Play()
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Basic usage:</p>
-<pre><code class="language-lua">local track = controller.Action:PlayRandomActionAnim("wave")
+<pre><code class="language-luau">local track = controller.Action:PlayRandomActionAnim("wave")
 </code></pre>
 <p>Wait for animation to finish:</p>
-<pre><code class="language-lua">local track = controller.Action:PlayRandomActionAnim("dance")
+<pre><code class="language-luau">local track = controller.Action:PlayRandomActionAnim("dance")
 
 track.Stopped:Wait()
 print("Dance finished!")
 </code></pre>
 <p>Play with custom adjustments:</p>
-<pre><code class="language-lua">local track = controller.Action:PlayRandomActionAnim("emote")
+<pre><code class="language-luau">local track = controller.Action:PlayRandomActionAnim("emote")
 track:AdjustSpeed(1.5) -- Speed up
 track:AdjustWeight(2)  -- Increase weight
 </code></pre>
 <p>Chain animations:</p>
-<pre><code class="language-lua">local function playEmoteSequence()
+<pre><code class="language-luau">local function playEmoteSequence()
     local wave = controller.Action:PlayRandomActionAnim("wave")
     wave.Stopped:Wait()
     
@@ -443,7 +443,7 @@ playEmoteSequence()
 <h3 id="playaction"><a class="header" href="#playaction"><code>:PlayAction()</code></a></h3>
 <p>Shorter alias for <code>:PlayRandomActionAnim()</code>.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function PlayAction(key: any): AnimationTrack
+<pre><code class="language-luau">function PlayAction(key: any): AnimationTrack
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -454,12 +454,12 @@ playEmoteSequence()
 <li><code>AnimationTrack</code> - The animation track that was played</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">-- These are equivalent
+<pre><code class="language-luau">-- These are equivalent
 local track1 = controller.Action:PlayAction("wave")
 local track2 = controller.Action:PlayRandomActionAnim("wave")
 </code></pre>
 <p>Quick emote playing:</p>
-<pre><code class="language-lua">-- Play various emotes
+<pre><code class="language-luau">-- Play various emotes
 controller.Action:PlayAction("wave")
 task.wait(2)
 controller.Action:PlayAction("dance")
@@ -470,21 +470,21 @@ controller.Action:PlayAction("point")
 <h3 id="setemotebindable"><a class="header" href="#setemotebindable"><code>:SetEmoteBindable()</code></a></h3>
 <p>Sets up the emote bindable function for handling emote requests. This is used internally to connect with Roblox's emote system.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function SetEmoteBindable(e: BindableFunction): ()
+<pre><code class="language-luau">function SetEmoteBindable(e: BindableFunction): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>e: BindableFunction</code> - The bindable function to set up</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local emoteBindable = Instance.new("BindableFunction")
+<pre><code class="language-luau">local emoteBindable = Instance.new("BindableFunction")
 controller.Action:SetEmoteBindable(emoteBindable)
 
 -- Now the emote system is connected
 -- Players can use the emote menu to trigger animations
 </code></pre>
 <p>Custom emote handler:</p>
-<pre><code class="language-lua">local emoteBindable = Instance.new("BindableFunction")
+<pre><code class="language-luau">local emoteBindable = Instance.new("BindableFunction")
 controller.Action:SetEmoteBindable(emoteBindable)
 
 -- Monitor emote usage
@@ -497,7 +497,7 @@ end
 </code></pre>
 <h2 id="complete-examples"><a class="header" href="#complete-examples">Complete Examples</a></h2>
 <h3 id="custom-emote-system"><a class="header" href="#custom-emote-system">Custom Emote System</a></h3>
-<pre><code class="language-lua">-- Define custom emotes
+<pre><code class="language-luau">-- Define custom emotes
 local customEmotes = {
     wave = {
         {id = "rbxassetid://111", weight = 10, fadeTime = 0.2}

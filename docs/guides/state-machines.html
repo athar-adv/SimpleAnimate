@@ -196,7 +196,7 @@
 </ul>
 <h2 id="required-interface"><a class="header" href="#required-interface">Required Interface</a></h2>
 <p>Your custom state machine must implement:</p>
-<pre><code class="language-lua">type StateMachine = {
+<pre><code class="language-luau">type StateMachine = {
     Running: RBXScriptSignal&lt;number&gt;,      -- Fires with speed
     Jumping: RBXScriptSignal&lt;()&gt;,          -- Fires on jump
     Climbing: RBXScriptSignal&lt;number&gt;,     -- Fires with climb speed
@@ -207,7 +207,7 @@
 </code></pre>
 <h2 id="basic-custom-state-machine"><a class="header" href="#basic-custom-state-machine">Basic Custom State Machine</a></h2>
 <h3 id="simple-implementation"><a class="header" href="#simple-implementation">Simple Implementation</a></h3>
-<pre><code class="language-lua">local Signal = require(game.ReplicatedStorage.Signal) -- Use any signal library
+<pre><code class="language-luau">local Signal = require(game.ReplicatedStorage.Signal) -- Use any signal library
 
 local CustomStateMachine = {}
 CustomStateMachine.__index = CustomStateMachine
@@ -246,7 +246,7 @@ end
 return CustomStateMachine
 </code></pre>
 <h3 id="using-with-simpleanimate"><a class="header" href="#using-with-simpleanimate">Using with SimpleAnimate</a></h3>
-<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local CustomStateMachine = require(game.ReplicatedStorage.CustomStateMachine)
 
 -- Create custom state machine
@@ -268,7 +268,7 @@ stateMachine:FireJumping()   -- Triggers jump animation
 </code></pre>
 <h2 id="vehicle-state-machine"><a class="header" href="#vehicle-state-machine">Vehicle State Machine</a></h2>
 <p>Control character animations while in a vehicle:</p>
-<pre><code class="language-lua">local VehicleStateMachine = {}
+<pre><code class="language-luau">local VehicleStateMachine = {}
 VehicleStateMachine.__index = VehicleStateMachine
 
 function VehicleStateMachine.new(vehicle)
@@ -303,7 +303,7 @@ end
 return VehicleStateMachine
 </code></pre>
 <p>Usage:</p>
-<pre><code class="language-lua">-- When player enters vehicle
+<pre><code class="language-luau">-- When player enters vehicle
 local vehicleStateMachine = VehicleStateMachine.new(vehicle)
 
 -- Create controller with vehicle state machine
@@ -319,7 +319,7 @@ local controller = SimpleAnimate.new(
 </code></pre>
 <h2 id="network-replicated-state-machine"><a class="header" href="#network-replicated-state-machine">Network-Replicated State Machine</a></h2>
 <p>Synchronize animation states across server and clients:</p>
-<pre><code class="language-lua">local ReplicatedStateMachine = {}
+<pre><code class="language-luau">local ReplicatedStateMachine = {}
 ReplicatedStateMachine.__index = ReplicatedStateMachine
 
 function ReplicatedStateMachine.new(character)
@@ -375,7 +375,7 @@ return ReplicatedStateMachine
 </code></pre>
 <h2 id="custom-movement-controller"><a class="header" href="#custom-movement-controller">Custom Movement Controller</a></h2>
 <p>Integrate with a custom character controller:</p>
-<pre><code class="language-lua">local CustomController = {}
+<pre><code class="language-luau">local CustomController = {}
 CustomController.__index = CustomController
 
 function CustomController.new(character)
@@ -430,7 +430,7 @@ end
 return CustomController
 </code></pre>
 <p>Usage:</p>
-<pre><code class="language-lua">local CustomController = require(game.ReplicatedStorage.CustomController)
+<pre><code class="language-luau">local CustomController = require(game.ReplicatedStorage.CustomController)
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Create custom controller
@@ -452,7 +452,7 @@ end)
 </code></pre>
 <h2 id="swimming-state-machine"><a class="header" href="#swimming-state-machine">Swimming State Machine</a></h2>
 <p>Custom swimming mechanics with state machine:</p>
-<pre><code class="language-lua">local SwimStateMachine = {}
+<pre><code class="language-luau">local SwimStateMachine = {}
 SwimStateMachine.__index = SwimStateMachine
 
 function SwimStateMachine.new(character)
@@ -506,7 +506,7 @@ return SwimStateMachine
 </code></pre>
 <h2 id="flying-state-machine"><a class="header" href="#flying-state-machine">Flying State Machine</a></h2>
 <p>For characters that can fly:</p>
-<pre><code class="language-lua">local FlyStateMachine = {}
+<pre><code class="language-luau">local FlyStateMachine = {}
 FlyStateMachine.__index = FlyStateMachine
 
 function FlyStateMachine.new()
@@ -554,7 +554,7 @@ return FlyStateMachine
 </code></pre>
 <h2 id="ai-state-machine"><a class="header" href="#ai-state-machine">AI State Machine</a></h2>
 <p>For NPC characters with AI:</p>
-<pre><code class="language-lua">local AIStateMachine = {}
+<pre><code class="language-luau">local AIStateMachine = {}
 AIStateMachine.__index = AIStateMachine
 
 function AIStateMachine.new(npc)
@@ -606,7 +606,7 @@ end
 return AIStateMachine
 </code></pre>
 <p>Usage with AI:</p>
-<pre><code class="language-lua">local aiStateMachine = AIStateMachine.new(npc)
+<pre><code class="language-luau">local aiStateMachine = AIStateMachine.new(npc)
 local controller = SimpleAnimate.new(npc, true, nil, nil, aiStateMachine)
 
 -- AI behavior
@@ -624,7 +624,7 @@ end
 </code></pre>
 <h2 id="state-machine-debugging"><a class="header" href="#state-machine-debugging">State Machine Debugging</a></h2>
 <p>Helper to debug state machine events:</p>
-<pre><code class="language-lua">local function debugStateMachine(stateMachine, name)
+<pre><code class="language-luau">local function debugStateMachine(stateMachine, name)
     print("=== Debugging State Machine:", name, "===")
     
     stateMachine.Running:Connect(function(speed)
@@ -663,7 +663,7 @@ debugStateMachine(customStateMachine, "CustomController")
 </ol>
 <h2 id="common-pitfalls"><a class="header" href="#common-pitfalls">Common Pitfalls</a></h2>
 <h3 id="missing-events"><a class="header" href="#missing-events">Missing Events</a></h3>
-<pre><code class="language-lua">-- ❌ BAD: Missing events
+<pre><code class="language-luau">-- ❌ BAD: Missing events
 local stateMachine = {
     Running = Signal.new(),
     WalkSpeed = 16
@@ -681,14 +681,14 @@ local stateMachine = {
 }
 </code></pre>
 <h3 id="wrong-signal-signatures"><a class="header" href="#wrong-signal-signatures">Wrong Signal Signatures</a></h3>
-<pre><code class="language-lua">-- ❌ BAD: Wrong signature
+<pre><code class="language-luau">-- ❌ BAD: Wrong signature
 self.Running:Fire() -- Missing speed parameter
 
 -- ✅ GOOD: Correct signature
 self.Running:Fire(16) -- Includes speed
 </code></pre>
 <h3 id="not-updating-walkspeed"><a class="header" href="#not-updating-walkspeed">Not Updating WalkSpeed</a></h3>
-<pre><code class="language-lua">-- ❌ BAD: Static WalkSpeed
+<pre><code class="language-luau">-- ❌ BAD: Static WalkSpeed
 self.WalkSpeed = 16 -- Never changes
 
 -- ✅ GOOD: Dynamic WalkSpeed
@@ -699,7 +699,7 @@ end
 </code></pre>
 <h2 id="complete-example"><a class="header" href="#complete-example">Complete Example</a></h2>
 <p>Full custom state machine implementation:</p>
-<pre><code class="language-lua">local Signal = require(game.ReplicatedStorage.Signal)
+<pre><code class="language-luau">local Signal = require(game.ReplicatedStorage.Signal)
 
 local CustomStateMachine = {}
 CustomStateMachine.__index = CustomStateMachine

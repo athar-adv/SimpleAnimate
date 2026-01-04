@@ -4,7 +4,7 @@
 
 The simplest way to get started with SimpleAnimate:
 
-```lua
+```luau
 local SimpleAnimate = require(path.to.SimpleAnimate)
 
 -- Wait for character
@@ -18,7 +18,7 @@ That's it! The controller will automatically handle all character animations bas
 
 ## Playing an Emote
 
-```lua
+```luau
 -- Play a random animation from the "wave" emote
 local track = controller.Action:PlayAction("wave")
 
@@ -29,7 +29,7 @@ print("Wave animation completed!")
 
 ## Changing a Core Animation
 
-```lua
+```luau
 -- Change the idle animation
 controller.Core.PoseController:ChangeCoreAnim(
     "Idle",
@@ -40,7 +40,7 @@ controller.Core.PoseController:ChangeCoreAnim(
 
 ## Listening to Pose Changes
 
-```lua
+```luau
 controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     print(string.format("Pose changed: %s -> %s", oldPose, newPose))
 end)
@@ -48,7 +48,7 @@ end)
 
 ## Getting Current State
 
-```lua
+```luau
 -- Get current pose
 local currentPose = controller.Core.PoseController:GetPose()
 print("Current pose:", currentPose) -- "Idle", "Walk", "Run", etc.
@@ -60,7 +60,7 @@ print("Current speed:", currentTrack.Speed)
 
 ## Creating Custom Actions
 
-```lua
+```luau
 -- Define a custom action
 local customAction = {
     {
@@ -82,7 +82,7 @@ controller.Action:PlayAction("myCustomAction")
 
 Always destroy the controller when done:
 
-```lua
+```luau
 -- Cleanup (automatically called when character is destroyed)
 controller:Destroy()
 ```

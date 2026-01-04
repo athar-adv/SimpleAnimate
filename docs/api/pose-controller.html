@@ -182,7 +182,7 @@
 <h3 id="posechanged"><a class="header" href="#posechanged"><code>PoseChanged</code></a></h3>
 <p>Fires when the character's pose changes.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">PoseChanged: RBXScriptSignal&lt;PoseType, PoseType, AnimationTrack&gt;
+<pre><code class="language-luau">PoseChanged: RBXScriptSignal&lt;PoseType, PoseType, AnimationTrack&gt;
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -192,12 +192,12 @@
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Basic usage:</p>
-<pre><code class="language-lua">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+<pre><code class="language-luau">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     print(string.format("Changed from %s to %s", oldPose, newPose))
 end)
 </code></pre>
 <p>Track specific transitions:</p>
-<pre><code class="language-lua">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+<pre><code class="language-luau">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     if newPose == "Jumping" then
         print("Character jumped!")
         track:AdjustSpeed(1.5) -- Make jump animation faster
@@ -207,7 +207,7 @@ end)
 end)
 </code></pre>
 <p>Create visual effects on pose changes:</p>
-<pre><code class="language-lua">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+<pre><code class="language-luau">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     if newPose == "Landed" then
         -- Create dust particle effect
         local dust = dustEffect:Clone()
@@ -224,7 +224,7 @@ end)
 <h3 id="setcoreactive"><a class="header" href="#setcoreactive"><code>:SetCoreActive()</code></a></h3>
 <p>Sets whether core animations are active.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function SetCoreActive(value: boolean): ()
+<pre><code class="language-luau">function SetCoreActive(value: boolean): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -232,14 +232,14 @@ end)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Disable all core animations:</p>
-<pre><code class="language-lua">controller.Core.PoseController:SetCoreActive(false)
+<pre><code class="language-luau">controller.Core.PoseController:SetCoreActive(false)
 -- Character will stop animating automatically
 </code></pre>
 <p>Re-enable core animations:</p>
-<pre><code class="language-lua">controller.Core.PoseController:SetCoreActive(true)
+<pre><code class="language-luau">controller.Core.PoseController:SetCoreActive(true)
 </code></pre>
 <p>Temporarily pause during cutscene:</p>
-<pre><code class="language-lua">-- Start cutscene
+<pre><code class="language-luau">-- Start cutscene
 controller.Core.PoseController:SetCoreActive(false)
 
 -- Play cutscene...
@@ -252,32 +252,32 @@ controller.Core.PoseController:SetCoreActive(true)
 <h3 id="getcoreactive"><a class="header" href="#getcoreactive"><code>:GetCoreActive()</code></a></h3>
 <p>Gets whether core animations are currently active.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetCoreActive(): boolean
+<pre><code class="language-luau">function GetCoreActive(): boolean
 </code></pre>
 <p><strong>Returns:</strong></p>
 <ul>
 <li><code>boolean</code> - Whether core animations are active</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local isActive = controller.Core.PoseController:GetCoreActive()
+<pre><code class="language-luau">local isActive = controller.Core.PoseController:GetCoreActive()
 print("Core animations active:", isActive)
 </code></pre>
 <p>Toggle core animations:</p>
-<pre><code class="language-lua">local currentState = controller.Core.PoseController:GetCoreActive()
+<pre><code class="language-luau">local currentState = controller.Core.PoseController:GetCoreActive()
 controller.Core.PoseController:SetCoreActive(not currentState)
 </code></pre>
 <hr />
 <h3 id="setcorecanplayanims"><a class="header" href="#setcorecanplayanims"><code>:SetCoreCanPlayAnims()</code></a></h3>
 <p>Controls whether core animations can play. Used internally during emotes.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function SetCoreCanPlayAnims(value: boolean): ()
+<pre><code class="language-luau">function SetCoreCanPlayAnims(value: boolean): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>value: boolean</code> - Whether core animations can play</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">-- Prevent core animations temporarily
+<pre><code class="language-luau">-- Prevent core animations temporarily
 controller.Core.PoseController:SetCoreCanPlayAnims(false)
 
 -- Allow core animations
@@ -287,7 +287,7 @@ controller.Core.PoseController:SetCoreCanPlayAnims(true)
 <h3 id="getcorecanplayanims"><a class="header" href="#getcorecanplayanims"><code>:GetCoreCanPlayAnims()</code></a></h3>
 <p>Gets whether core animations can play.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetCoreCanPlayAnims(): boolean
+<pre><code class="language-luau">function GetCoreCanPlayAnims(): boolean
 </code></pre>
 <p><strong>Returns:</strong></p>
 <ul>
@@ -297,38 +297,38 @@ controller.Core.PoseController:SetCoreCanPlayAnims(true)
 <h3 id="getcurrenttrack"><a class="header" href="#getcurrenttrack"><code>:GetCurrentTrack()</code></a></h3>
 <p>Gets the currently playing animation track.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetCurrentTrack(): AnimationTrack
+<pre><code class="language-luau">function GetCurrentTrack(): AnimationTrack
 </code></pre>
 <p><strong>Returns:</strong></p>
 <ul>
 <li><code>AnimationTrack</code> - The current animation track</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local track = controller.Core.PoseController:GetCurrentTrack()
+<pre><code class="language-luau">local track = controller.Core.PoseController:GetCurrentTrack()
 print("Current animation:", track.Animation.AnimationId)
 print("Current speed:", track.Speed)
 print("Is playing:", track.IsPlaying)
 </code></pre>
 <p>Adjust current animation speed:</p>
-<pre><code class="language-lua">local track = controller.Core.PoseController:GetCurrentTrack()
+<pre><code class="language-luau">local track = controller.Core.PoseController:GetCurrentTrack()
 track:AdjustSpeed(2) -- Play at 2x speed
 </code></pre>
 <hr />
 <h3 id="getpose"><a class="header" href="#getpose"><code>:GetPose()</code></a></h3>
 <p>Gets the current pose type.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetPose(): PoseType?
+<pre><code class="language-luau">function GetPose(): PoseType?
 </code></pre>
 <p><strong>Returns:</strong></p>
 <ul>
 <li><code>PoseType?</code> - The current pose (e.g., "Idle", "Walk", "Run", "Jumping")</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local currentPose = controller.Core.PoseController:GetPose()
+<pre><code class="language-luau">local currentPose = controller.Core.PoseController:GetPose()
 print("Character is:", currentPose)
 </code></pre>
 <p>Conditional logic based on pose:</p>
-<pre><code class="language-lua">local pose = controller.Core.PoseController:GetPose()
+<pre><code class="language-luau">local pose = controller.Core.PoseController:GetPose()
 
 if pose == "Idle" then
     print("Character is standing still")
@@ -342,7 +342,7 @@ end
 <h3 id="setposeenabled"><a class="header" href="#setposeenabled"><code>:SetPoseEnabled()</code></a></h3>
 <p>Enables or disables a specific pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function SetPoseEnabled(pose: PoseType, enabled: boolean): ()
+<pre><code class="language-luau">function SetPoseEnabled(pose: PoseType, enabled: boolean): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -351,23 +351,23 @@ end
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Disable jumping animation:</p>
-<pre><code class="language-lua">controller.Core.PoseController:SetPoseEnabled("Jumping", false)
+<pre><code class="language-luau">controller.Core.PoseController:SetPoseEnabled("Jumping", false)
 -- Character can still jump but won't play jump animation
 </code></pre>
 <p>Disable multiple poses:</p>
-<pre><code class="language-lua">-- Create a "statue" mode
+<pre><code class="language-luau">-- Create a "statue" mode
 controller.Core.PoseController:SetPoseEnabled("Walk", false)
 controller.Core.PoseController:SetPoseEnabled("Run", false)
 controller.Core.PoseController:SetPoseEnabled("Jumping", false)
 </code></pre>
 <p>Re-enable poses:</p>
-<pre><code class="language-lua">controller.Core.PoseController:SetPoseEnabled("Jumping", true)
+<pre><code class="language-luau">controller.Core.PoseController:SetPoseEnabled("Jumping", true)
 </code></pre>
 <hr />
 <h3 id="getcoreaniminfos"><a class="header" href="#getcoreaniminfos"><code>:GetCoreAnimInfos()</code></a></h3>
 <p>Gets the animation information array for a specific pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetCoreAnimInfos(pose: PoseType): {AnimInfo}
+<pre><code class="language-luau">function GetCoreAnimInfos(pose: PoseType): {AnimInfo}
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -378,21 +378,21 @@ controller.Core.PoseController:SetPoseEnabled("Jumping", false)
 <li><code>{AnimInfo}</code> - Array of animation info structures</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local idleAnims = controller.Core.PoseController:GetCoreAnimInfos("Idle")
+<pre><code class="language-luau">local idleAnims = controller.Core.PoseController:GetCoreAnimInfos("Idle")
 
 for i, info in idleAnims do
     print(string.format("Idle anim %d: %s (weight: %d)", i, info.id, info.weight))
 end
 </code></pre>
 <p>Check how many walk animations exist:</p>
-<pre><code class="language-lua">local walkAnims = controller.Core.PoseController:GetCoreAnimInfos("Walk")
+<pre><code class="language-luau">local walkAnims = controller.Core.PoseController:GetCoreAnimInfos("Walk")
 print("Number of walk animations:", #walkAnims)
 </code></pre>
 <hr />
 <h3 id="changecoreanim"><a class="header" href="#changecoreanim"><code>:ChangeCoreAnim()</code></a></h3>
 <p>Changes a core animation for a specific pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function ChangeCoreAnim(
+<pre><code class="language-luau">function ChangeCoreAnim(
     pose: PoseType,
     index: number,
     new: Animation | string | AnimationTrack | AnimInfo
@@ -410,20 +410,20 @@ print("Number of walk animations:", #walkAnims)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Change using animation ID:</p>
-<pre><code class="language-lua">controller.Core.PoseController:ChangeCoreAnim(
+<pre><code class="language-luau">controller.Core.PoseController:ChangeCoreAnim(
     "Idle",
     1,
     "rbxassetid://123456789"
 )
 </code></pre>
 <p>Change using Animation instance:</p>
-<pre><code class="language-lua">local anim = Instance.new("Animation")
+<pre><code class="language-luau">local anim = Instance.new("Animation")
 anim.AnimationId = "rbxassetid://123456789"
 
 controller.Core.PoseController:ChangeCoreAnim("Run", 1, anim)
 </code></pre>
 <p>Change using AnimInfo table:</p>
-<pre><code class="language-lua">local newAnimInfo = {
+<pre><code class="language-luau">local newAnimInfo = {
     id = "rbxassetid://123456789",
     weight = 15,
     speed = 1.2,
@@ -433,7 +433,7 @@ controller.Core.PoseController:ChangeCoreAnim("Run", 1, anim)
 controller.Core.PoseController:ChangeCoreAnim("Walk", 1, newAnimInfo)
 </code></pre>
 <p>Change multiple animations:</p>
-<pre><code class="language-lua">-- Replace all idle animations
+<pre><code class="language-luau">-- Replace all idle animations
 local idleAnims = {
     "rbxassetid://111111",
     "rbxassetid://222222",
@@ -448,7 +448,7 @@ end
 <h3 id="getrandomcoreanim"><a class="header" href="#getrandomcoreanim"><code>:GetRandomCoreAnim()</code></a></h3>
 <p>Gets a random animation track for the specified pose, weighted by animation weights.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function GetRandomCoreAnim(pose: PoseType): AnimationTrack
+<pre><code class="language-luau">function GetRandomCoreAnim(pose: PoseType): AnimationTrack
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -459,14 +459,14 @@ end
 <li><code>AnimationTrack</code> - A randomly selected animation track</li>
 </ul>
 <p><strong>Examples:</strong></p>
-<pre><code class="language-lua">local randomIdle = controller.Core.PoseController:GetRandomCoreAnim("Idle")
+<pre><code class="language-luau">local randomIdle = controller.Core.PoseController:GetRandomCoreAnim("Idle")
 print("Selected idle animation:", randomIdle.Animation.AnimationId)
 </code></pre>
 <hr />
 <h3 id="stopcoreanimations"><a class="header" href="#stopcoreanimations"><code>:StopCoreAnimations()</code></a></h3>
 <p>Stops all currently playing core animations.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function StopCoreAnimations(fadeTime: number?): ()
+<pre><code class="language-luau">function StopCoreAnimations(fadeTime: number?): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -474,13 +474,13 @@ print("Selected idle animation:", randomIdle.Animation.AnimationId)
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Stop immediately:</p>
-<pre><code class="language-lua">controller.Core.PoseController:StopCoreAnimations()
+<pre><code class="language-luau">controller.Core.PoseController:StopCoreAnimations()
 </code></pre>
 <p>Stop with fade:</p>
-<pre><code class="language-lua">controller.Core.PoseController:StopCoreAnimations(0.5) -- Fade out over 0.5 seconds
+<pre><code class="language-luau">controller.Core.PoseController:StopCoreAnimations(0.5) -- Fade out over 0.5 seconds
 </code></pre>
 <p>Use before playing custom animation:</p>
-<pre><code class="language-lua">-- Stop all core animations before custom sequence
+<pre><code class="language-luau">-- Stop all core animations before custom sequence
 controller.Core.PoseController:StopCoreAnimations(0.2)
 
 local customTrack = animator:LoadAnimation(customAnimation)
@@ -490,7 +490,7 @@ customTrack:Play()
 <h3 id="playcoreanimation"><a class="header" href="#playcoreanimation"><code>:PlayCoreAnimation()</code></a></h3>
 <p>Plays an animation for the specified pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function PlayCoreAnimation(
+<pre><code class="language-luau">function PlayCoreAnimation(
     pose: PoseType,
     looped: boolean?,
     speed: number?,
@@ -510,19 +510,19 @@ customTrack:Play()
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Play idle animation:</p>
-<pre><code class="language-lua">controller.Core.PoseController:PlayCoreAnimation("Idle")
+<pre><code class="language-luau">controller.Core.PoseController:PlayCoreAnimation("Idle")
 </code></pre>
 <p>Play with custom speed:</p>
-<pre><code class="language-lua">controller.Core.PoseController:PlayCoreAnimation("Run", true, 1.5)
+<pre><code class="language-luau">controller.Core.PoseController:PlayCoreAnimation("Run", true, 1.5)
 </code></pre>
 <p>Play non-looping:</p>
-<pre><code class="language-lua">controller.Core.PoseController:PlayCoreAnimation("Jumping", false, 1, 0.1)
+<pre><code class="language-luau">controller.Core.PoseController:PlayCoreAnimation("Jumping", false, 1, 0.1)
 </code></pre>
 <hr />
 <h3 id="changepose"><a class="header" href="#changepose"><code>:ChangePose()</code></a></h3>
 <p>Changes the character's pose.</p>
 <p><strong>Signature:</strong></p>
-<pre><code class="language-lua">function ChangePose(pose: PoseType, speed: number?, isCore: boolean?): ()
+<pre><code class="language-luau">function ChangePose(pose: PoseType, speed: number?, isCore: boolean?): ()
 </code></pre>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -532,10 +532,10 @@ customTrack:Play()
 </ul>
 <p><strong>Examples:</strong></p>
 <p>Force character to idle:</p>
-<pre><code class="language-lua">controller.Core.PoseController:ChangePose("Idle")
+<pre><code class="language-luau">controller.Core.PoseController:ChangePose("Idle")
 </code></pre>
 <p>Change pose with custom speed:</p>
-<pre><code class="language-lua">controller.Core.PoseController:ChangePose("Walk", 1.5)
+<pre><code class="language-luau">controller.Core.PoseController:ChangePose("Walk", 1.5)
 </code></pre>
 <p><strong>Note:</strong> Usually you don't need to call this manually as the Connections module handles pose changes automatically based on humanoid state.</p>
 

@@ -11,7 +11,7 @@ The PoseController manages pose transitions and core animation playback. It hand
 Fires when the character's pose changes.
 
 **Signature:**
-```lua
+```luau
 PoseChanged: RBXScriptSignal<PoseType, PoseType, AnimationTrack>
 ```
 
@@ -23,14 +23,14 @@ PoseChanged: RBXScriptSignal<PoseType, PoseType, AnimationTrack>
 **Examples:**
 
 Basic usage:
-```lua
+```luau
 controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     print(string.format("Changed from %s to %s", oldPose, newPose))
 end)
 ```
 
 Track specific transitions:
-```lua
+```luau
 controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     if newPose == "Jumping" then
         print("Character jumped!")
@@ -42,7 +42,7 @@ end)
 ```
 
 Create visual effects on pose changes:
-```lua
+```luau
 controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     if newPose == "Landed" then
         -- Create dust particle effect
@@ -64,7 +64,7 @@ end)
 Sets whether core animations are active.
 
 **Signature:**
-```lua
+```luau
 function SetCoreActive(value: boolean): ()
 ```
 
@@ -74,18 +74,18 @@ function SetCoreActive(value: boolean): ()
 **Examples:**
 
 Disable all core animations:
-```lua
+```luau
 controller.Core.PoseController:SetCoreActive(false)
 -- Character will stop animating automatically
 ```
 
 Re-enable core animations:
-```lua
+```luau
 controller.Core.PoseController:SetCoreActive(true)
 ```
 
 Temporarily pause during cutscene:
-```lua
+```luau
 -- Start cutscene
 controller.Core.PoseController:SetCoreActive(false)
 
@@ -103,7 +103,7 @@ controller.Core.PoseController:SetCoreActive(true)
 Gets whether core animations are currently active.
 
 **Signature:**
-```lua
+```luau
 function GetCoreActive(): boolean
 ```
 
@@ -112,13 +112,13 @@ function GetCoreActive(): boolean
 
 **Examples:**
 
-```lua
+```luau
 local isActive = controller.Core.PoseController:GetCoreActive()
 print("Core animations active:", isActive)
 ```
 
 Toggle core animations:
-```lua
+```luau
 local currentState = controller.Core.PoseController:GetCoreActive()
 controller.Core.PoseController:SetCoreActive(not currentState)
 ```
@@ -130,7 +130,7 @@ controller.Core.PoseController:SetCoreActive(not currentState)
 Controls whether core animations can play. Used internally during emotes.
 
 **Signature:**
-```lua
+```luau
 function SetCoreCanPlayAnims(value: boolean): ()
 ```
 
@@ -139,7 +139,7 @@ function SetCoreCanPlayAnims(value: boolean): ()
 
 **Examples:**
 
-```lua
+```luau
 -- Prevent core animations temporarily
 controller.Core.PoseController:SetCoreCanPlayAnims(false)
 
@@ -154,7 +154,7 @@ controller.Core.PoseController:SetCoreCanPlayAnims(true)
 Gets whether core animations can play.
 
 **Signature:**
-```lua
+```luau
 function GetCoreCanPlayAnims(): boolean
 ```
 
@@ -168,7 +168,7 @@ function GetCoreCanPlayAnims(): boolean
 Gets the currently playing animation track.
 
 **Signature:**
-```lua
+```luau
 function GetCurrentTrack(): AnimationTrack
 ```
 
@@ -177,7 +177,7 @@ function GetCurrentTrack(): AnimationTrack
 
 **Examples:**
 
-```lua
+```luau
 local track = controller.Core.PoseController:GetCurrentTrack()
 print("Current animation:", track.Animation.AnimationId)
 print("Current speed:", track.Speed)
@@ -185,7 +185,7 @@ print("Is playing:", track.IsPlaying)
 ```
 
 Adjust current animation speed:
-```lua
+```luau
 local track = controller.Core.PoseController:GetCurrentTrack()
 track:AdjustSpeed(2) -- Play at 2x speed
 ```
@@ -197,7 +197,7 @@ track:AdjustSpeed(2) -- Play at 2x speed
 Gets the current pose type.
 
 **Signature:**
-```lua
+```luau
 function GetPose(): PoseType?
 ```
 
@@ -206,13 +206,13 @@ function GetPose(): PoseType?
 
 **Examples:**
 
-```lua
+```luau
 local currentPose = controller.Core.PoseController:GetPose()
 print("Character is:", currentPose)
 ```
 
 Conditional logic based on pose:
-```lua
+```luau
 local pose = controller.Core.PoseController:GetPose()
 
 if pose == "Idle" then
@@ -231,7 +231,7 @@ end
 Enables or disables a specific pose.
 
 **Signature:**
-```lua
+```luau
 function SetPoseEnabled(pose: PoseType, enabled: boolean): ()
 ```
 
@@ -242,13 +242,13 @@ function SetPoseEnabled(pose: PoseType, enabled: boolean): ()
 **Examples:**
 
 Disable jumping animation:
-```lua
+```luau
 controller.Core.PoseController:SetPoseEnabled("Jumping", false)
 -- Character can still jump but won't play jump animation
 ```
 
 Disable multiple poses:
-```lua
+```luau
 -- Create a "statue" mode
 controller.Core.PoseController:SetPoseEnabled("Walk", false)
 controller.Core.PoseController:SetPoseEnabled("Run", false)
@@ -256,7 +256,7 @@ controller.Core.PoseController:SetPoseEnabled("Jumping", false)
 ```
 
 Re-enable poses:
-```lua
+```luau
 controller.Core.PoseController:SetPoseEnabled("Jumping", true)
 ```
 
@@ -267,7 +267,7 @@ controller.Core.PoseController:SetPoseEnabled("Jumping", true)
 Gets the animation information array for a specific pose.
 
 **Signature:**
-```lua
+```luau
 function GetCoreAnimInfos(pose: PoseType): {AnimInfo}
 ```
 
@@ -279,7 +279,7 @@ function GetCoreAnimInfos(pose: PoseType): {AnimInfo}
 
 **Examples:**
 
-```lua
+```luau
 local idleAnims = controller.Core.PoseController:GetCoreAnimInfos("Idle")
 
 for i, info in idleAnims do
@@ -288,7 +288,7 @@ end
 ```
 
 Check how many walk animations exist:
-```lua
+```luau
 local walkAnims = controller.Core.PoseController:GetCoreAnimInfos("Walk")
 print("Number of walk animations:", #walkAnims)
 ```
@@ -300,7 +300,7 @@ print("Number of walk animations:", #walkAnims)
 Changes a core animation for a specific pose.
 
 **Signature:**
-```lua
+```luau
 function ChangeCoreAnim(
     pose: PoseType,
     index: number,
@@ -319,7 +319,7 @@ function ChangeCoreAnim(
 **Examples:**
 
 Change using animation ID:
-```lua
+```luau
 controller.Core.PoseController:ChangeCoreAnim(
     "Idle",
     1,
@@ -328,7 +328,7 @@ controller.Core.PoseController:ChangeCoreAnim(
 ```
 
 Change using Animation instance:
-```lua
+```luau
 local anim = Instance.new("Animation")
 anim.AnimationId = "rbxassetid://123456789"
 
@@ -336,7 +336,7 @@ controller.Core.PoseController:ChangeCoreAnim("Run", 1, anim)
 ```
 
 Change using AnimInfo table:
-```lua
+```luau
 local newAnimInfo = {
     id = "rbxassetid://123456789",
     weight = 15,
@@ -348,7 +348,7 @@ controller.Core.PoseController:ChangeCoreAnim("Walk", 1, newAnimInfo)
 ```
 
 Change multiple animations:
-```lua
+```luau
 -- Replace all idle animations
 local idleAnims = {
     "rbxassetid://111111",
@@ -368,7 +368,7 @@ end
 Gets a random animation track for the specified pose, weighted by animation weights.
 
 **Signature:**
-```lua
+```luau
 function GetRandomCoreAnim(pose: PoseType): AnimationTrack
 ```
 
@@ -380,7 +380,7 @@ function GetRandomCoreAnim(pose: PoseType): AnimationTrack
 
 **Examples:**
 
-```lua
+```luau
 local randomIdle = controller.Core.PoseController:GetRandomCoreAnim("Idle")
 print("Selected idle animation:", randomIdle.Animation.AnimationId)
 ```
@@ -392,7 +392,7 @@ print("Selected idle animation:", randomIdle.Animation.AnimationId)
 Stops all currently playing core animations.
 
 **Signature:**
-```lua
+```luau
 function StopCoreAnimations(fadeTime: number?): ()
 ```
 
@@ -402,17 +402,17 @@ function StopCoreAnimations(fadeTime: number?): ()
 **Examples:**
 
 Stop immediately:
-```lua
+```luau
 controller.Core.PoseController:StopCoreAnimations()
 ```
 
 Stop with fade:
-```lua
+```luau
 controller.Core.PoseController:StopCoreAnimations(0.5) -- Fade out over 0.5 seconds
 ```
 
 Use before playing custom animation:
-```lua
+```luau
 -- Stop all core animations before custom sequence
 controller.Core.PoseController:StopCoreAnimations(0.2)
 
@@ -427,7 +427,7 @@ customTrack:Play()
 Plays an animation for the specified pose.
 
 **Signature:**
-```lua
+```luau
 function PlayCoreAnimation(
     pose: PoseType,
     looped: boolean?,
@@ -448,17 +448,17 @@ function PlayCoreAnimation(
 **Examples:**
 
 Play idle animation:
-```lua
+```luau
 controller.Core.PoseController:PlayCoreAnimation("Idle")
 ```
 
 Play with custom speed:
-```lua
+```luau
 controller.Core.PoseController:PlayCoreAnimation("Run", true, 1.5)
 ```
 
 Play non-looping:
-```lua
+```luau
 controller.Core.PoseController:PlayCoreAnimation("Jumping", false, 1, 0.1)
 ```
 
@@ -469,7 +469,7 @@ controller.Core.PoseController:PlayCoreAnimation("Jumping", false, 1, 0.1)
 Changes the character's pose.
 
 **Signature:**
-```lua
+```luau
 function ChangePose(pose: PoseType, speed: number?, isCore: boolean?): ()
 ```
 
@@ -481,12 +481,12 @@ function ChangePose(pose: PoseType, speed: number?, isCore: boolean?): ()
 **Examples:**
 
 Force character to idle:
-```lua
+```luau
 controller.Core.PoseController:ChangePose("Idle")
 ```
 
 Change pose with custom speed:
-```lua
+```luau
 controller.Core.PoseController:ChangePose("Walk", 1.5)
 ```
 

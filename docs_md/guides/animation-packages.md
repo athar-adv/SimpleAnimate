@@ -15,7 +15,7 @@ SimpleAnimate can automatically load these player-equipped animations.
 
 ### Server-Side Loading
 
-```lua
+```luau
 local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
@@ -43,7 +43,7 @@ end)
 
 ### Client-Side Loading
 
-```lua
+```luau
 -- LocalScript in StarterPlayer.StarterCharacterScripts
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 local character = script.Parent
@@ -67,7 +67,7 @@ When loading animation packages, provide fallbacks for missing animations:
 
 ### Using Default Fallbacks
 
-```lua
+```luau
 -- If player doesn't have custom animations, R15 defaults are used
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 -- Missing animations automatically filled with R15 defaults
@@ -75,7 +75,7 @@ local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 ### Custom Fallbacks
 
-```lua
+```luau
 -- Define your custom fallback animations
 local customDefaults = {
     Idle = {{id = "rbxassetid://YOUR_IDLE", weight = 10}},
@@ -91,7 +91,7 @@ local coreAnims = SimpleAnimate.getAnimPackageAsync(player, customDefaults)
 
 ### Selective Fallbacks
 
-```lua
+```luau
 -- Get player's animations
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
@@ -106,7 +106,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims)
 
 ### Player Animations with Custom Emotes
 
-```lua
+```luau
 -- Use player's movement animations
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
@@ -127,7 +127,7 @@ local controller = SimpleAnimate.new(
 
 ### Custom Animations with Player Emotes
 
-```lua
+```luau
 -- Use your custom movement animations
 local customCore = {
     Idle = {{id = "rbxassetid://YOUR_IDLE", weight = 10}},
@@ -150,7 +150,7 @@ local controller = SimpleAnimate.new(
 
 ### R6 vs R15 Detection
 
-```lua
+```luau
 local function getRigType(character)
     local humanoid = character:FindFirstChildWhichIsA("Humanoid")
     if humanoid then
@@ -175,7 +175,7 @@ end
 
 ### Force Specific Rig Type
 
-```lua
+```luau
 -- Always use R15 animations regardless of player's equipped package
 local r15Core, r15Emotes = SimpleAnimate.getCopyOfAnims("R15")
 
@@ -191,7 +191,7 @@ local controller = SimpleAnimate.new(
 
 Cache player animation packages to avoid repeated API calls:
 
-```lua
+```luau
 local Players = game:GetService("Players")
 local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
@@ -240,7 +240,7 @@ end)
 
 Check if animations loaded successfully:
 
-```lua
+```luau
 local function validateAnimationPackage(anims, packageName)
     local requiredPoses = {"Idle", "Walk", "Run", "Jump"}
     
@@ -269,7 +269,7 @@ end
 
 ### Keep Player Package, Override One Pose
 
-```lua
+```luau
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- Player has custom animations, but we want a special idle
@@ -287,7 +287,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims)
 
 ### Blend Custom with Player Animations
 
-```lua
+```luau
 local coreAnims = SimpleAnimate.getAnimPackageAsync(player)
 
 -- Add variants to player's animations
@@ -305,7 +305,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims)
 
 Store and retrieve animation package information:
 
-```lua
+```luau
 local AnimationPackages = {
     Stylish = {
         name = "Stylish",
@@ -350,7 +350,7 @@ applyPackage(player, "Stylish")
 
 Allow players to switch animation packages at runtime:
 
-```lua
+```luau
 local currentControllers = {}
 
 local function switchAnimationPackage(player, packageName)
@@ -389,7 +389,7 @@ end)
 
 Robust error handling for animation package loading:
 
-```lua
+```luau
 local function safeLoadAnimations(player)
     local success, coreAnims = pcall(function()
         return SimpleAnimate.getAnimPackageAsync(player)
@@ -432,7 +432,7 @@ end)
 
 Create a UI for players to choose animation packages:
 
-```lua
+```luau
 -- Client Script
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
@@ -470,7 +470,7 @@ end
 
 Pre-load animation packages before character spawns:
 
-```lua
+```luau
 local loadedPackages = {}
 
 -- Pre-load all packages on server start
@@ -509,7 +509,7 @@ end)
 
 ### Animations Not Loading
 
-```lua
+```luau
 -- ❌ Problem: Server call without player parameter
 local anims = SimpleAnimate.getAnimPackageAsync() -- Error on server!
 
@@ -519,7 +519,7 @@ local anims = SimpleAnimate.getAnimPackageAsync(player)
 
 ### Missing Animations
 
-```lua
+```luau
 -- ❌ Problem: Not providing fallbacks
 local anims = SimpleAnimate.getAnimPackageAsync(player)
 -- Some poses might be missing
@@ -531,7 +531,7 @@ local anims = SimpleAnimate.getAnimPackageAsync(player, defaults)
 
 ### Repeated Loading
 
-```lua
+```luau
 -- ❌ Problem: Loading on every character spawn
 player.CharacterAdded:Connect(function(character)
     local anims = SimpleAnimate.getAnimPackageAsync(player) -- Loads every time

@@ -179,7 +179,7 @@
 <p>This guide covers how to use custom animations with SimpleAnimate.</p>
 <h2 id="animation-info-structure"><a class="header" href="#animation-info-structure">Animation Info Structure</a></h2>
 <p>All animations in SimpleAnimate are defined using the <code>AnimInfo</code> structure:</p>
-<pre><code class="language-lua">{
+<pre><code class="language-luau">{
     id = "rbxassetid://123456789", -- Animation asset ID
     weight = 10,                    -- Selection weight (default: 10)
     speed = 1,                      -- Playback speed (default: 1)
@@ -190,7 +190,7 @@
 <h2 id="creating-custom-core-animations"><a class="header" href="#creating-custom-core-animations">Creating Custom Core Animations</a></h2>
 <h3 id="method-1-modify-default-animations"><a class="header" href="#method-1-modify-default-animations">Method 1: Modify Default Animations</a></h3>
 <p>Start with default animations and modify them:</p>
-<pre><code class="language-lua">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
 
 -- Get a copy of R15 animations
 local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
@@ -217,7 +217,7 @@ local controller = SimpleAnimate.new(character, true, coreAnims, emoteAnims)
 </code></pre>
 <h3 id="method-2-build-from-scratch"><a class="header" href="#method-2-build-from-scratch">Method 2: Build From Scratch</a></h3>
 <p>Create a complete animation set from scratch:</p>
-<pre><code class="language-lua">local customCoreAnims = {
+<pre><code class="language-luau">local customCoreAnims = {
     Idle = {
         {id = "rbxassetid://123", weight = 10, fadeTime = 0.1}
     },
@@ -245,7 +245,7 @@ local controller = SimpleAnimate.new(character, true, customCoreAnims)
 </code></pre>
 <h2 id="multiple-animation-variants"><a class="header" href="#multiple-animation-variants">Multiple Animation Variants</a></h2>
 <p>Add multiple variants of the same animation with different weights:</p>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Multiple idle animations
 coreAnims.Idle = {
@@ -282,7 +282,7 @@ coreAnims.Run = {
 </code></pre>
 <h2 id="animation-speed-control"><a class="header" href="#animation-speed-control">Animation Speed Control</a></h2>
 <p>Control playback speed for different effects:</p>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Slow idle for tired character
 coreAnims.Idle[1].speed = 0.7
@@ -295,7 +295,7 @@ coreAnims.Climb[1].speed = 0.8
 </code></pre>
 <h2 id="fade-time-customization"><a class="header" href="#fade-time-customization">Fade Time Customization</a></h2>
 <p>Control how animations blend together:</p>
-<pre><code class="language-lua">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
+<pre><code class="language-luau">local coreAnims = SimpleAnimate.getCopyOfAnims("R15")
 
 -- Quick transition for responsive movement
 coreAnims.Walk[1].fadeTime = 0.05
@@ -309,7 +309,7 @@ coreAnims.Jump[1].fadeTime = 0
 </code></pre>
 <h2 id="runtime-animation-changes"><a class="header" href="#runtime-animation-changes">Runtime Animation Changes</a></h2>
 <p>Change animations while the game is running:</p>
-<pre><code class="language-lua">-- Change a single animation
+<pre><code class="language-luau">-- Change a single animation
 controller.Core.PoseController:ChangeCoreAnim(
     "Idle",
     1,
@@ -332,7 +332,7 @@ controller.Core.PoseController:ChangeCoreAnim(
 </code></pre>
 <h2 id="character-specific-animations"><a class="header" href="#character-specific-animations">Character-Specific Animations</a></h2>
 <p>Different animations for different character types:</p>
-<pre><code class="language-lua">local function getAnimationsForCharacter(characterType)
+<pre><code class="language-luau">local function getAnimationsForCharacter(characterType)
     if characterType == "Warrior" then
         return {
             Idle = {{id = "rbxassetid://WARRIOR_IDLE", weight = 10}},

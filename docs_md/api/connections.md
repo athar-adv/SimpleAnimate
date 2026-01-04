@@ -28,7 +28,7 @@ These properties control animation behavior and speed multipliers:
 
 Control when the character switches from walking to running:
 
-```lua
+```luau
 -- Default is 15.5, lower value = switches to run earlier
 controller.Core.Connections.RunThreshold = 10
 
@@ -37,7 +37,7 @@ controller.Core.Connections.RunThreshold = 10
 
 ### Custom Animation Speeds
 
-```lua
+```luau
 -- Make idle animation slower for dramatic effect
 controller.Core.Connections.IdleAnimationSpeed = 0.7
 
@@ -47,7 +47,7 @@ controller.Core.Connections.MoveAnimationSpeedMultiplier = 1.5
 
 ### Adjusting Jump Timing
 
-```lua
+```luau
 -- Make character fall faster (shorter jump animation)
 controller.Core.Connections.JumpDuration = 0.1
 
@@ -59,7 +59,7 @@ controller.Core.Connections.JumpDuration = 0.5
 
 Disable auto-adjustment and set custom multipliers:
 
-```lua
+```luau
 local connections = controller.Core.Connections
 
 -- Disable automatic adjustment
@@ -73,7 +73,7 @@ connections.SwimAnimationSpeedMultiplier = 0.8   -- Swim at 0.8x speed
 
 ### Swimming Configuration
 
-```lua
+```luau
 local connections = controller.Core.Connections
 
 -- Adjust swim idle threshold
@@ -90,7 +90,7 @@ connections.SwimAnimationSpeedMultiplier = 1.2
 
 Create a system where animation speed matches character speed:
 
-```lua
+```luau
 local connections = controller.Core.Connections
 
 -- Enable speed-based animation
@@ -109,7 +109,7 @@ end)
 
 Create areas with different animation behaviors:
 
-```lua
+```luau
 local connections = controller.Core.Connections
 
 local slowZone = workspace.SlowZone
@@ -136,7 +136,7 @@ end)
 
 Adjust animation speed based on game state:
 
-```lua
+```luau
 local connections = controller.Core.Connections
 
 -- Normal mode
@@ -175,7 +175,7 @@ end)
 
 For more control, disable automatic speed calculations:
 
-```lua
+```luau
 local connections = controller.Core.Connections
 
 -- Disable auto-adjustment
@@ -189,7 +189,7 @@ connections.MoveAnimationSpeedMultiplier = 1.5
 
 ### Custom Thresholds for Different Characters
 
-```lua
+```luau
 -- Heavy character - slower threshold
 local heavyConnections = heavyController.Core.Connections
 heavyConnections.RunThreshold = 12
@@ -203,7 +203,7 @@ lightConnections.MoveAnimationSpeedMultiplier = 1.2
 
 ### Monitoring Animation State
 
-```lua
+```luau
 local connections = controller.Core.Connections
 
 -- Check current settings
@@ -224,7 +224,7 @@ end)
 
 A comprehensive example combining multiple settings:
 
-```lua
+```luau
 local connections = controller.Core.Connections
 
 -- Configure all movement settings

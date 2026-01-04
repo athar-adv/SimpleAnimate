@@ -178,7 +178,7 @@
                         <h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
 <h2 id="basic-setup"><a class="header" href="#basic-setup">Basic Setup</a></h2>
 <p>The simplest way to get started with SimpleAnimate:</p>
-<pre><code class="language-lua">local SimpleAnimate = require(path.to.SimpleAnimate)
+<pre><code class="language-luau">local SimpleAnimate = require(path.to.SimpleAnimate)
 
 -- Wait for character
 local character = player.Character or player.CharacterAdded:Wait()
@@ -188,7 +188,7 @@ local controller = SimpleAnimate.new(character)
 </code></pre>
 <p>That's it! The controller will automatically handle all character animations based on humanoid state changes.</p>
 <h2 id="playing-an-emote"><a class="header" href="#playing-an-emote">Playing an Emote</a></h2>
-<pre><code class="language-lua">-- Play a random animation from the "wave" emote
+<pre><code class="language-luau">-- Play a random animation from the "wave" emote
 local track = controller.Action:PlayAction("wave")
 
 -- Wait for it to finish
@@ -196,7 +196,7 @@ track.Stopped:Wait()
 print("Wave animation completed!")
 </code></pre>
 <h2 id="changing-a-core-animation"><a class="header" href="#changing-a-core-animation">Changing a Core Animation</a></h2>
-<pre><code class="language-lua">-- Change the idle animation
+<pre><code class="language-luau">-- Change the idle animation
 controller.Core.PoseController:ChangeCoreAnim(
     "Idle",
     1,
@@ -204,12 +204,12 @@ controller.Core.PoseController:ChangeCoreAnim(
 )
 </code></pre>
 <h2 id="listening-to-pose-changes"><a class="header" href="#listening-to-pose-changes">Listening to Pose Changes</a></h2>
-<pre><code class="language-lua">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+<pre><code class="language-luau">controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
     print(string.format("Pose changed: %s -&gt; %s", oldPose, newPose))
 end)
 </code></pre>
 <h2 id="getting-current-state"><a class="header" href="#getting-current-state">Getting Current State</a></h2>
-<pre><code class="language-lua">-- Get current pose
+<pre><code class="language-luau">-- Get current pose
 local currentPose = controller.Core.PoseController:GetPose()
 print("Current pose:", currentPose) -- "Idle", "Walk", "Run", etc.
 
@@ -218,7 +218,7 @@ local currentTrack = controller.Core.PoseController:GetCurrentTrack()
 print("Current speed:", currentTrack.Speed)
 </code></pre>
 <h2 id="creating-custom-actions"><a class="header" href="#creating-custom-actions">Creating Custom Actions</a></h2>
-<pre><code class="language-lua">-- Define a custom action
+<pre><code class="language-luau">-- Define a custom action
 local customAction = {
     {
         id = "rbxassetid://123456789",
@@ -236,7 +236,7 @@ controller.Action:PlayAction("myCustomAction")
 </code></pre>
 <h2 id="cleanup"><a class="header" href="#cleanup">Cleanup</a></h2>
 <p>Always destroy the controller when done:</p>
-<pre><code class="language-lua">-- Cleanup (automatically called when character is destroyed)
+<pre><code class="language-luau">-- Cleanup (automatically called when character is destroyed)
 controller:Destroy()
 </code></pre>
 <h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
