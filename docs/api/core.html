@@ -175,7 +175,500 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="core"><a class="header" href="#core">Core</a></h1>
+                        <h1 id="core-api"><a class="header" href="#core-api">Core API</a></h1>
+<p>The Core module manages core character animations and automatic behavior in response to humanoid state changes. It consists of two main components: PoseController and Connections.</p>
+<p><strong>Access:</strong> <code>controller.Core</code></p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>The Core system handles:</p>
+<ul>
+<li>Automatic animation playback based on character movement</li>
+<li>Pose transitions (idle, walk, run, jump, etc.)</li>
+<li>Animation speed adjustments based on movement speed</li>
+<li>State machine event handling</li>
+<li>Customizable animation behavior</li>
+</ul>
+<h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
+<h3 id="posecontroller"><a class="header" href="#posecontroller"><code>PoseController</code></a></h3>
+<p>The pose controller manages animation playback and pose transitions.</p>
+<p><strong>Type:</strong> <code>PoseController</code></p>
+<p><strong>Purpose:</strong> Controls which animations play based on the character's current state/pose</p>
+<p><strong>See:</strong> <a href="./pose-controller.html">PoseController API</a></p>
+<p><strong>Examples:</strong></p>
+<p>Get current pose:</p>
+<pre><code class="language-luau">local core = controller.Core
+local pose = core.PoseController:GetPose()
+print("Current pose:", pose) -- "Idle", "Walk", "Run", etc.
+</code></pre>
+<p>Change pose manually:</p>
+<pre><code class="language-luau">core.PoseController:ChangePose("Idle")
+</code></pre>
+<p>Listen for pose changes:</p>
+<pre><code class="language-luau">core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+    print(string.format("Changed from %s to %s", oldPose, newPose))
+    print("Animation ID:", track.Animation.AnimationId)
+end)
+</code></pre>
+<hr />
+<h3 id="connections"><a class="header" href="#connections"><code>Connections</code></a></h3>
+<p>Manages humanoid event connections and animation behavior settings.</p>
+<p><strong>Type:</strong> <code>Connections</code></p>
+<p><strong>Purpose:</strong> Handles automatic pose changes based on humanoid events (running, jumping, etc.) and provides configuration options for animation behavior</p>
+<p><strong>See:</strong> <a href="./connections.html">Connections API</a></p>
+<p><strong>Examples:</strong></p>
+<p>Configure run threshold:</p>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Character runs at speeds above 12
+core.Connections.RunThreshold = 12
+</code></pre>
+<p>Adjust animation speeds:</p>
+<pre><code class="language-luau">-- Make all animations play faster
+core.Connections.MoveAnimationSpeedMultiplier = 1.5
+
+-- Make climbing animations slower
+core.Connections.ClimbAnimationSpeedMultiplier = 0.7
+</code></pre>
+<p>Configure jump timing:</p>
+<pre><code class="language-luau">-- Stay in jump animation longer before falling
+core.Connections.JumpDuration = 0.3
+</code></pre>
+<h2 id="methods"><a class="header" href="#methods">Methods</a></h2>
+<h3 id="destroy"><a class="header" href="#destroy"><code>:Destroy()</code></a></h3>
+<p>Destroys the Core instance and cleans up resources.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-luau">function Destroy(): ()
+</code></pre>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Destroys the PoseController</li>
+<li>Destroys the Connections module</li>
+<li>Disconnects all event connections</li>
+<li>Cleans up all references</li>
+</ul>
+<p><strong>Note:</strong> This is automatically called when the AnimationController is destroyed. You should not need to call this directly.</p>
+<h2 id="complete-examples"><a class="header" href="#complete-examples">Complete Examples</a></h2>
+<h3 id="basic-core-usage"><a class="header" href="#basic-core-usage">Basic Core Usage</a></h3>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+local core = controller.Core
+
+-- Get current state
+local pose = core.PoseController:GetPose()
+local track = core.PoseController:GetCurrentTrack()
+local isActive = core.PoseController:GetCoreActive()
+
+print("Pose:", pose)
+print("Animation:", track.Animation.AnimationId)
+print("Active:", isActive)
+
+-- Configure behavior
+core.Connections.RunThreshold = 15
+core.Connections.MoveAnimationSpeedMultiplier = 1.2
+</code></pre>
+<h3 id="monitoring-character-state"><a class="header" href="#monitoring-character-state">Monitoring Character State</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Monitor pose changes
+core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+    print(string.format("[%s] %s -&gt; %s", 
+        os.date("%X"), oldPose, newPose))
+end)
+
+-- Get current state every second
+while true do
+    task.wait(1)
+    
+    local pose = core.PoseController:GetPose()
+    local track = core.PoseController:GetCurrentTrack()
+    
+    print(string.format("State: %s (Speed: %.2f)", pose, track.Speed))
+end
+</code></pre>
+<h3 id="custom-movement-behavior"><a class="header" href="#custom-movement-behavior">Custom Movement Behavior</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Configure for heavy character
+core.Connections.RunThreshold = 12  -- Runs at lower speed
+core.Connections.MoveAnimationSpeedMultiplier = 0.8  -- Slower animations
+core.Connections.ClimbAnimationSpeedMultiplier = 0.6  -- Much slower climbing
+core.Connections.JumpDuration = 0.15  -- Shorter jump
+
+-- Configure animation speeds
+core.Connections.IdleAnimationSpeed = 0.9
+core.Connections.SwimIdleAnimationSpeed = 0.7
+</code></pre>
+<h3 id="dynamic-speed-adjustment"><a class="header" href="#dynamic-speed-adjustment">Dynamic Speed Adjustment</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+
+-- Adjust animations based on health
+humanoid.HealthChanged:Connect(function(health)
+    local healthPercent = health / humanoid.MaxHealth
+    
+    if healthPercent &gt; 0.7 then
+        -- Healthy: Normal speed
+        core.Connections.MoveAnimationSpeedMultiplier = 1.0
+        core.Connections.RunThreshold = 15
+    elseif healthPercent &gt; 0.3 then
+        -- Injured: Slower
+        core.Connections.MoveAnimationSpeedMultiplier = 0.7
+        core.Connections.RunThreshold = 12
+    else
+        -- Critical: Very slow
+        core.Connections.MoveAnimationSpeedMultiplier = 0.5
+        core.Connections.RunThreshold = 10
+    end
+end)
+</code></pre>
+<h3 id="temporary-animation-override"><a class="header" href="#temporary-animation-override">Temporary Animation Override</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Save original settings
+local originalRunThreshold = core.Connections.RunThreshold
+local originalSpeedMult = core.Connections.MoveAnimationSpeedMultiplier
+
+-- Apply temporary boost
+local function applySpeedBoost(duration)
+    -- Stop core animations temporarily
+    core.PoseController:SetCoreActive(false)
+    core.PoseController:StopCoreAnimations(0.1)
+    
+    -- Play boost animation
+    local boostAnim = animator:LoadAnimation(boostAnimation)
+    boostAnim:Play()
+    
+    task.wait(0.5)
+    
+    -- Resume with boosted settings
+    core.PoseController:SetCoreActive(true)
+    core.Connections.RunThreshold = 20
+    core.Connections.MoveAnimationSpeedMultiplier = 2.0
+    
+    -- Restore after duration
+    task.delay(duration, function()
+        core.Connections.RunThreshold = originalRunThreshold
+        core.Connections.MoveAnimationSpeedMultiplier = originalSpeedMult
+    end)
+end
+
+applySpeedBoost(5) -- 5 second boost
+</code></pre>
+<h3 id="conditional-animation-system"><a class="header" href="#conditional-animation-system">Conditional Animation System</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Different settings for different areas
+local zones = {
+    Normal = {
+        RunThreshold = 15,
+        SpeedMult = 1.0
+    },
+    SlowZone = {
+        RunThreshold = 10,
+        SpeedMult = 0.6
+    },
+    FastZone = {
+        RunThreshold = 20,
+        SpeedMult = 1.5
+    }
+}
+
+local function enterZone(zoneName)
+    local settings = zones[zoneName]
+    if not settings then return end
+    
+    core.Connections.RunThreshold = settings.RunThreshold
+    core.Connections.MoveAnimationSpeedMultiplier = settings.SpeedMult
+    
+    print("Entered", zoneName)
+end
+
+-- Detect zones
+local currentZone = "Normal"
+
+workspace.SlowZone.Touched:Connect(function(hit)
+    if hit.Parent == character then
+        enterZone("SlowZone")
+    end
+end)
+
+workspace.FastZone.Touched:Connect(function(hit)
+    if hit.Parent == character then
+        enterZone("FastZone")
+    end
+end)
+</code></pre>
+<h3 id="state-based-animation-control"><a class="header" href="#state-based-animation-control">State-Based Animation Control</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Game states
+local states = {
+    Exploring = {
+        active = true,
+        runThreshold = 15,
+        speedMult = 1.0
+    },
+    Combat = {
+        active = true,
+        runThreshold = 12,
+        speedMult = 1.2
+    },
+    Cutscene = {
+        active = false,  -- Disable core animations
+        runThreshold = 0,
+        speedMult = 0
+    },
+    Stunned = {
+        active = false,
+        runThreshold = 0,
+        speedMult = 0
+    }
+}
+
+local function setState(stateName)
+    local state = states[stateName]
+    if not state then return end
+    
+    -- Apply state settings
+    core.PoseController:SetCoreActive(state.active)
+    core.Connections.RunThreshold = state.runThreshold
+    core.Connections.MoveAnimationSpeedMultiplier = state.speedMult
+    
+    -- Stop animations if not active
+    if not state.active then
+        core.PoseController:StopCoreAnimations(0.2)
+    end
+    
+    print("State changed to:", stateName)
+end
+
+-- Usage
+setState("Exploring")  -- Normal gameplay
+setState("Combat")     -- Combat mode
+setState("Cutscene")   -- During cutscene
+setState("Stunned")    -- Character stunned
+</code></pre>
+<h3 id="pose-specific-behavior"><a class="header" href="#pose-specific-behavior">Pose-Specific Behavior</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Track time in each pose
+local poseTimers = {}
+
+core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+    -- Record time entering pose
+    poseTimers[newPose] = tick()
+    
+    -- Special behavior for specific poses
+    if newPose == "Jumping" then
+        print("Character jumped!")
+        -- Play jump sound, create particle effect, etc.
+        
+    elseif newPose == "Freefall" then
+        print("Character is falling!")
+        -- Start fall damage calculation
+        
+    elseif newPose == "Landed" then
+        print("Character landed!")
+        
+        -- Calculate fall time
+        local fallTime = tick() - (poseTimers.Freefall or tick())
+        if fallTime &gt; 1 then
+            print("Long fall! Time:", fallTime)
+            -- Apply fall damage, dust effect, etc.
+        end
+        
+    elseif newPose == "Swimming" then
+        print("Character entered water!")
+        -- Play splash effect
+        
+    elseif newPose == "Climbing" then
+        print("Character started climbing!")
+        -- Play climb sound
+    end
+end)
+</code></pre>
+<h3 id="animation-speed-based-on-status"><a class="header" href="#animation-speed-based-on-status">Animation Speed Based on Status</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+local statusEffects = {}
+
+-- Status effect system
+local function addStatusEffect(effectName, settings)
+    statusEffects[effectName] = settings
+    updateAnimationSpeed()
+end
+
+local function removeStatusEffect(effectName)
+    statusEffects[effectName] = nil
+    updateAnimationSpeed()
+end
+
+function updateAnimationSpeed()
+    local totalSpeedMult = 1.0
+    local totalThresholdMult = 1.0
+    
+    -- Apply all active status effects
+    for _, effect in statusEffects do
+        totalSpeedMult = totalSpeedMult * effect.speedMult
+        totalThresholdMult = totalThresholdMult * effect.thresholdMult
+    end
+    
+    -- Apply to core
+    core.Connections.MoveAnimationSpeedMultiplier = totalSpeedMult
+    core.Connections.RunThreshold = 15 * totalThresholdMult
+    
+    print(string.format("Speed: %.2fx, Threshold: %.1f", 
+        totalSpeedMult, core.Connections.RunThreshold))
+end
+
+-- Usage
+addStatusEffect("SpeedBoost", {speedMult = 1.5, thresholdMult = 1.2})
+addStatusEffect("Slow", {speedMult = 0.6, thresholdMult = 0.8})
+
+task.delay(5, function()
+    removeStatusEffect("SpeedBoost")
+end)
+</code></pre>
+<h3 id="swimming-system-integration"><a class="header" href="#swimming-system-integration">Swimming System Integration</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Custom swimming configuration
+core.Connections.SwimIdleThreshold = 2.5
+core.Connections.SwimIdleAnimationSpeed = 0.8
+core.Connections.SwimAnimationSpeedMultiplier = 1.1
+
+-- Monitor swimming state
+local inWater = false
+
+core.PoseController.PoseChanged:Connect(function(oldPose, newPose)
+    if newPose == "Swimming" or newPose == "SwimIdle" then
+        if not inWater then
+            inWater = true
+            print("Entered water")
+            
+            -- Play splash effect
+            local splash = splashEffect:Clone()
+            splash.Parent = character.HumanoidRootPart
+            splash:Emit(20)
+            
+            -- Play splash sound
+            local sound = splashSound:Clone()
+            sound.Parent = character.HumanoidRootPart
+            sound:Play()
+        end
+    else
+        if inWater then
+            inWater = false
+            print("Exited water")
+            
+            -- Play exit splash
+        end
+    end
+end)
+</code></pre>
+<h3 id="performance-monitoring"><a class="header" href="#performance-monitoring">Performance Monitoring</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+local RunService = game:GetService("RunService")
+
+-- Track animation performance
+local animStats = {
+    poseChanges = 0,
+    lastPoseChange = 0,
+    averageFPS = 60
+}
+
+core.PoseController.PoseChanged:Connect(function()
+    animStats.poseChanges = animStats.poseChanges + 1
+    animStats.lastPoseChange = tick()
+end)
+
+-- Monitor performance
+RunService.Heartbeat:Connect(function()
+    animStats.averageFPS = 1 / RunService.Heartbeat:Wait()
+    
+    -- If performance is poor, reduce animation quality
+    if animStats.averageFPS &lt; 30 then
+        core.Connections.MoveAnimationSpeedMultiplier = 0.5
+        warn("Low FPS, reducing animation quality")
+    end
+end)
+
+-- Print stats
+task.spawn(function()
+    while true do
+        task.wait(5)
+        print("Animation Stats:")
+        print("  Pose Changes:", animStats.poseChanges)
+        print("  Last Change:", tick() - animStats.lastPoseChange, "seconds ago")
+        print("  Average FPS:", math.floor(animStats.averageFPS))
+    end
+end)
+</code></pre>
+<h3 id="character-class-system"><a class="header" href="#character-class-system">Character Class System</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Define character classes
+local classes = {
+    Warrior = {
+        runThreshold = 14,
+        speedMult = 1.0,
+        jumpDuration = 0.2
+    },
+    Rogue = {
+        runThreshold = 16,
+        speedMult = 1.3,
+        jumpDuration = 0.25
+    },
+    Mage = {
+        runThreshold = 13,
+        speedMult = 0.9,
+        jumpDuration = 0.18
+    },
+    Tank = {
+        runThreshold = 12,
+        speedMult = 0.7,
+        jumpDuration = 0.15
+    }
+}
+
+local function applyClass(className)
+    local class = classes[className]
+    if not class then return end
+    
+    core.Connections.RunThreshold = class.runThreshold
+    core.Connections.MoveAnimationSpeedMultiplier = class.speedMult
+    core.Connections.JumpDuration = class.jumpDuration
+    
+    print("Applied class:", className)
+end
+
+-- Usage
+local playerClass = player:GetAttribute("Class") or "Warrior"
+applyClass(playerClass)
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Access through controller</strong>: Always access Core via <code>controller.Core</code></li>
+<li><strong>Configure once</strong>: Set Connections properties during initialization</li>
+<li><strong>Monitor pose changes</strong>: Use PoseChanged event for state-dependent behavior</li>
+<li><strong>Don't over-configure</strong>: Default settings work well for most cases</li>
+<li><strong>Test thoroughly</strong>: Animation timing affects gameplay feel</li>
+<li><strong>Consider performance</strong>: Frequent configuration changes can impact performance</li>
+<li><strong>Use meaningful values</strong>: Base thresholds and multipliers on game design needs</li>
+</ol>
+<h2 id="common-use-cases"><a class="header" href="#common-use-cases">Common Use Cases</a></h2>
+<ul>
+<li><strong>Heavy character</strong>: Lower RunThreshold, slower SpeedMult</li>
+<li><strong>Fast character</strong>: Higher RunThreshold, faster SpeedMult</li>
+<li><strong>Injured state</strong>: Reduce SpeedMult, lower RunThreshold</li>
+<li><strong>Speed boost</strong>: Temporarily increase SpeedMult</li>
+<li><strong>Cutscenes</strong>: Disable core animations with SetCoreActive(false)</li>
+<li><strong>Swimming areas</strong>: Configure swim thresholds and speeds</li>
+<li><strong>Climbing challenges</strong>: Adjust climb animation speed</li>
+</ul>
+<h2 id="related-apis"><a class="header" href="#related-apis">Related APIs</a></h2>
+<ul>
+<li><a href="./pose-controller.html">PoseController API</a> - Detailed pose control</li>
+<li><a href="./connections.html">Connections API</a> - Configuration options</li>
+<li><a href="./animation-controller.html">AnimationController API</a> - Main controller</li>
+</ul>
 
                     </main>
 

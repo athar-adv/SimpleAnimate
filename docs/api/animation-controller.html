@@ -175,7 +175,505 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="animationcontroller"><a class="header" href="#animationcontroller">AnimationController</a></h1>
+                        <h1 id="animationcontroller-api"><a class="header" href="#animationcontroller-api">AnimationController API</a></h1>
+<p>The AnimationController is the main instance returned by <code>SimpleAnimate.new()</code>. It provides access to both core animation systems and action/emote systems.</p>
+<p><strong>Created by:</strong> <code>SimpleAnimate.new()</code></p>
+<h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
+<h3 id="core"><a class="header" href="#core"><code>Core</code></a></h3>
+<p>Access to the core animation system.</p>
+<p><strong>Type:</strong> <code>Core</code></p>
+<p><strong>Contains:</strong></p>
+<ul>
+<li><code>PoseController</code> - Controls pose transitions and animation playback</li>
+<li><code>Connections</code> - Manages humanoid event connections</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>Access PoseController:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+-- Get current pose
+local pose = controller.Core.PoseController:GetPose()
+print("Current pose:", pose)
+
+-- Listen for pose changes
+controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose)
+    print("Pose changed:", oldPose, "-&gt;", newPose)
+end)
+</code></pre>
+<p>Access Connections configuration:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+-- Adjust run threshold
+controller.Core.Connections.RunThreshold = 12
+
+-- Modify animation speed
+controller.Core.Connections.MoveAnimationSpeedMultiplier = 1.5
+</code></pre>
+<hr />
+<h3 id="action"><a class="header" href="#action"><code>Action</code></a></h3>
+<p>Access to the action/emote animation system.</p>
+<p><strong>Type:</strong> <code>Actions</code></p>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>CreateAction()</code> - Create a new action</li>
+<li><code>PlayAction()</code> - Play an action</li>
+<li><code>RemoveAction()</code> - Remove an action</li>
+<li>And more (see <a href="./action.html">Action API</a>)</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>Play emotes:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+-- Play a wave emote
+controller.Action:PlayAction("wave")
+
+-- Create custom action
+controller.Action:CreateAction("celebrate", {
+    {id = "rbxassetid://123456", weight = 10}
+})
+
+-- Play it
+controller.Action:PlayAction("celebrate")
+</code></pre>
+<h2 id="methods"><a class="header" href="#methods">Methods</a></h2>
+<h3 id="destroy"><a class="header" href="#destroy"><code>:Destroy()</code></a></h3>
+<p>Destroys the AnimationController and cleans up all resources.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-luau">function Destroy(): ()
+</code></pre>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Destroys the Core system (PoseController and Connections)</li>
+<li>Destroys the Action system</li>
+<li>Disconnects all event connections</li>
+<li>Removes the controller from the global registry</li>
+<li>Cleans up all internal references</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>Manual cleanup:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+-- Later...
+controller:Destroy()
+</code></pre>
+<p>Cleanup on character removal:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+character.Destroying:Connect(function()
+    controller:Destroy()
+end)
+</code></pre>
+<p><strong>Note:</strong> The controller automatically destroys itself when the character is destroyed, so manual cleanup is usually not necessary.</p>
+<p>Cleanup before respawn:</p>
+<pre><code class="language-luau">local Players = game:GetService("Players")
+local controllers = {}
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        -- Clean up old controller if exists
+        if controllers[player] then
+            controllers[player]:Destroy()
+        end
+        
+        -- Create new controller
+        controllers[player] = SimpleAnimate.new(character)
+    end)
+    
+    player.CharacterRemoving:Connect(function()
+        if controllers[player] then
+            controllers[player]:Destroy()
+            controllers[player] = nil
+        end
+    end)
+end)
+</code></pre>
+<h2 id="complete-examples"><a class="header" href="#complete-examples">Complete Examples</a></h2>
+<h3 id="basic-character-setup"><a class="header" href="#basic-character-setup">Basic Character Setup</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Create controller
+local controller = SimpleAnimate.new(character)
+
+-- Access core animations
+print("Current pose:", controller.Core.PoseController:GetPose())
+
+-- Play emote
+controller.Action:PlayAction("wave")
+
+-- Cleanup (automatic, but can be manual)
+character.Destroying:Connect(function()
+    controller:Destroy()
+end)
+</code></pre>
+<h3 id="custom-animation-system"><a class="header" href="#custom-animation-system">Custom Animation System</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Get custom animations
+local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
+
+-- Customize
+coreAnims.Idle[1].id = "rbxassetid://CUSTOM_IDLE"
+emoteAnims.wave[1].id = "rbxassetid://CUSTOM_WAVE"
+
+-- Create controller
+local controller = SimpleAnimate.new(
+    character,
+    true,
+    coreAnims,
+    emoteAnims
+)
+
+-- Configure behavior
+controller.Core.Connections.RunThreshold = 14
+controller.Core.Connections.MoveAnimationSpeedMultiplier = 1.2
+
+-- Add custom actions
+controller.Action:CreateAction("customEmote", {
+    {id = "rbxassetid://123", weight = 10}
+})
+</code></pre>
+<h3 id="multiple-controllers-npcs"><a class="header" href="#multiple-controllers-npcs">Multiple Controllers (NPCs)</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+local npcControllers = {}
+
+local function setupNPC(npc)
+    local controller = SimpleAnimate.new(npc)
+    
+    -- Store reference
+    npcControllers[npc] = controller
+    
+    -- Configure NPC-specific settings
+    controller.Core.Connections.RunThreshold = 10
+    controller.Core.Connections.MoveAnimationSpeedMultiplier = 0.8
+    
+    return controller
+end
+
+-- Setup all NPCs
+for _, npc in workspace.NPCs:GetChildren() do
+    setupNPC(npc)
+end
+
+-- Cleanup when NPC is removed
+workspace.NPCs.ChildRemoved:Connect(function(npc)
+    if npcControllers[npc] then
+        npcControllers[npc]:Destroy()
+        npcControllers[npc] = nil
+    end
+end)
+</code></pre>
+<h3 id="controller-with-monitoring"><a class="header" href="#controller-with-monitoring">Controller with Monitoring</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Create controller
+local controller = SimpleAnimate.new(character)
+
+-- Monitor pose changes
+controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+    print(string.format(
+        "[%s] Pose: %s -&gt; %s (Speed: %.2f)",
+        character.Name,
+        oldPose,
+        newPose,
+        track.Speed
+    ))
+end)
+
+-- Monitor animation speed
+game:GetService("RunService").Heartbeat:Connect(function()
+    local track = controller.Core.PoseController:GetCurrentTrack()
+    if track then
+        -- Log or display animation info
+        print("Current animation speed:", track.Speed)
+    end
+end)
+</code></pre>
+<h3 id="dynamic-animation-switching"><a class="header" href="#dynamic-animation-switching">Dynamic Animation Switching</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+local controller = SimpleAnimate.new(character)
+
+-- Normal animations
+local normalAnims = {
+    Idle = {{id = "rbxassetid://NORMAL_IDLE", weight = 10}},
+    Walk = {{id = "rbxassetid://NORMAL_WALK", weight = 10}},
+    Run = {{id = "rbxassetid://NORMAL_RUN", weight = 10}}
+}
+
+-- Combat animations
+local combatAnims = {
+    Idle = {{id = "rbxassetid://COMBAT_IDLE", weight = 10}},
+    Walk = {{id = "rbxassetid://COMBAT_WALK", weight = 10}},
+    Run = {{id = "rbxassetid://COMBAT_RUN", weight = 10}}
+}
+
+-- Switch to combat mode
+local function enterCombatMode()
+    for pose, animInfos in combatAnims do
+        controller.Core.PoseController:ChangeCoreAnim(pose, 1, animInfos[1])
+    end
+    print("Entered combat mode")
+end
+
+-- Switch to normal mode
+local function exitCombatMode()
+    for pose, animInfos in normalAnims do
+        controller.Core.PoseController:ChangeCoreAnim(pose, 1, animInfos[1])
+    end
+    print("Exited combat mode")
+end
+
+-- Listen for combat state changes
+character:GetAttributeChangedSignal("InCombat"):Connect(function()
+    if character:GetAttribute("InCombat") then
+        enterCombatMode()
+    else
+        exitCombatMode()
+    end
+end)
+</code></pre>
+<h3 id="controller-with-custom-state-machine"><a class="header" href="#controller-with-custom-state-machine">Controller with Custom State Machine</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+local CustomStateMachine = require(game.ReplicatedStorage.CustomStateMachine)
+
+-- Create custom state machine
+local stateMachine = CustomStateMachine.new(character)
+
+-- Create controller with custom state machine
+local controller = SimpleAnimate.new(
+    character,
+    true,
+    nil,
+    nil,
+    stateMachine
+)
+
+-- Control animations through state machine
+stateMachine:FireRunning(10)  -- Walk
+stateMachine:FireRunning(20)  -- Run
+stateMachine:FireJumping()    -- Jump
+</code></pre>
+<h3 id="controller-with-error-handling"><a class="header" href="#controller-with-error-handling">Controller with Error Handling</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+local function safeCreateController(character)
+    local success, controller = pcall(function()
+        return SimpleAnimate.new(character)
+    end)
+    
+    if success then
+        print("Controller created for", character.Name)
+        
+        -- Setup monitoring
+        controller.Core.PoseController.PoseChanged:Connect(function(old, new)
+            print("Pose changed:", old, "-&gt;", new)
+        end)
+        
+        return controller
+    else
+        warn("Failed to create controller:", controller)
+        return nil
+    end
+end
+
+-- Usage
+local controller = safeCreateController(character)
+
+if controller then
+    -- Controller ready
+    controller.Action:PlayAction("wave")
+else
+    -- Fallback behavior
+    warn("Using fallback animation system")
+end
+</code></pre>
+<h3 id="controller-pool-system"><a class="header" href="#controller-pool-system">Controller Pool System</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+local Players = game:GetService("Players")
+
+local ControllerPool = {}
+ControllerPool.__index = ControllerPool
+
+function ControllerPool.new()
+    local self = setmetatable({}, ControllerPool)
+    self._controllers = {}
+    return self
+end
+
+function ControllerPool:Add(player, character)
+    -- Remove old controller if exists
+    self:Remove(player)
+    
+    -- Create new controller
+    local controller = SimpleAnimate.new(character)
+    self._controllers[player.UserId] = {
+        player = player,
+        character = character,
+        controller = controller
+    }
+    
+    return controller
+end
+
+function ControllerPool:Get(player)
+    local entry = self._controllers[player.UserId]
+    return entry and entry.controller
+end
+
+function ControllerPool:Remove(player)
+    local entry = self._controllers[player.UserId]
+    if entry then
+        entry.controller:Destroy()
+        self._controllers[player.UserId] = nil
+    end
+end
+
+function ControllerPool:GetAll()
+    local controllers = {}
+    for _, entry in self._controllers do
+        table.insert(controllers, entry.controller)
+    end
+    return controllers
+end
+
+-- Usage
+local pool = ControllerPool.new()
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        pool:Add(player, character)
+    end)
+    
+    player.CharacterRemoving:Connect(function()
+        pool:Remove(player)
+    end)
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    pool:Remove(player)
+end)
+
+-- Get a specific controller
+local controller = pool:Get(player)
+
+-- Get all controllers
+local allControllers = pool:GetAll()
+for _, controller in allControllers do
+    -- Do something with each controller
+    controller.Core.Connections.RunThreshold = 15
+end
+</code></pre>
+<h2 id="accessing-existing-controllers"><a class="header" href="#accessing-existing-controllers">Accessing Existing Controllers</a></h2>
+<h3 id="using-fromexisting"><a class="header" href="#using-fromexisting">Using <code>fromExisting()</code></a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- In Script A: Create controller
+local controller = SimpleAnimate.new(character)
+
+-- In Script B: Get existing controller
+local controller = SimpleAnimate.fromExisting(character)
+
+if controller then
+    -- Controller exists, use it
+    controller.Action:PlayAction("wave")
+else
+    -- Controller doesn't exist
+    warn("No controller found for", character.Name)
+end
+</code></pre>
+<h3 id="using-awaitcontroller"><a class="header" href="#using-awaitcontroller">Using <code>awaitController()</code></a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Wait for controller to be created (with timeout)
+local controller = SimpleAnimate.awaitController(character, 5)
+
+if controller then
+    print("Controller ready!")
+    controller.Action:PlayAction("dance")
+else
+    warn("Controller not found within 5 seconds")
+end
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Let it auto-cleanup</strong>: The controller automatically destroys itself when the character is destroyed</li>
+<li><strong>One controller per character</strong>: Don't create multiple controllers for the same character</li>
+<li><strong>Use fromExisting()</strong>: Check for existing controllers before creating new ones</li>
+<li><strong>Store references</strong>: Keep references to controllers you need to access later</li>
+<li><strong>Handle errors</strong>: Use pcall when creating controllers for robustness</li>
+<li><strong>Clean up properly</strong>: If you manually destroy, ensure you also clean up your references</li>
+<li><strong>Don't over-configure</strong>: Default settings work well for most use cases</li>
+</ol>
+<h2 id="common-patterns"><a class="header" href="#common-patterns">Common Patterns</a></h2>
+<h3 id="lazy-controller-creation"><a class="header" href="#lazy-controller-creation">Lazy Controller Creation</a></h3>
+<pre><code class="language-luau">local controllers = {}
+
+local function getOrCreateController(character)
+    if controllers[character] then
+        return controllers[character]
+    end
+    
+    local controller = SimpleAnimate.new(character)
+    controllers[character] = controller
+    
+    character.Destroying:Connect(function()
+        controllers[character] = nil
+    end)
+    
+    return controller
+end
+
+-- Usage
+local controller = getOrCreateController(character)
+</code></pre>
+<h3 id="controller-with-lifecycle-hooks"><a class="header" href="#controller-with-lifecycle-hooks">Controller with Lifecycle Hooks</a></h3>
+<pre><code class="language-luau">local function createControllerWithHooks(character, options)
+    options = options or {}
+    
+    -- onCreate hook
+    if options.onCreate then
+        options.onCreate(character)
+    end
+    
+    -- Create controller
+    local controller = SimpleAnimate.new(character)
+    
+    -- onReady hook
+    if options.onReady then
+        options.onReady(controller)
+    end
+    
+    -- onDestroy hook
+    character.Destroying:Connect(function()
+        if options.onDestroy then
+            options.onDestroy(controller)
+        end
+    end)
+    
+    return controller
+end
+
+-- Usage
+local controller = createControllerWithHooks(character, {
+    onCreate = function(char)
+        print("Creating controller for", char.Name)
+    end,
+    onReady = function(ctrl)
+        print("Controller ready!")
+        ctrl.Action:PlayAction("wave")
+    end,
+    onDestroy = function(ctrl)
+        print("Controller destroyed")
+    end
+})
+</code></pre>
+<h2 id="related-apis"><a class="header" href="#related-apis">Related APIs</a></h2>
+<ul>
+<li><a href="./core.html">Core API</a> - Core animation system</li>
+<li><a href="./pose-controller.html">PoseController API</a> - Pose management</li>
+<li><a href="./connections.html">Connections API</a> - Event handling configuration</li>
+<li><a href="./action.html">Action API</a> - Emote and action system</li>
+</ul>
 
                     </main>
 

@@ -852,8 +852,999 @@ local defaultR15 = SimpleAnimate.default.R15
 print(defaultR15.Animations.Idle[1].id)
 print(defaultR15.Emotes.wave[1].id)
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="animationcontroller"><a class="header" href="#animationcontroller">AnimationController</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="core"><a class="header" href="#core">Core</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="animationcontroller-api"><a class="header" href="#animationcontroller-api">AnimationController API</a></h1>
+<p>The AnimationController is the main instance returned by <code>SimpleAnimate.new()</code>. It provides access to both core animation systems and action/emote systems.</p>
+<p><strong>Created by:</strong> <code>SimpleAnimate.new()</code></p>
+<h2 id="properties-2"><a class="header" href="#properties-2">Properties</a></h2>
+<h3 id="core"><a class="header" href="#core"><code>Core</code></a></h3>
+<p>Access to the core animation system.</p>
+<p><strong>Type:</strong> <code>Core</code></p>
+<p><strong>Contains:</strong></p>
+<ul>
+<li><code>PoseController</code> - Controls pose transitions and animation playback</li>
+<li><code>Connections</code> - Manages humanoid event connections</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>Access PoseController:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+-- Get current pose
+local pose = controller.Core.PoseController:GetPose()
+print("Current pose:", pose)
+
+-- Listen for pose changes
+controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose)
+    print("Pose changed:", oldPose, "-&gt;", newPose)
+end)
+</code></pre>
+<p>Access Connections configuration:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+-- Adjust run threshold
+controller.Core.Connections.RunThreshold = 12
+
+-- Modify animation speed
+controller.Core.Connections.MoveAnimationSpeedMultiplier = 1.5
+</code></pre>
+<hr />
+<h3 id="action"><a class="header" href="#action"><code>Action</code></a></h3>
+<p>Access to the action/emote animation system.</p>
+<p><strong>Type:</strong> <code>Actions</code></p>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>CreateAction()</code> - Create a new action</li>
+<li><code>PlayAction()</code> - Play an action</li>
+<li><code>RemoveAction()</code> - Remove an action</li>
+<li>And more (see <a href="api/./action.html">Action API</a>)</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>Play emotes:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+-- Play a wave emote
+controller.Action:PlayAction("wave")
+
+-- Create custom action
+controller.Action:CreateAction("celebrate", {
+    {id = "rbxassetid://123456", weight = 10}
+})
+
+-- Play it
+controller.Action:PlayAction("celebrate")
+</code></pre>
+<h2 id="methods"><a class="header" href="#methods">Methods</a></h2>
+<h3 id="destroy"><a class="header" href="#destroy"><code>:Destroy()</code></a></h3>
+<p>Destroys the AnimationController and cleans up all resources.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-luau">function Destroy(): ()
+</code></pre>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Destroys the Core system (PoseController and Connections)</li>
+<li>Destroys the Action system</li>
+<li>Disconnects all event connections</li>
+<li>Removes the controller from the global registry</li>
+<li>Cleans up all internal references</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<p>Manual cleanup:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+-- Later...
+controller:Destroy()
+</code></pre>
+<p>Cleanup on character removal:</p>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+
+character.Destroying:Connect(function()
+    controller:Destroy()
+end)
+</code></pre>
+<p><strong>Note:</strong> The controller automatically destroys itself when the character is destroyed, so manual cleanup is usually not necessary.</p>
+<p>Cleanup before respawn:</p>
+<pre><code class="language-luau">local Players = game:GetService("Players")
+local controllers = {}
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        -- Clean up old controller if exists
+        if controllers[player] then
+            controllers[player]:Destroy()
+        end
+        
+        -- Create new controller
+        controllers[player] = SimpleAnimate.new(character)
+    end)
+    
+    player.CharacterRemoving:Connect(function()
+        if controllers[player] then
+            controllers[player]:Destroy()
+            controllers[player] = nil
+        end
+    end)
+end)
+</code></pre>
+<h2 id="complete-examples"><a class="header" href="#complete-examples">Complete Examples</a></h2>
+<h3 id="basic-character-setup"><a class="header" href="#basic-character-setup">Basic Character Setup</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Create controller
+local controller = SimpleAnimate.new(character)
+
+-- Access core animations
+print("Current pose:", controller.Core.PoseController:GetPose())
+
+-- Play emote
+controller.Action:PlayAction("wave")
+
+-- Cleanup (automatic, but can be manual)
+character.Destroying:Connect(function()
+    controller:Destroy()
+end)
+</code></pre>
+<h3 id="custom-animation-system"><a class="header" href="#custom-animation-system">Custom Animation System</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Get custom animations
+local coreAnims, emoteAnims = SimpleAnimate.getCopyOfAnims("R15")
+
+-- Customize
+coreAnims.Idle[1].id = "rbxassetid://CUSTOM_IDLE"
+emoteAnims.wave[1].id = "rbxassetid://CUSTOM_WAVE"
+
+-- Create controller
+local controller = SimpleAnimate.new(
+    character,
+    true,
+    coreAnims,
+    emoteAnims
+)
+
+-- Configure behavior
+controller.Core.Connections.RunThreshold = 14
+controller.Core.Connections.MoveAnimationSpeedMultiplier = 1.2
+
+-- Add custom actions
+controller.Action:CreateAction("customEmote", {
+    {id = "rbxassetid://123", weight = 10}
+})
+</code></pre>
+<h3 id="multiple-controllers-npcs"><a class="header" href="#multiple-controllers-npcs">Multiple Controllers (NPCs)</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+local npcControllers = {}
+
+local function setupNPC(npc)
+    local controller = SimpleAnimate.new(npc)
+    
+    -- Store reference
+    npcControllers[npc] = controller
+    
+    -- Configure NPC-specific settings
+    controller.Core.Connections.RunThreshold = 10
+    controller.Core.Connections.MoveAnimationSpeedMultiplier = 0.8
+    
+    return controller
+end
+
+-- Setup all NPCs
+for _, npc in workspace.NPCs:GetChildren() do
+    setupNPC(npc)
+end
+
+-- Cleanup when NPC is removed
+workspace.NPCs.ChildRemoved:Connect(function(npc)
+    if npcControllers[npc] then
+        npcControllers[npc]:Destroy()
+        npcControllers[npc] = nil
+    end
+end)
+</code></pre>
+<h3 id="controller-with-monitoring"><a class="header" href="#controller-with-monitoring">Controller with Monitoring</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Create controller
+local controller = SimpleAnimate.new(character)
+
+-- Monitor pose changes
+controller.Core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+    print(string.format(
+        "[%s] Pose: %s -&gt; %s (Speed: %.2f)",
+        character.Name,
+        oldPose,
+        newPose,
+        track.Speed
+    ))
+end)
+
+-- Monitor animation speed
+game:GetService("RunService").Heartbeat:Connect(function()
+    local track = controller.Core.PoseController:GetCurrentTrack()
+    if track then
+        -- Log or display animation info
+        print("Current animation speed:", track.Speed)
+    end
+end)
+</code></pre>
+<h3 id="dynamic-animation-switching"><a class="header" href="#dynamic-animation-switching">Dynamic Animation Switching</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+local controller = SimpleAnimate.new(character)
+
+-- Normal animations
+local normalAnims = {
+    Idle = {{id = "rbxassetid://NORMAL_IDLE", weight = 10}},
+    Walk = {{id = "rbxassetid://NORMAL_WALK", weight = 10}},
+    Run = {{id = "rbxassetid://NORMAL_RUN", weight = 10}}
+}
+
+-- Combat animations
+local combatAnims = {
+    Idle = {{id = "rbxassetid://COMBAT_IDLE", weight = 10}},
+    Walk = {{id = "rbxassetid://COMBAT_WALK", weight = 10}},
+    Run = {{id = "rbxassetid://COMBAT_RUN", weight = 10}}
+}
+
+-- Switch to combat mode
+local function enterCombatMode()
+    for pose, animInfos in combatAnims do
+        controller.Core.PoseController:ChangeCoreAnim(pose, 1, animInfos[1])
+    end
+    print("Entered combat mode")
+end
+
+-- Switch to normal mode
+local function exitCombatMode()
+    for pose, animInfos in normalAnims do
+        controller.Core.PoseController:ChangeCoreAnim(pose, 1, animInfos[1])
+    end
+    print("Exited combat mode")
+end
+
+-- Listen for combat state changes
+character:GetAttributeChangedSignal("InCombat"):Connect(function()
+    if character:GetAttribute("InCombat") then
+        enterCombatMode()
+    else
+        exitCombatMode()
+    end
+end)
+</code></pre>
+<h3 id="controller-with-custom-state-machine"><a class="header" href="#controller-with-custom-state-machine">Controller with Custom State Machine</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+local CustomStateMachine = require(game.ReplicatedStorage.CustomStateMachine)
+
+-- Create custom state machine
+local stateMachine = CustomStateMachine.new(character)
+
+-- Create controller with custom state machine
+local controller = SimpleAnimate.new(
+    character,
+    true,
+    nil,
+    nil,
+    stateMachine
+)
+
+-- Control animations through state machine
+stateMachine:FireRunning(10)  -- Walk
+stateMachine:FireRunning(20)  -- Run
+stateMachine:FireJumping()    -- Jump
+</code></pre>
+<h3 id="controller-with-error-handling"><a class="header" href="#controller-with-error-handling">Controller with Error Handling</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+local function safeCreateController(character)
+    local success, controller = pcall(function()
+        return SimpleAnimate.new(character)
+    end)
+    
+    if success then
+        print("Controller created for", character.Name)
+        
+        -- Setup monitoring
+        controller.Core.PoseController.PoseChanged:Connect(function(old, new)
+            print("Pose changed:", old, "-&gt;", new)
+        end)
+        
+        return controller
+    else
+        warn("Failed to create controller:", controller)
+        return nil
+    end
+end
+
+-- Usage
+local controller = safeCreateController(character)
+
+if controller then
+    -- Controller ready
+    controller.Action:PlayAction("wave")
+else
+    -- Fallback behavior
+    warn("Using fallback animation system")
+end
+</code></pre>
+<h3 id="controller-pool-system"><a class="header" href="#controller-pool-system">Controller Pool System</a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+local Players = game:GetService("Players")
+
+local ControllerPool = {}
+ControllerPool.__index = ControllerPool
+
+function ControllerPool.new()
+    local self = setmetatable({}, ControllerPool)
+    self._controllers = {}
+    return self
+end
+
+function ControllerPool:Add(player, character)
+    -- Remove old controller if exists
+    self:Remove(player)
+    
+    -- Create new controller
+    local controller = SimpleAnimate.new(character)
+    self._controllers[player.UserId] = {
+        player = player,
+        character = character,
+        controller = controller
+    }
+    
+    return controller
+end
+
+function ControllerPool:Get(player)
+    local entry = self._controllers[player.UserId]
+    return entry and entry.controller
+end
+
+function ControllerPool:Remove(player)
+    local entry = self._controllers[player.UserId]
+    if entry then
+        entry.controller:Destroy()
+        self._controllers[player.UserId] = nil
+    end
+end
+
+function ControllerPool:GetAll()
+    local controllers = {}
+    for _, entry in self._controllers do
+        table.insert(controllers, entry.controller)
+    end
+    return controllers
+end
+
+-- Usage
+local pool = ControllerPool.new()
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        pool:Add(player, character)
+    end)
+    
+    player.CharacterRemoving:Connect(function()
+        pool:Remove(player)
+    end)
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    pool:Remove(player)
+end)
+
+-- Get a specific controller
+local controller = pool:Get(player)
+
+-- Get all controllers
+local allControllers = pool:GetAll()
+for _, controller in allControllers do
+    -- Do something with each controller
+    controller.Core.Connections.RunThreshold = 15
+end
+</code></pre>
+<h2 id="accessing-existing-controllers"><a class="header" href="#accessing-existing-controllers">Accessing Existing Controllers</a></h2>
+<h3 id="using-fromexisting"><a class="header" href="#using-fromexisting">Using <code>fromExisting()</code></a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- In Script A: Create controller
+local controller = SimpleAnimate.new(character)
+
+-- In Script B: Get existing controller
+local controller = SimpleAnimate.fromExisting(character)
+
+if controller then
+    -- Controller exists, use it
+    controller.Action:PlayAction("wave")
+else
+    -- Controller doesn't exist
+    warn("No controller found for", character.Name)
+end
+</code></pre>
+<h3 id="using-awaitcontroller"><a class="header" href="#using-awaitcontroller">Using <code>awaitController()</code></a></h3>
+<pre><code class="language-luau">local SimpleAnimate = require(game.ReplicatedStorage.SimpleAnimate)
+
+-- Wait for controller to be created (with timeout)
+local controller = SimpleAnimate.awaitController(character, 5)
+
+if controller then
+    print("Controller ready!")
+    controller.Action:PlayAction("dance")
+else
+    warn("Controller not found within 5 seconds")
+end
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Let it auto-cleanup</strong>: The controller automatically destroys itself when the character is destroyed</li>
+<li><strong>One controller per character</strong>: Don't create multiple controllers for the same character</li>
+<li><strong>Use fromExisting()</strong>: Check for existing controllers before creating new ones</li>
+<li><strong>Store references</strong>: Keep references to controllers you need to access later</li>
+<li><strong>Handle errors</strong>: Use pcall when creating controllers for robustness</li>
+<li><strong>Clean up properly</strong>: If you manually destroy, ensure you also clean up your references</li>
+<li><strong>Don't over-configure</strong>: Default settings work well for most use cases</li>
+</ol>
+<h2 id="common-patterns"><a class="header" href="#common-patterns">Common Patterns</a></h2>
+<h3 id="lazy-controller-creation"><a class="header" href="#lazy-controller-creation">Lazy Controller Creation</a></h3>
+<pre><code class="language-luau">local controllers = {}
+
+local function getOrCreateController(character)
+    if controllers[character] then
+        return controllers[character]
+    end
+    
+    local controller = SimpleAnimate.new(character)
+    controllers[character] = controller
+    
+    character.Destroying:Connect(function()
+        controllers[character] = nil
+    end)
+    
+    return controller
+end
+
+-- Usage
+local controller = getOrCreateController(character)
+</code></pre>
+<h3 id="controller-with-lifecycle-hooks"><a class="header" href="#controller-with-lifecycle-hooks">Controller with Lifecycle Hooks</a></h3>
+<pre><code class="language-luau">local function createControllerWithHooks(character, options)
+    options = options or {}
+    
+    -- onCreate hook
+    if options.onCreate then
+        options.onCreate(character)
+    end
+    
+    -- Create controller
+    local controller = SimpleAnimate.new(character)
+    
+    -- onReady hook
+    if options.onReady then
+        options.onReady(controller)
+    end
+    
+    -- onDestroy hook
+    character.Destroying:Connect(function()
+        if options.onDestroy then
+            options.onDestroy(controller)
+        end
+    end)
+    
+    return controller
+end
+
+-- Usage
+local controller = createControllerWithHooks(character, {
+    onCreate = function(char)
+        print("Creating controller for", char.Name)
+    end,
+    onReady = function(ctrl)
+        print("Controller ready!")
+        ctrl.Action:PlayAction("wave")
+    end,
+    onDestroy = function(ctrl)
+        print("Controller destroyed")
+    end
+})
+</code></pre>
+<h2 id="related-apis"><a class="header" href="#related-apis">Related APIs</a></h2>
+<ul>
+<li><a href="api/./core.html">Core API</a> - Core animation system</li>
+<li><a href="api/./pose-controller.html">PoseController API</a> - Pose management</li>
+<li><a href="api/./connections.html">Connections API</a> - Event handling configuration</li>
+<li><a href="api/./action.html">Action API</a> - Emote and action system</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="core-api"><a class="header" href="#core-api">Core API</a></h1>
+<p>The Core module manages core character animations and automatic behavior in response to humanoid state changes. It consists of two main components: PoseController and Connections.</p>
+<p><strong>Access:</strong> <code>controller.Core</code></p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>The Core system handles:</p>
+<ul>
+<li>Automatic animation playback based on character movement</li>
+<li>Pose transitions (idle, walk, run, jump, etc.)</li>
+<li>Animation speed adjustments based on movement speed</li>
+<li>State machine event handling</li>
+<li>Customizable animation behavior</li>
+</ul>
+<h2 id="properties-3"><a class="header" href="#properties-3">Properties</a></h2>
+<h3 id="posecontroller"><a class="header" href="#posecontroller"><code>PoseController</code></a></h3>
+<p>The pose controller manages animation playback and pose transitions.</p>
+<p><strong>Type:</strong> <code>PoseController</code></p>
+<p><strong>Purpose:</strong> Controls which animations play based on the character's current state/pose</p>
+<p><strong>See:</strong> <a href="api/./pose-controller.html">PoseController API</a></p>
+<p><strong>Examples:</strong></p>
+<p>Get current pose:</p>
+<pre><code class="language-luau">local core = controller.Core
+local pose = core.PoseController:GetPose()
+print("Current pose:", pose) -- "Idle", "Walk", "Run", etc.
+</code></pre>
+<p>Change pose manually:</p>
+<pre><code class="language-luau">core.PoseController:ChangePose("Idle")
+</code></pre>
+<p>Listen for pose changes:</p>
+<pre><code class="language-luau">core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+    print(string.format("Changed from %s to %s", oldPose, newPose))
+    print("Animation ID:", track.Animation.AnimationId)
+end)
+</code></pre>
+<hr />
+<h3 id="connections"><a class="header" href="#connections"><code>Connections</code></a></h3>
+<p>Manages humanoid event connections and animation behavior settings.</p>
+<p><strong>Type:</strong> <code>Connections</code></p>
+<p><strong>Purpose:</strong> Handles automatic pose changes based on humanoid events (running, jumping, etc.) and provides configuration options for animation behavior</p>
+<p><strong>See:</strong> <a href="api/./connections.html">Connections API</a></p>
+<p><strong>Examples:</strong></p>
+<p>Configure run threshold:</p>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Character runs at speeds above 12
+core.Connections.RunThreshold = 12
+</code></pre>
+<p>Adjust animation speeds:</p>
+<pre><code class="language-luau">-- Make all animations play faster
+core.Connections.MoveAnimationSpeedMultiplier = 1.5
+
+-- Make climbing animations slower
+core.Connections.ClimbAnimationSpeedMultiplier = 0.7
+</code></pre>
+<p>Configure jump timing:</p>
+<pre><code class="language-luau">-- Stay in jump animation longer before falling
+core.Connections.JumpDuration = 0.3
+</code></pre>
+<h2 id="methods-1"><a class="header" href="#methods-1">Methods</a></h2>
+<h3 id="destroy-1"><a class="header" href="#destroy-1"><code>:Destroy()</code></a></h3>
+<p>Destroys the Core instance and cleans up resources.</p>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-luau">function Destroy(): ()
+</code></pre>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Destroys the PoseController</li>
+<li>Destroys the Connections module</li>
+<li>Disconnects all event connections</li>
+<li>Cleans up all references</li>
+</ul>
+<p><strong>Note:</strong> This is automatically called when the AnimationController is destroyed. You should not need to call this directly.</p>
+<h2 id="complete-examples-1"><a class="header" href="#complete-examples-1">Complete Examples</a></h2>
+<h3 id="basic-core-usage"><a class="header" href="#basic-core-usage">Basic Core Usage</a></h3>
+<pre><code class="language-luau">local controller = SimpleAnimate.new(character)
+local core = controller.Core
+
+-- Get current state
+local pose = core.PoseController:GetPose()
+local track = core.PoseController:GetCurrentTrack()
+local isActive = core.PoseController:GetCoreActive()
+
+print("Pose:", pose)
+print("Animation:", track.Animation.AnimationId)
+print("Active:", isActive)
+
+-- Configure behavior
+core.Connections.RunThreshold = 15
+core.Connections.MoveAnimationSpeedMultiplier = 1.2
+</code></pre>
+<h3 id="monitoring-character-state"><a class="header" href="#monitoring-character-state">Monitoring Character State</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Monitor pose changes
+core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+    print(string.format("[%s] %s -&gt; %s", 
+        os.date("%X"), oldPose, newPose))
+end)
+
+-- Get current state every second
+while true do
+    task.wait(1)
+    
+    local pose = core.PoseController:GetPose()
+    local track = core.PoseController:GetCurrentTrack()
+    
+    print(string.format("State: %s (Speed: %.2f)", pose, track.Speed))
+end
+</code></pre>
+<h3 id="custom-movement-behavior"><a class="header" href="#custom-movement-behavior">Custom Movement Behavior</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Configure for heavy character
+core.Connections.RunThreshold = 12  -- Runs at lower speed
+core.Connections.MoveAnimationSpeedMultiplier = 0.8  -- Slower animations
+core.Connections.ClimbAnimationSpeedMultiplier = 0.6  -- Much slower climbing
+core.Connections.JumpDuration = 0.15  -- Shorter jump
+
+-- Configure animation speeds
+core.Connections.IdleAnimationSpeed = 0.9
+core.Connections.SwimIdleAnimationSpeed = 0.7
+</code></pre>
+<h3 id="dynamic-speed-adjustment"><a class="header" href="#dynamic-speed-adjustment">Dynamic Speed Adjustment</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+
+-- Adjust animations based on health
+humanoid.HealthChanged:Connect(function(health)
+    local healthPercent = health / humanoid.MaxHealth
+    
+    if healthPercent &gt; 0.7 then
+        -- Healthy: Normal speed
+        core.Connections.MoveAnimationSpeedMultiplier = 1.0
+        core.Connections.RunThreshold = 15
+    elseif healthPercent &gt; 0.3 then
+        -- Injured: Slower
+        core.Connections.MoveAnimationSpeedMultiplier = 0.7
+        core.Connections.RunThreshold = 12
+    else
+        -- Critical: Very slow
+        core.Connections.MoveAnimationSpeedMultiplier = 0.5
+        core.Connections.RunThreshold = 10
+    end
+end)
+</code></pre>
+<h3 id="temporary-animation-override"><a class="header" href="#temporary-animation-override">Temporary Animation Override</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Save original settings
+local originalRunThreshold = core.Connections.RunThreshold
+local originalSpeedMult = core.Connections.MoveAnimationSpeedMultiplier
+
+-- Apply temporary boost
+local function applySpeedBoost(duration)
+    -- Stop core animations temporarily
+    core.PoseController:SetCoreActive(false)
+    core.PoseController:StopCoreAnimations(0.1)
+    
+    -- Play boost animation
+    local boostAnim = animator:LoadAnimation(boostAnimation)
+    boostAnim:Play()
+    
+    task.wait(0.5)
+    
+    -- Resume with boosted settings
+    core.PoseController:SetCoreActive(true)
+    core.Connections.RunThreshold = 20
+    core.Connections.MoveAnimationSpeedMultiplier = 2.0
+    
+    -- Restore after duration
+    task.delay(duration, function()
+        core.Connections.RunThreshold = originalRunThreshold
+        core.Connections.MoveAnimationSpeedMultiplier = originalSpeedMult
+    end)
+end
+
+applySpeedBoost(5) -- 5 second boost
+</code></pre>
+<h3 id="conditional-animation-system"><a class="header" href="#conditional-animation-system">Conditional Animation System</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Different settings for different areas
+local zones = {
+    Normal = {
+        RunThreshold = 15,
+        SpeedMult = 1.0
+    },
+    SlowZone = {
+        RunThreshold = 10,
+        SpeedMult = 0.6
+    },
+    FastZone = {
+        RunThreshold = 20,
+        SpeedMult = 1.5
+    }
+}
+
+local function enterZone(zoneName)
+    local settings = zones[zoneName]
+    if not settings then return end
+    
+    core.Connections.RunThreshold = settings.RunThreshold
+    core.Connections.MoveAnimationSpeedMultiplier = settings.SpeedMult
+    
+    print("Entered", zoneName)
+end
+
+-- Detect zones
+local currentZone = "Normal"
+
+workspace.SlowZone.Touched:Connect(function(hit)
+    if hit.Parent == character then
+        enterZone("SlowZone")
+    end
+end)
+
+workspace.FastZone.Touched:Connect(function(hit)
+    if hit.Parent == character then
+        enterZone("FastZone")
+    end
+end)
+</code></pre>
+<h3 id="state-based-animation-control"><a class="header" href="#state-based-animation-control">State-Based Animation Control</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Game states
+local states = {
+    Exploring = {
+        active = true,
+        runThreshold = 15,
+        speedMult = 1.0
+    },
+    Combat = {
+        active = true,
+        runThreshold = 12,
+        speedMult = 1.2
+    },
+    Cutscene = {
+        active = false,  -- Disable core animations
+        runThreshold = 0,
+        speedMult = 0
+    },
+    Stunned = {
+        active = false,
+        runThreshold = 0,
+        speedMult = 0
+    }
+}
+
+local function setState(stateName)
+    local state = states[stateName]
+    if not state then return end
+    
+    -- Apply state settings
+    core.PoseController:SetCoreActive(state.active)
+    core.Connections.RunThreshold = state.runThreshold
+    core.Connections.MoveAnimationSpeedMultiplier = state.speedMult
+    
+    -- Stop animations if not active
+    if not state.active then
+        core.PoseController:StopCoreAnimations(0.2)
+    end
+    
+    print("State changed to:", stateName)
+end
+
+-- Usage
+setState("Exploring")  -- Normal gameplay
+setState("Combat")     -- Combat mode
+setState("Cutscene")   -- During cutscene
+setState("Stunned")    -- Character stunned
+</code></pre>
+<h3 id="pose-specific-behavior"><a class="header" href="#pose-specific-behavior">Pose-Specific Behavior</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Track time in each pose
+local poseTimers = {}
+
+core.PoseController.PoseChanged:Connect(function(oldPose, newPose, track)
+    -- Record time entering pose
+    poseTimers[newPose] = tick()
+    
+    -- Special behavior for specific poses
+    if newPose == "Jumping" then
+        print("Character jumped!")
+        -- Play jump sound, create particle effect, etc.
+        
+    elseif newPose == "Freefall" then
+        print("Character is falling!")
+        -- Start fall damage calculation
+        
+    elseif newPose == "Landed" then
+        print("Character landed!")
+        
+        -- Calculate fall time
+        local fallTime = tick() - (poseTimers.Freefall or tick())
+        if fallTime &gt; 1 then
+            print("Long fall! Time:", fallTime)
+            -- Apply fall damage, dust effect, etc.
+        end
+        
+    elseif newPose == "Swimming" then
+        print("Character entered water!")
+        -- Play splash effect
+        
+    elseif newPose == "Climbing" then
+        print("Character started climbing!")
+        -- Play climb sound
+    end
+end)
+</code></pre>
+<h3 id="animation-speed-based-on-status"><a class="header" href="#animation-speed-based-on-status">Animation Speed Based on Status</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+local statusEffects = {}
+
+-- Status effect system
+local function addStatusEffect(effectName, settings)
+    statusEffects[effectName] = settings
+    updateAnimationSpeed()
+end
+
+local function removeStatusEffect(effectName)
+    statusEffects[effectName] = nil
+    updateAnimationSpeed()
+end
+
+function updateAnimationSpeed()
+    local totalSpeedMult = 1.0
+    local totalThresholdMult = 1.0
+    
+    -- Apply all active status effects
+    for _, effect in statusEffects do
+        totalSpeedMult = totalSpeedMult * effect.speedMult
+        totalThresholdMult = totalThresholdMult * effect.thresholdMult
+    end
+    
+    -- Apply to core
+    core.Connections.MoveAnimationSpeedMultiplier = totalSpeedMult
+    core.Connections.RunThreshold = 15 * totalThresholdMult
+    
+    print(string.format("Speed: %.2fx, Threshold: %.1f", 
+        totalSpeedMult, core.Connections.RunThreshold))
+end
+
+-- Usage
+addStatusEffect("SpeedBoost", {speedMult = 1.5, thresholdMult = 1.2})
+addStatusEffect("Slow", {speedMult = 0.6, thresholdMult = 0.8})
+
+task.delay(5, function()
+    removeStatusEffect("SpeedBoost")
+end)
+</code></pre>
+<h3 id="swimming-system-integration"><a class="header" href="#swimming-system-integration">Swimming System Integration</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Custom swimming configuration
+core.Connections.SwimIdleThreshold = 2.5
+core.Connections.SwimIdleAnimationSpeed = 0.8
+core.Connections.SwimAnimationSpeedMultiplier = 1.1
+
+-- Monitor swimming state
+local inWater = false
+
+core.PoseController.PoseChanged:Connect(function(oldPose, newPose)
+    if newPose == "Swimming" or newPose == "SwimIdle" then
+        if not inWater then
+            inWater = true
+            print("Entered water")
+            
+            -- Play splash effect
+            local splash = splashEffect:Clone()
+            splash.Parent = character.HumanoidRootPart
+            splash:Emit(20)
+            
+            -- Play splash sound
+            local sound = splashSound:Clone()
+            sound.Parent = character.HumanoidRootPart
+            sound:Play()
+        end
+    else
+        if inWater then
+            inWater = false
+            print("Exited water")
+            
+            -- Play exit splash
+        end
+    end
+end)
+</code></pre>
+<h3 id="performance-monitoring"><a class="header" href="#performance-monitoring">Performance Monitoring</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+local RunService = game:GetService("RunService")
+
+-- Track animation performance
+local animStats = {
+    poseChanges = 0,
+    lastPoseChange = 0,
+    averageFPS = 60
+}
+
+core.PoseController.PoseChanged:Connect(function()
+    animStats.poseChanges = animStats.poseChanges + 1
+    animStats.lastPoseChange = tick()
+end)
+
+-- Monitor performance
+RunService.Heartbeat:Connect(function()
+    animStats.averageFPS = 1 / RunService.Heartbeat:Wait()
+    
+    -- If performance is poor, reduce animation quality
+    if animStats.averageFPS &lt; 30 then
+        core.Connections.MoveAnimationSpeedMultiplier = 0.5
+        warn("Low FPS, reducing animation quality")
+    end
+end)
+
+-- Print stats
+task.spawn(function()
+    while true do
+        task.wait(5)
+        print("Animation Stats:")
+        print("  Pose Changes:", animStats.poseChanges)
+        print("  Last Change:", tick() - animStats.lastPoseChange, "seconds ago")
+        print("  Average FPS:", math.floor(animStats.averageFPS))
+    end
+end)
+</code></pre>
+<h3 id="character-class-system"><a class="header" href="#character-class-system">Character Class System</a></h3>
+<pre><code class="language-luau">local core = controller.Core
+
+-- Define character classes
+local classes = {
+    Warrior = {
+        runThreshold = 14,
+        speedMult = 1.0,
+        jumpDuration = 0.2
+    },
+    Rogue = {
+        runThreshold = 16,
+        speedMult = 1.3,
+        jumpDuration = 0.25
+    },
+    Mage = {
+        runThreshold = 13,
+        speedMult = 0.9,
+        jumpDuration = 0.18
+    },
+    Tank = {
+        runThreshold = 12,
+        speedMult = 0.7,
+        jumpDuration = 0.15
+    }
+}
+
+local function applyClass(className)
+    local class = classes[className]
+    if not class then return end
+    
+    core.Connections.RunThreshold = class.runThreshold
+    core.Connections.MoveAnimationSpeedMultiplier = class.speedMult
+    core.Connections.JumpDuration = class.jumpDuration
+    
+    print("Applied class:", className)
+end
+
+-- Usage
+local playerClass = player:GetAttribute("Class") or "Warrior"
+applyClass(playerClass)
+</code></pre>
+<h2 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h2>
+<ol>
+<li><strong>Access through controller</strong>: Always access Core via <code>controller.Core</code></li>
+<li><strong>Configure once</strong>: Set Connections properties during initialization</li>
+<li><strong>Monitor pose changes</strong>: Use PoseChanged event for state-dependent behavior</li>
+<li><strong>Don't over-configure</strong>: Default settings work well for most cases</li>
+<li><strong>Test thoroughly</strong>: Animation timing affects gameplay feel</li>
+<li><strong>Consider performance</strong>: Frequent configuration changes can impact performance</li>
+<li><strong>Use meaningful values</strong>: Base thresholds and multipliers on game design needs</li>
+</ol>
+<h2 id="common-use-cases"><a class="header" href="#common-use-cases">Common Use Cases</a></h2>
+<ul>
+<li><strong>Heavy character</strong>: Lower RunThreshold, slower SpeedMult</li>
+<li><strong>Fast character</strong>: Higher RunThreshold, faster SpeedMult</li>
+<li><strong>Injured state</strong>: Reduce SpeedMult, lower RunThreshold</li>
+<li><strong>Speed boost</strong>: Temporarily increase SpeedMult</li>
+<li><strong>Cutscenes</strong>: Disable core animations with SetCoreActive(false)</li>
+<li><strong>Swimming areas</strong>: Configure swim thresholds and speeds</li>
+<li><strong>Climbing challenges</strong>: Adjust climb animation speed</li>
+</ul>
+<h2 id="related-apis-1"><a class="header" href="#related-apis-1">Related APIs</a></h2>
+<ul>
+<li><a href="api/./pose-controller.html">PoseController API</a> - Detailed pose control</li>
+<li><a href="api/./connections.html">Connections API</a> - Configuration options</li>
+<li><a href="api/./animation-controller.html">AnimationController API</a> - Main controller</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="posecontroller-api"><a class="header" href="#posecontroller-api">PoseController API</a></h1>
 <p>The PoseController manages pose transitions and core animation playback. It handles switching between different character states like idle, walking, running, jumping, etc.</p>
 <p><strong>Access:</strong> <code>controller.Core.PoseController</code></p>
@@ -899,7 +1890,7 @@ end)
     end
 end)
 </code></pre>
-<h2 id="methods"><a class="header" href="#methods">Methods</a></h2>
+<h2 id="methods-2"><a class="header" href="#methods-2">Methods</a></h2>
 <h3 id="setcoreactive"><a class="header" href="#setcoreactive"><code>:SetCoreActive()</code></a></h3>
 <p>Sets whether core animations are active.</p>
 <p><strong>Signature:</strong></p>
@@ -1220,7 +2211,7 @@ customTrack:Play()
 <div style="break-before: page; page-break-before: always;"></div><h1 id="connections-api"><a class="header" href="#connections-api">Connections API</a></h1>
 <p>The Connections module handles humanoid event connections and automatic pose changes based on character state. It responds to movement, jumping, climbing, swimming, and other state changes.</p>
 <p><strong>Access:</strong> <code>controller.Core.Connections</code></p>
-<h2 id="properties-2"><a class="header" href="#properties-2">Properties</a></h2>
+<h2 id="properties-4"><a class="header" href="#properties-4">Properties</a></h2>
 <h3 id="configuration-properties"><a class="header" href="#configuration-properties">Configuration Properties</a></h3>
 <p>These properties control animation behavior and speed multipliers:</p>
 <ul>
@@ -1441,7 +2432,7 @@ applySpeedBoost(5) -- 5 second speed boost
 <div style="break-before: page; page-break-before: always;"></div><h1 id="action-api"><a class="header" href="#action-api">Action API</a></h1>
 <p>The Action module manages emotes and custom action animations. It handles one-off animations that interrupt core animations temporarily.</p>
 <p><strong>Access:</strong> <code>controller.Action</code></p>
-<h2 id="methods-1"><a class="header" href="#methods-1">Methods</a></h2>
+<h2 id="methods-3"><a class="header" href="#methods-3">Methods</a></h2>
 <h3 id="createaction"><a class="header" href="#createaction"><code>:CreateAction()</code></a></h3>
 <p>Creates a new action animation and adds it to the actions collection.</p>
 <p><strong>Signature:</strong></p>
@@ -1758,7 +2749,7 @@ function emoteBindable.OnInvoke(emoteName)
     return originalInvoke(emoteName)
 end
 </code></pre>
-<h2 id="complete-examples"><a class="header" href="#complete-examples">Complete Examples</a></h2>
+<h2 id="complete-examples-2"><a class="header" href="#complete-examples-2">Complete Examples</a></h2>
 <h3 id="custom-emote-system"><a class="header" href="#custom-emote-system">Custom Emote System</a></h3>
 <pre><code class="language-luau">-- Define custom emotes
 local customEmotes = {
@@ -1989,7 +2980,7 @@ local characterType = player:GetAttribute("CharacterType")
 local anims = getAnimationsForCharacter(characterType)
 local controller = SimpleAnimate.new(character, true, anims)
 </code></pre>
-<h2 id="conditional-animation-system"><a class="header" href="#conditional-animation-system">Conditional Animation System</a></h2>
+<h2 id="conditional-animation-system-1"><a class="header" href="#conditional-animation-system-1">Conditional Animation System</a></h2>
 <p>Change animations based on game state:</p>
 <pre><code class="language-luau">local controller = SimpleAnimate.new(character)
 
@@ -2096,7 +3087,7 @@ local preloadedAnims = SimpleAnimate.Preload.preloadAnimList(
 
 local controller3 = SimpleAnimate.new(character, false, preloadedAnims)
 </code></pre>
-<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h2 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h2>
 <ol>
 <li><strong>Always provide fallbacks</strong>: Include all required poses even if using defaults</li>
 <li><strong>Test weight distributions</strong>: Higher weights = more frequent selection</li>
@@ -2628,7 +3619,7 @@ end
 -- Usage
 debugStateMachine(customStateMachine, "CustomController")
 </code></pre>
-<h2 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h2>
+<h2 id="best-practices-3"><a class="header" href="#best-practices-3">Best Practices</a></h2>
 <ol>
 <li><strong>Implement all required events</strong>: Even if unused, provide them for compatibility</li>
 <li><strong>Fire events consistently</strong>: Match Humanoid behavior for predictable results</li>
@@ -3151,7 +4142,7 @@ Players.PlayerAdded:Connect(function(player)
     end)
 end)
 </code></pre>
-<h2 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h2>
+<h2 id="best-practices-4"><a class="header" href="#best-practices-4">Best Practices</a></h2>
 <ol>
 <li><strong>Always provide fallbacks</strong>: Handle cases where player animations fail to load</li>
 <li><strong>Cache when possible</strong>: Avoid repeated API calls for the same player</li>
@@ -3192,7 +4183,7 @@ player.CharacterAdded:Connect(function(character)
     local controller = SimpleAnimate.new(character, true, playerAnims)
 end)
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="basic-character-setup"><a class="header" href="#basic-character-setup">Basic Character Setup</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="basic-character-setup-1"><a class="header" href="#basic-character-setup-1">Basic Character Setup</a></h1>
 <h2 id="simple-setup-server"><a class="header" href="#simple-setup-server">Simple Setup (Server)</a></h2>
 <p>The most basic setup for handling all players:</p>
 <pre><code class="language-luau">local Players = game:GetService("Players")
