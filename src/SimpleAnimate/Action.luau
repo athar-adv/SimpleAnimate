@@ -1,4 +1,6 @@
 --!optimize 2
+--!nonstrict
+
 --Action.luau
 
 local utility = script.Parent.Utility
@@ -49,10 +51,11 @@ Action.__index = Action
     @return The preloaded animation information table
 ]]
 function Action:CreateAction(key: any, template: {Types.AnimInfo}, doPreload: boolean?, priority: Enum.AnimationPriority?, looped: boolean?): {Types.AnimInfo}
-	doPreload = if doPreload == nil then true else doPreload
-	priority = priority or Enum.AnimationPriority.Action
+	local doPreload = if doPreload == nil then true else doPreload
+	local priority = priority or Enum.AnimationPriority.Action
+	local looped = if looped == nil then false else looped
 	
-	local anims = doPreload and Preload.preloadAnimArray(self._animator, template, key, priority, looped or false) or template
+	local anims = doPreload and Preload.preloadAnimArray(self._animator, template, key, priority, looped) or template
 	
 	self._actions[key] = anims
 	
@@ -68,10 +71,10 @@ end
     @param priority Animation priority level (default: Enum.AnimationPriority.Action)
     @return Array of preloaded animation information tables
 ]]
-function Action:BulkCreateAction(animsList: Types.AnimationsList, doPreload: boolean?, priority: Enum.AnimationPriority?): Types.AnimationsList
+function Action:BulkCreateAction(animsList: Types.AnimationsList, doPreload: boolean?, priority: Enum.AnimationPriority?, looped: boolean?): Types.AnimationsList
 	local anims = {}
 	for key, list in animsList do
-		anims[key] = self:Create(key, list, doPreload, priority)
+		anims[key] = self:CreateAction(key, list, doPreload, priority, looped)
 	end
 	return anims
 end
@@ -136,11 +139,10 @@ end
     @return A random animation track from the action
 ]]
 function Action:GetRandomActionAnim(key: any): AnimationTrack
-	local list: Types.AnimationsList = self._actions[key]
+	local list: {Types.AnimInfo} = self._actions[key]
 
 	if not list then 
 		error(`Action {key} has not been created yet. (:GetRandomActionAnim)`)
-		return
 	end
 	
 	local track = randomWeighted(list)
@@ -165,7 +167,7 @@ Action.PlayAction = Action.PlayRandomActionAnim :: typeof(
 	--[[
 		A shorter alias for <code>Action:PlayRandomActionAnim()</code>.
 	]]
-	function(self: Actions, key: any): AnimationTrack end
+	function(self: Action, key: any): AnimationTrack return nil::any end
 )
 
 --[[
@@ -265,7 +267,7 @@ local function new(PoseController, rig: Model, emoteAnimations: Types.Animations
 		_emotes = emoteAnimations,
 		_actions = {},
 		_endTriggers = {},
-	}, Action)
+	}, Action) :: any
 end
 
 return {

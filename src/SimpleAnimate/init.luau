@@ -1,4 +1,6 @@
 --!optimize 2
+--!nonstrict
+
 --SimpleAnimate.luau
 
 local RunService = game:GetService('RunService')
@@ -10,9 +12,6 @@ local Types = require(script.Types)
 
 local Preload = require(script.Utility.Preload)
 local LoadPackage = require(script.Utility.LoadPackage)
-
-local loadAnimPackage = script.Async.LoadAnimPackage
-local loadEmotePackage = script.Async.LoadEmotePackage
 
 local animationControllers = {}
 local waitingForController = {}
@@ -57,7 +56,7 @@ end
 
 export type AnimationController = typeof(AnimationController) & {
 	Core: Core.Core,
-	Action: Action.Actions,
+	Action: Action.Action,
 }
 
 --[[
@@ -206,14 +205,24 @@ local function getCopyOfAnims(name: "R6" | "R15"): (Types.AnimationsList, Types.
 	return deepCopy(module.Animations), deepCopy(module.Emotes)
 end
 
-local function getAnimPackageAsync(player: Player?, defaultPoseSourceIfUnavailable: Types.AnimationsList?): Types.AnimationsList?
+--[[
+	<em><strong>*Yields*</strong></em>
+	<em><strong>*R15 Only*</strong></em>
+	
+	Fetches a player's animation package from the cloud.
+	
+	@param player The player who owns the animation package, should be nil if this function is called from the client.
+	@param defaultPoseSourceIfUnavailable The AnimationsList to fall back on incase a pose is missing from the package, such as Jumping.
+	@return The new AnimationsList containing the player's currently equipped animation package
+]]
+local function getAnimPackageAsync(player: Player?, defaultPoseSourceIfUnavailable: Types.AnimationsList?): Types.AnimationsList
 	if typeof(player) ~= "Instance" and RunService:IsServer() then
 		error("When calling getAnimPackageAsync from the server, the first argument must be a player.")
 	end
 	
-	defaultPoseSourceIfUnavailable = defaultPoseSourceIfUnavailable or deepCopy(DefaultAnims.R15.Animations)
+	local defaultPoseSourceIfUnavailable = defaultPoseSourceIfUnavailable or deepCopy(DefaultAnims.R15.Animations)
 	
-	local list = if RunService:IsClient() then loadAnimPackage:InvokeServer() else LoadPackage.getPlayerAnimPackage(player)
+	local list = if RunService:IsClient() then script.Async:WaitForChild("LoadAnimPackage"):InvokeServer() else LoadPackage.getPlayerAnimPackage(player)
 
 	for name, animations in defaultPoseSourceIfUnavailable do
 		if list[name] ~= nil then continue end
@@ -224,13 +233,23 @@ local function getAnimPackageAsync(player: Player?, defaultPoseSourceIfUnavailab
 	return list
 end
 
-local function getEmotePackageAsync(player: Player?, defaultEmoteSourceIfUnavailable: Types.AnimationsList?): Types.AnimationsList?
+--[[
+	<em><strong>*Yields*</strong></em>
+	<em><strong>*R15 Only*</strong></em>
+	
+	Fetches a player's emote package from the cloud.
+	
+	@param player The player who owns the emote package, should be nil if this function is called from the client.
+	@param defaultPoseSourceIfUnavailable The AnimationsList to fall back on incase an emote is missing from the package, such as Wave.
+	@return The new AnimationsList containing the player's currently equipped emote package
+]]
+local function getEmotePackageAsync(player: Player?, defaultEmoteSourceIfUnavailable: Types.AnimationsList?): Types.AnimationsList
 	if typeof(player) ~= "Instance" and RunService:IsServer() then
 		error("When calling getEmotePackageAsync from the server, the first argument must be a player.")
 	end
-	defaultEmoteSourceIfUnavailable = defaultEmoteSourceIfUnavailable or deepCopy(DefaultAnims.R15.Animations)
+	local defaultEmoteSourceIfUnavailable = defaultEmoteSourceIfUnavailable or deepCopy(DefaultAnims.R15.Animations)
 	
-	local list = if RunService:IsClient() then loadEmotePackage:InvokeServer() else LoadPackage.getPlayerEmotePackage(player)
+	local list = if RunService:IsClient() then script.Async:WaitForChild("LoadEmotePackage"):InvokeServer() else LoadPackage.getPlayerEmotePackage(player)
 	
 	for name, animations in defaultEmoteSourceIfUnavailable do
 		if list[name] ~= nil then continue end

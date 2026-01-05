@@ -43,7 +43,7 @@ end
 local function loadEmoteAnimations(folderId: number)
 	if folderId == 0 then return end
 
-	local tbl ={}
+	local tbl = {}
 
 	local model = InsertService[l](InsertService, folderId)
 	for _, v in model:GetDescendants() do

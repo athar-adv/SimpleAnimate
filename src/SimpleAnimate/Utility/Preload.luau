@@ -2,7 +2,7 @@ local BASE_URL = "rbxassetid://"
 
 local Preload = {}
 
-function Preload.prelaodAnimArray(animator, anims, name: string, priority: Enum.AnimationPriority, looped: boolean)
+function Preload.preloadAnimArray(animator, anims, name: string, priority: Enum.AnimationPriority, looped: boolean)
 	local tbl = {}
 	for e, x in anims do
 		local anim = Instance.new("Animation")
@@ -27,7 +27,7 @@ end
 function Preload.preloadAnimList(animator, anims, name: string, priority: Enum.AnimationPriority, looped: boolean)
 	local tbl = {}
 	for i, v in anims do
-		tbl[i] = Preload.prelaodAnimArray(animator, v, name, priority, looped)
+		tbl[i] = Preload.preloadAnimArray(animator, v, name, priority, looped)
 	end
 
 	return tbl
