@@ -102,6 +102,8 @@ function PoseController:ChangeCoreAnim(pose: PoseType, index: number, new: Anima
 
 	if type(new) == "table" then
 		self._anims[pose][index] = new
+		
+		track = assert(new.anim)
 	elseif type(new) == "string" then
 		local animation = Instance.new("Animation")
 		animation.AnimationId = new

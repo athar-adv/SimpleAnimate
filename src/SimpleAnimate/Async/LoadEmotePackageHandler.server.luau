@@ -1,7 +1,7 @@
 local LoadPackage = require("../Utility/LoadPackage")
 
 local loadEmotePackage = Instance.new("RemoteFunction")
-loadEmotePackage.Name = "loadEmotePackage"
+loadEmotePackage.Name = "LoadEmotePackage"
 loadEmotePackage.Parent = script.Parent
 script.Parent = loadEmotePackage
 
